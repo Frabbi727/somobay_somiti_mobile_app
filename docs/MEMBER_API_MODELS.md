@@ -198,7 +198,7 @@ All PaymentSummaryModel fields, plus:
 | Field | JSON Key | Type | Nullable | Description | Example |
 |-------|----------|------|----------|-------------|---------|
 | date | date | String | Yes | `YYYY-MM-DD` | `"2026-07-10"` |
-| description | description | String | No | Localised text | `"Deposit · 2026-07"` |
+| description | description | String | No | Localised text | `"Deposit · July 2026"` |
 | charge | charge | MoneyModel | Yes | Charged (zero on payment rows) | `৳ 1,000.00` |
 | paid | paid | MoneyModel | Yes | Paid (zero on charge rows) | `৳ 0.00` |
 | balance | balance | MoneyModel | Yes | Running balance (positive = owed) | `৳ 1,200.00` |

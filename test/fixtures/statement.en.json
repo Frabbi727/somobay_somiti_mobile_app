@@ -12,7 +12,7 @@
   "rows": [
    {
     "date": "2026-07-10",
-    "description": "Registration fee · 2026-07",
+    "description": "Registration fee · July 2026",
     "charge": {
      "poisha": 20000,
      "display": "৳ 200.00"
@@ -28,7 +28,7 @@
    },
    {
     "date": "2026-07-10",
-    "description": "Deposit · 2026-07",
+    "description": "Deposit · July 2026",
     "charge": {
      "poisha": 100000,
      "display": "৳ 1,000.00"
@@ -44,7 +44,7 @@
    },
    {
     "date": "2026-07-10",
-    "description": "Service charge · 2026-07",
+    "description": "Service charge · July 2026",
     "charge": {
      "poisha": 2000,
      "display": "৳ 20.00"
@@ -76,7 +76,7 @@
    },
    {
     "date": "2026-08-10",
-    "description": "Deposit · 2026-08",
+    "description": "Deposit · August 2026",
     "charge": {
      "poisha": 100000,
      "display": "৳ 1,000.00"
@@ -92,7 +92,7 @@
    },
    {
     "date": "2026-08-10",
-    "description": "Service charge · 2026-08",
+    "description": "Service charge · August 2026",
     "charge": {
      "poisha": 2000,
      "display": "৳ 20.00"

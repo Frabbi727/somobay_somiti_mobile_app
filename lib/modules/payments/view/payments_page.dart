@@ -33,6 +33,8 @@ class PaymentsPage extends GetView<PaymentsController> {
           await Get.toNamed(AppRoutes.payOnline);
           controller.refreshPayments();
         },
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
         icon: const Icon(Icons.phone_android_rounded),
         label: Text('payments_pay_online'.tr),
       ),

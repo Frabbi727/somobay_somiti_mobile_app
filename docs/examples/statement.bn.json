@@ -14,7 +14,7 @@
             "rows": [
                 {
                     "date": "2026-07-10",
-                    "description": "ভর্তি ফি · 2026-07",
+                    "description": "ভর্তি ফি · জুলাই ২০২৬",
                     "charge": {
                         "poisha": 20000,
                         "display": "৳ ২০০.০০"
@@ -30,7 +30,7 @@
                 },
                 {
                     "date": "2026-07-10",
-                    "description": "জমা · 2026-07",
+                    "description": "জমা · জুলাই ২০২৬",
                     "charge": {
                         "poisha": 100000,
                         "display": "৳ ১,০০০.০০"
@@ -46,7 +46,7 @@
                 },
                 {
                     "date": "2026-07-10",
-                    "description": "সার্ভিস চার্জ · 2026-07",
+                    "description": "সার্ভিস চার্জ · জুলাই ২০২৬",
                     "charge": {
                         "poisha": 2000,
                         "display": "৳ ২০.০০"
@@ -78,7 +78,7 @@
                 },
                 {
                     "date": "2026-08-10",
-                    "description": "জমা · 2026-08",
+                    "description": "জমা · আগস্ট ২০২৬",
                     "charge": {
                         "poisha": 100000,
                         "display": "৳ ১,০০০.০০"
@@ -94,7 +94,7 @@
                 },
                 {
                     "date": "2026-08-10",
-                    "description": "সার্ভিস চার্জ · 2026-08",
+                    "description": "সার্ভিস চার্জ · আগস্ট ২০২৬",
                     "charge": {
                         "poisha": 2000,
                         "display": "৳ ২০.০০"

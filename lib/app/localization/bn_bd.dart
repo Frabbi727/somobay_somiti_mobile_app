@@ -222,7 +222,7 @@ const Map<String, String> bnBD = {
   TranslationKeys.paySent: 'পরিশোধ অনুমোদনের জন্য পাঠানো হয়েছে।',
 
   // Statement
-  TranslationKeys.statementTitle: 'পাসবই',
+  TranslationKeys.statementTitle: 'খতিয়ান বই',
   TranslationKeys.statementRange: '@from – @until',
   TranslationKeys.statementChangeRange: 'তারিখ বদলান',
   TranslationKeys.statementOpening: 'শুরুর জের',

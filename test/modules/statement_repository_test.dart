@@ -15,7 +15,7 @@ void main() {
     expect(api.last.queryParameters, {'from': '2026-07-01', 'until': '2026-08-31'});
     expect(statement.from, '2026-07-01');
     expect(statement.opening.poisha, 0);
-    expect(statement.rows.first.description, 'Registration fee · 2026-07');
+    expect(statement.rows.first.description, 'Registration fee · July 2026');
     expect(statement.rows.first.charge?.poisha, 20000);
     expect(statement.rows.first.balance?.display, '৳ 200.00');
     expect(statement.closing.poisha, statement.rows.last.balance?.poisha);

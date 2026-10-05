@@ -327,7 +327,7 @@ Bearer, `Accept: application/json`, `Content-Type: multipart/form-data`.
   "data": {
     "from": "2026-07-01", "until": "2026-08-31",
     "opening": { "poisha": 0, "display": "৳ 0.00" },
-    "rows": [ { "date": "2026-07-01", "description": "Registration fee · 2026-07", "charge": {…}, "paid": {…}, "balance": {…} } ],
+    "rows": [ { "date": "2026-07-01", "description": "Registration fee · July 2026", "charge": {…}, "paid": {…}, "balance": {…} } ],
     "total_charges": {…}, "total_paid": {…}, "closing": {…}
   }
 }
@@ -336,7 +336,7 @@ Bearer, `Accept: application/json`, `Content-Type: multipart/form-data`.
 Each row has both `charge` and `paid` as money (one of them is zero); `balance` is the running balance after the row. Defaults: `from` = 1 July of the current fiscal year, `until` = today. 422 when `until` < `from` or a date is malformed. Any `member` parameter is ignored.
 
 ### PDF link
-`GET /api/v1/statement/pdf-link?from=&until=` · Bearer · 200 `{"url": "…/api/v1/statement/pdf-signed?…&signature=…"}` ([examples/statement_pdf_link.en.json](examples/statement_pdf_link.en.json)). Valid 15 minutes; open in the browser. (`GET /statement/pdf` also exists and streams the PDF to a Bearer request.)
+`GET /api/v1/statement/pdf-link?from=&until=` · Bearer · 200 `{"url": "…/api/v1/statement/pdf-signed?…&signature=…"}` ([examples/statement_pdf_link.en.json](examples/statement_pdf_link.en.json)). Valid 15 minutes; open in the browser. The PDF is in the language of the `pdf-link` request (signed into the link), not the browser's. (`GET /statement/pdf` also exists and streams the PDF to a Bearer request.)
 
 ---
 
