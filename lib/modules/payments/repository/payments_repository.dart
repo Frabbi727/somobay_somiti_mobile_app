@@ -19,7 +19,7 @@ abstract class IPaymentsRepository {
     required String amount,
     required String trxId,
     required String receivedOn,
-    required String proofPath,
+    String? proofPath,
     required String idempotencyKey,
   });
 }
@@ -71,7 +71,7 @@ class PaymentsRepository implements IPaymentsRepository {
     required String amount,
     required String trxId,
     required String receivedOn,
-    required String proofPath,
+    String? proofPath,
     required String idempotencyKey,
   }) async {
     try {
@@ -81,7 +81,7 @@ class PaymentsRepository implements IPaymentsRepository {
         'trx_id': trxId,
         'received_on': receivedOn,
         'idempotency_key': idempotencyKey,
-        'proof': await MultipartFile.fromFile(proofPath),
+        if (proofPath != null) 'proof': await MultipartFile.fromFile(proofPath),
       });
       final response = await apiClient.post(ApiConstants.payments, data: form);
       final body = response.data as Map<String, dynamic>;

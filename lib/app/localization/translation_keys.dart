@@ -217,6 +217,11 @@ class TranslationKeys {
   static const String payProofChoose = 'pay_proof_choose';
   static const String payProofTooLarge = 'pay_proof_too_large';
   static const String payProofRequired = 'pay_proof_required';
+  static const String payProofShort = 'pay_proof_short';
+  static const String payProofNone = 'pay_proof_none';
+  static const String payProofRemove = 'pay_proof_remove';
+  static const String payProofCompressing = 'pay_proof_compressing';
+  static const String payProofUnreadable = 'pay_proof_unreadable';
   static const String payConfirmTitle = 'pay_confirm_title';
   static const String paySend = 'pay_send';
   static const String paySent = 'pay_sent';

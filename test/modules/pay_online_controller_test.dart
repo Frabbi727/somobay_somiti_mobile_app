@@ -20,7 +20,7 @@ class RecordingRepository implements IPaymentsRepository {
     required String amount,
     required String trxId,
     required String receivedOn,
-    required String proofPath,
+    String? proofPath,
     required String idempotencyKey,
   }) async {
     keys.add(idempotencyKey);
@@ -56,5 +56,28 @@ void main() {
 
     expect(await controller.send(), isTrue); // a fresh form after success
     expect(repository.keys[2], isNot(repository.keys[0]));
+  });
+
+  test('sends without proof, which is optional', () async {
+    final repository = RecordingRepository([null]);
+    final controller = PayOnlineController(repository: repository)
+      ..amountController.text = '600'
+      ..trxController.text = 'NG12345678';
+
+    expect(await controller.send(), isTrue);
+    expect(repository.keys, hasLength(1));
+  });
+
+  test('refuses a PDF over 2 MB and attaches a smaller one as is', () async {
+    final controller = PayOnlineController(repository: RecordingRepository([]));
+
+    expect(await controller.attachProof(path: '/tmp/big.pdf', name: 'big.pdf', size: PayOnlineController.maxPdfBytes + 1), 'pay_proof_too_large');
+    expect(controller.proofPath.value, isNull);
+
+    expect(await controller.attachProof(path: '/tmp/slip.pdf', name: 'slip.pdf', size: 300 * 1024), isNull);
+    expect(controller.proofPath.value, '/tmp/slip.pdf');
+
+    controller.clearProof();
+    expect(controller.proofPath.value, isNull);
   });
 }

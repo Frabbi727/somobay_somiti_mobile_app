@@ -60,6 +60,16 @@ void main() {
     expect(first.files.single.key, 'proof');
   });
 
+  test('submits without a proof file when none is attached (proof is optional)', () async {
+    final api = FakeApi({'POST ${ApiConstants.payments}': (r) => (201, fixture('payment_submit.bn'))});
+
+    final result = await PaymentsRepository(apiClient: api.client())
+        .submit(method: 'nagad', amount: '600', trxId: 'NG12345678', receivedOn: '2026-08-12', idempotencyKey: 'key-2');
+
+    expect(result.failure, isNull);
+    expect((api.last.data as FormData).files, isEmpty);
+  });
+
   test('a conflict and validation errors come back as their failures', () async {
     final api = FakeApi({
       'POST ${ApiConstants.payments}': (r) {

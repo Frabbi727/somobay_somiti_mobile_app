@@ -76,9 +76,17 @@ class PayOnlinePage extends GetView<PayOnlineController> {
                       contentPadding: EdgeInsets.zero,
                       leading: const Icon(Icons.attach_file_rounded),
                       title: Text('pay_proof'.tr),
-                      subtitle: Text(controller.proofName.value ?? 'pay_proof_choose'.tr),
-                      trailing: const Icon(Icons.upload_file_rounded),
-                      onTap: _pickProof,
+                      subtitle: Text(controller.compressing.value ? 'pay_proof_compressing'.tr : controller.proofName.value ?? 'pay_proof_choose'.tr),
+                      trailing: controller.compressing.value
+                          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2.5))
+                          : controller.proofPath.value != null
+                              ? IconButton(
+                                  icon: const Icon(Icons.close_rounded),
+                                  tooltip: 'pay_proof_remove'.tr,
+                                  onPressed: controller.clearProof,
+                                )
+                              : const Icon(Icons.upload_file_rounded),
+                      onTap: controller.compressing.value ? null : _pickProof,
                     ),
                     _fieldError('proof'),
                     if (controller.failure.value != null && controller.failure.value!.validationErrors == null)
@@ -90,6 +98,7 @@ class PayOnlinePage extends GetView<PayOnlineController> {
                     AppButton.primary(
                       text: 'pay_send'.tr,
                       isLoading: controller.sending.value,
+                      isDisabled: controller.compressing.value,
                       onPressed: _confirmAndSend,
                     ),
                   ],
@@ -130,20 +139,14 @@ class PayOnlinePage extends GetView<PayOnlineController> {
     final file = result?.files.single;
     if (file == null || file.path == null) return;
 
-    if (file.size > PayOnlineController.maxProofBytes) {
-      Get.snackbar('common_error_title'.tr, 'pay_proof_too_large'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
-      return;
+    final problem = await controller.attachProof(path: file.path!, name: file.name, size: file.size);
+    if (problem != null) {
+      Get.snackbar('common_error_title'.tr, problem.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
     }
-
-    controller.setProof(path: file.path!, name: file.name);
   }
 
   Future<void> _confirmAndSend() async {
     if (!controller.formKey.currentState!.validate()) return;
-    if (controller.proofPath.value == null) {
-      Get.snackbar('common_error_title'.tr, 'pay_proof_required'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
-      return;
-    }
 
     // Like the portal's summary confirmation: show exactly what will be sent.
     final confirmed = await AppConfirmationDialog.show(
@@ -153,6 +156,7 @@ class PayOnlinePage extends GetView<PayOnlineController> {
         '${'pay_amount'.tr}: ${controller.amountController.text.trim()}',
         '${'pay_trx'.tr}: ${controller.trxController.text.trim().toUpperCase()}',
         '${'pay_date'.tr}: ${ApiDateFormat.date(controller.receivedOn.value)}',
+        '${'pay_proof_short'.tr}: ${controller.proofName.value ?? 'pay_proof_none'.tr}',
       ].join('\n'),
       confirmText: 'pay_send'.tr,
     );
