@@ -1,0 +1,49 @@
+{
+  "app": {
+    "package_name": "com.somobay_somiti_mobile_app.somobay_somiti_mobile_app",
+    "default_language": "bn-BD",
+    "app_or_game": "App",
+    "free_or_paid": "Free",
+    "category": "Finance",
+    "contact_email": "frabbi727@gmail.com",
+    "privacy_policy_url": "https://shomiti.techrealify.com/privacy-policy",
+    "privacy_policy_url_english": "https://shomiti.techrealify.com/privacy-policy?lang=en"
+  },
+  "listing": {
+    "bn-BD": {
+      "title": "সমবায় সমিতি",
+      "short_description": "সমিতির জমা, বকেয়া, পরিশোধ, শেয়ার ও খতিয়ান এক অ্যাপে দেখুন।",
+      "full_description": "সমবায় সমিতি অ্যাপটি সঞ্চয় ও সমবায় সমিতির সদস্যদের জন্য। আপনার সমিতির রাখা হিসাব এখন হাতের মুঠোয়, সহজে ও নিরাপদে।\n\nমূল বৈশিষ্ট্যসমূহ:\n• হোম: মোট জমা, অগ্রিম জমা, বকেয়া, কোন মাস পর্যন্ত পরিশোধিত এবং শেয়ারের সংখ্যা এক নজরে।\n• বকেয়া: মাসিক জমা, সার্ভিস চার্জ ও অন্যান্য বকেয়ার তালিকা, শেষ তারিখসহ।\n• পরিশোধ: আপনার সব পরিশোধ ও তার অবস্থা (অপেক্ষমাণ, অনুমোদিত, বাতিল), অনুমোদিত পরিশোধের রসিদ।\n• পরিশোধ জানান: বিকাশ বা নগদে টাকা পাঠানোর পর লেনদেন নম্বর দিয়ে সমিতিকে জানান; চাইলে স্ক্রিনশট যুক্ত করুন। সমিতির অফিস যাচাই করে অনুমোদন দেয়।\n• খতিয়ান বই: যেকোনো সময়ের হিসাব বিবরণী দেখুন ও পিডিএফ ডাউনলোড করুন।\n• শেয়ার ও লভ্যাংশ: আপনার শেয়ার এবং প্রাপ্ত লভ্যাংশের হিসাব।\n• বার্তা: সমিতি থেকে পাঠানো এসএমএস একসাথে দেখুন।\n• প্রোফাইল: আপনার তথ্য ও নমিনি; বাংলা বা ইংরেজি ভাষা।\n\nঅ্যাপটি নিজে কোনো টাকা লেনদেন করে না; এটি শুধু আপনার সমিতির হিসাব দেখায়। লগইনের পাসওয়ার্ড সমিতির অফিস থেকে দেওয়া হয়।"
+    },
+    "en-US": {
+      "title": "Somobay Somiti",
+      "short_description": "See your society savings, dues, payments, shares and passbook in one app.",
+      "full_description": "Somobay Somiti is for members of savings and co-operative societies (somiti). The records your society keeps, now in your pocket, simply and securely.\n\nKey features:\n• Home: your total savings, advance, dues, the month you have paid up to and your number of shares at a glance.\n• Dues: monthly deposits, service charges and other dues, with due dates.\n• Payments: every payment and its status (pending, approved, rejected), with receipts for approved payments.\n• Report a payment: after sending money by bKash or Nagad, tell the society with the transaction ID and, if you like, a screenshot. The society office checks and approves it.\n• Passbook: your statement for any period, with PDF download.\n• Shares & dividends: your shares and the dividends you have received.\n• Messages: the SMS your society has sent you, in one place.\n• Profile: your details and nominees; Bangla or English.\n\nThe app does not move money itself; it shows the records your society keeps. Your society office gives you your sign-in password."
+    }
+  },
+  "app_content": {
+    "ads": "No, the app does not contain ads",
+    "app_access": "All functionality requires sign-in. Provide a demo member's mobile number and password from the server (Settings in Play Console > App access).",
+    "target_audience": "18 and over",
+    "content_rating_notes": "No violence, sexual content, gambling, user-to-user chat or location sharing.",
+    "financial_features": {
+      "answer": "My app doesn't provide any financial features",
+      "explanation": "The app does not process or transfer money. Members view their savings society records (dues, payments, shares, statements) and can notify the society office of payments they already made through bKash/Nagad outside the app; office staff verify them manually."
+    },
+    "data_safety": {
+      "collects_or_shares_user_data": true,
+      "encrypted_in_transit": true,
+      "account_deletion": "Members ask the society office; see the privacy policy.",
+      "data_types": [
+        { "type": "Name", "collected": true, "shared": false, "purpose": "Account management", "optional": false },
+        { "type": "Phone number", "collected": true, "shared": true, "shared_with": "SMS provider", "purpose": "Account management, Developer communications", "optional": false },
+        { "type": "Email address", "collected": true, "shared": false, "purpose": "Account management", "optional": true },
+        { "type": "Address", "collected": true, "shared": false, "purpose": "Account management", "optional": true },
+        { "type": "Other info (national ID, date of birth, nominees)", "collected": true, "shared": false, "purpose": "Account management", "optional": true },
+        { "type": "Photos", "collected": true, "shared": false, "purpose": "App functionality (payment proof)", "optional": true },
+        { "type": "Files and docs", "collected": true, "shared": false, "purpose": "App functionality (payment proof PDF)", "optional": true },
+        { "type": "Other financial info (balances, dues, payments reported)", "collected": true, "shared": false, "purpose": "App functionality, Account management", "optional": false }
+      ]
+    }
+  }
+}
