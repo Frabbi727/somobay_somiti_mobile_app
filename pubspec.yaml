@@ -2,7 +2,7 @@ name: somobay_somiti_mobile_app
 description: "A production-grade Flutter mobile application for Somobay Somiti (Cooperative Society) management."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.12.2
