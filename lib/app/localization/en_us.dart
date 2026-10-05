@@ -163,4 +163,22 @@ const Map<String, String> enUS = {
 
   // Notifications
   TranslationKeys.notificationsTitle: 'Messages',
+
+  // Dues
+  TranslationKeys.tabDues: 'Dues',
+  TranslationKeys.duesTitle: 'My dues',
+  TranslationKeys.duesFilterOpen: 'Unpaid',
+  TranslationKeys.duesFilterAll: 'All',
+  TranslationKeys.duesFilterSettled: 'Paid',
+  TranslationKeys.duesTypeAll: 'All types',
+  TranslationKeys.duesTypeDeposit: 'Deposit',
+  TranslationKeys.duesTypeService: 'Service charge',
+  TranslationKeys.duesTypeRegistration: 'Registration fee',
+  TranslationKeys.duesTypeLateFee: 'Late fee',
+  TranslationKeys.duesAmount: 'Amount',
+  TranslationKeys.duesPaid: 'Paid',
+  TranslationKeys.duesOutstanding: 'Outstanding',
+  TranslationKeys.duesDueDate: 'Due by',
+  TranslationKeys.duesNoneOpen: 'Nothing is due. Well done!',
+  TranslationKeys.duesNone: 'No dues found.',
 };

@@ -163,4 +163,22 @@ const Map<String, String> bnBD = {
 
   // Notifications
   TranslationKeys.notificationsTitle: 'বার্তা',
+
+  // Dues
+  TranslationKeys.tabDues: 'বকেয়া',
+  TranslationKeys.duesTitle: 'আমার বকেয়া',
+  TranslationKeys.duesFilterOpen: 'অপরিশোধিত',
+  TranslationKeys.duesFilterAll: 'সব',
+  TranslationKeys.duesFilterSettled: 'পরিশোধিত',
+  TranslationKeys.duesTypeAll: 'সব ধরন',
+  TranslationKeys.duesTypeDeposit: 'মাসিক জমা',
+  TranslationKeys.duesTypeService: 'সার্ভিস চার্জ',
+  TranslationKeys.duesTypeRegistration: 'ভর্তি ফি',
+  TranslationKeys.duesTypeLateFee: 'বিলম্ব ফি',
+  TranslationKeys.duesAmount: 'পরিমাণ',
+  TranslationKeys.duesPaid: 'পরিশোধিত',
+  TranslationKeys.duesOutstanding: 'বাকি',
+  TranslationKeys.duesDueDate: 'শেষ তারিখ',
+  TranslationKeys.duesNoneOpen: 'কোনো বকেয়া নেই।',
+  TranslationKeys.duesNone: 'কোনো বকেয়া পাওয়া যায়নি।',
 };

@@ -163,4 +163,22 @@ class TranslationKeys {
 
   // Notifications
   static const String notificationsTitle = 'notifications_title';
+
+  // Dues
+  static const String tabDues = 'tab_dues';
+  static const String duesTitle = 'dues_title';
+  static const String duesFilterOpen = 'dues_filter_open';
+  static const String duesFilterAll = 'dues_filter_all';
+  static const String duesFilterSettled = 'dues_filter_settled';
+  static const String duesTypeAll = 'dues_type_all';
+  static const String duesTypeDeposit = 'dues_type_deposit';
+  static const String duesTypeService = 'dues_type_service';
+  static const String duesTypeRegistration = 'dues_type_registration';
+  static const String duesTypeLateFee = 'dues_type_late_fee';
+  static const String duesAmount = 'dues_amount';
+  static const String duesPaid = 'dues_paid';
+  static const String duesOutstanding = 'dues_outstanding';
+  static const String duesDueDate = 'dues_due_date';
+  static const String duesNoneOpen = 'dues_none_open';
+  static const String duesNone = 'dues_none';
 }
