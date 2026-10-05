@@ -9,6 +9,7 @@ import '../../../core/widgets/app_buttons.dart';
 import '../../../core/widgets/app_dialogs.dart';
 import '../../../core/widgets/app_text_fields.dart';
 import '../controller/pay_online_controller.dart';
+import 'package:somobay_somiti_mobile_app/core/utils/snackbar_margin.dart';
 
 /// Report a bKash/Nagad payment for staff approval (the web portal's Pay Online form). Only
 /// emptiness is checked here; the backend validates everything and returns field errors.
@@ -130,7 +131,7 @@ class PayOnlinePage extends GetView<PayOnlineController> {
     if (file == null || file.path == null) return;
 
     if (file.size > PayOnlineController.maxProofBytes) {
-      Get.snackbar('common_error_title'.tr, 'pay_proof_too_large'.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+      Get.snackbar('common_error_title'.tr, 'pay_proof_too_large'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
       return;
     }
 
@@ -140,7 +141,7 @@ class PayOnlinePage extends GetView<PayOnlineController> {
   Future<void> _confirmAndSend() async {
     if (!controller.formKey.currentState!.validate()) return;
     if (controller.proofPath.value == null) {
-      Get.snackbar('common_error_title'.tr, 'pay_proof_required'.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+      Get.snackbar('common_error_title'.tr, 'pay_proof_required'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
       return;
     }
 
@@ -159,7 +160,7 @@ class PayOnlinePage extends GetView<PayOnlineController> {
 
     if (await controller.send()) {
       Get.back();
-      Get.snackbar('common_success_title'.tr, controller.lastMessage ?? 'pay_sent'.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+      Get.snackbar('common_success_title'.tr, controller.lastMessage ?? 'pay_sent'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
     }
   }
 }

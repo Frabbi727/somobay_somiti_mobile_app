@@ -10,6 +10,7 @@ import '../../../core/widgets/app_loading.dart';
 import '../../../core/widgets/app_status_chip.dart';
 import '../controller/payment_detail_controller.dart';
 import '../model/payment_detail_model.dart';
+import 'package:somobay_somiti_mobile_app/core/utils/snackbar_margin.dart';
 
 /// One payment: what it paid (by month and type), what went to advance, and its receipt.
 class PaymentDetailPage extends GetView<PaymentDetailController> {
@@ -57,7 +58,7 @@ class PaymentDetailPage extends GetView<PaymentDetailController> {
   Future<void> _openReceipt() async {
     final error = await controller.openReceipt();
     if (error != null) {
-      Get.snackbar('common_error_title'.tr, error.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+      Get.snackbar('common_error_title'.tr, error.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
     }
   }
 

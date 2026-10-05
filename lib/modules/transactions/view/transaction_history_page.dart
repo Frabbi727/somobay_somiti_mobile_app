@@ -9,6 +9,7 @@ import '../../../core/widgets/app_error_state.dart';
 import '../../../core/widgets/app_loading.dart';
 import '../controller/transaction_controller.dart';
 import '../model/statement_model.dart';
+import 'package:somobay_somiti_mobile_app/core/utils/snackbar_margin.dart';
 
 /// The passbook tab: the member statement (web portal "Statement") with a PDF download.
 /// Opening, rows, totals and closing come from the backend; nothing is added up here.
@@ -167,7 +168,7 @@ class TransactionHistoryPage extends GetView<TransactionController> {
   Future<void> _openPdf() async {
     final error = await controller.openPdf();
     if (error != null) {
-      Get.snackbar('common_error_title'.tr, error.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+      Get.snackbar('common_error_title'.tr, error.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
     }
   }
 }

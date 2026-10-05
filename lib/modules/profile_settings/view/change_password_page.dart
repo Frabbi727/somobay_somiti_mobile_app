@@ -7,6 +7,7 @@ import '../../../core/widgets/app_app_bar.dart';
 import '../../../core/widgets/app_buttons.dart';
 import '../../../core/widgets/app_text_fields.dart';
 import '../controller/profile_controller.dart';
+import 'package:somobay_somiti_mobile_app/core/utils/snackbar_margin.dart';
 
 /// Change the member's own password (minimum 6 characters, as the backend requires).
 class ChangePasswordPage extends GetView<ChangePasswordController> {
@@ -61,7 +62,7 @@ class ChangePasswordPage extends GetView<ChangePasswordController> {
                     onPressed: () async {
                       if (await controller.submit()) {
                         Get.back();
-                        Get.snackbar('common_success_title'.tr, 'password_saved'.tr, snackPosition: SnackPosition.BOTTOM, margin: const EdgeInsets.all(16));
+                        Get.snackbar('common_success_title'.tr, 'password_saved'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
                       }
                     },
                   ),

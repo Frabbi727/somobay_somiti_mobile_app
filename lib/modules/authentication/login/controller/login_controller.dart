@@ -10,6 +10,7 @@ import '../../../../core/services/storage_service.dart';
 import '../../../../core/utils/bangla_number_util.dart';
 import '../../model/login_request_model.dart';
 import '../../repository/auth_repository.dart';
+import 'package:somobay_somiti_mobile_app/core/utils/snackbar_margin.dart';
 
 class LoginController extends GetxController {
   final IAuthRepository repository;
@@ -115,7 +116,7 @@ class LoginController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: color,
       colorText: Colors.white,
-      margin: const EdgeInsets.all(16),
+      margin: snackbarMargin(),
     );
   }
 
