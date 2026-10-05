@@ -9,6 +9,7 @@ class ProfileBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<IProfileRepository>(
       () => ProfileRepository(apiClient: Get.find<ApiClient>()),
+      fenix: true,
     );
     Get.lazyPut<ProfileController>(
       () => ProfileController(
@@ -18,6 +19,12 @@ class ProfileBinding extends Bindings {
     );
     Get.lazyPut<ChangePasswordController>(
       () => ChangePasswordController(repository: Get.find<IProfileRepository>()),
+    );
+    Get.lazyPut<DividendsController>(
+      () => DividendsController(repository: Get.find<IProfileRepository>()),
+    );
+    Get.lazyPut<SomitiInfoController>(
+      () => SomitiInfoController(repository: Get.find<IProfileRepository>()),
     );
   }
 }

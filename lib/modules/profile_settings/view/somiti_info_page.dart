@@ -1,52 +1,66 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
+import '../../../core/utils/bangla_number_util.dart';
 import '../../../core/widgets/app_app_bar.dart';
 import '../../../core/widgets/app_card.dart';
+import '../../../core/widgets/app_error_state.dart';
+import '../../../core/widgets/app_loading.dart';
+import '../controller/profile_controller.dart';
 
-class SomitiInfoPage extends StatelessWidget {
-  const SomitiInfoPage({Key? key}) : super(key: key);
+/// The society's name, registration, address and contact (`config/somiti-info`).
+class SomitiInfoPage extends GetView<SomitiInfoController> {
+  const SomitiInfoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppAppBar(title: 'profile_somiti_by_laws'.tr),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      appBar: AppAppBar(title: 'profile_about_somiti'.tr),
+      body: Obx(() {
+        final state = controller.infoState.value;
+        if (state.isLoading || state.isInitial) return const AppLoading();
+        if (state.isError || state.data == null) return AppErrorState(failure: state.failure, onRetry: controller.fetch);
+
+        final info = state.data!;
+        return ListView(
+          padding: const EdgeInsets.all(16),
           children: [
+            Center(
+              child: info.logoUrl == null
+                  ? const Icon(Icons.account_balance_rounded, size: 64, color: AppColors.primary)
+                  : CachedNetworkImage(imageUrl: info.logoUrl!, height: 80, errorWidget: (_, __, ___) => const Icon(Icons.account_balance_rounded, size: 64)),
+            ),
+            const SizedBox(height: 12),
+            Text(info.name, textAlign: TextAlign.center, style: AppTextStyles.h2),
+            const SizedBox(height: 16),
             AppCard(
+              margin: EdgeInsets.zero,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('প্রগতি বহুমুখী সমবায় সমিতি লিঃ', style: AppTextStyles.h2),
-                  const SizedBox(height: 6),
-                  Text('নিবন্ধন নং: SOM-DH-2018-0921', style: AppTextStyles.caption.copyWith(color: AppColors.primary, fontWeight: FontWeight.bold)),
-                  const Divider(height: 24),
-                  _buildSection('১. সমিতির লক্ষ্য ও উদ্দেশ্য', 'সদস্যদের মধ্যে সঞ্চয়ের অভ্যাস গড়ে তোলা, পারস্পরিক আর্থিক সহযোগিতা এবং অর্থনৈতিক স্বাবলম্বিতা অর্জন।'),
-                  const SizedBox(height: 14),
-                  _buildSection('২. সদস্যপদের নিয়মাবলী', '১৮ বছর বা তদূর্ধ্ব যেকোনো বাংলাদেশি নাগরিক সমিতির নিয়মাবলী মেনে সদস্যপদের জন্য আবেদন করতে পারবেন।'),
-                  const SizedBox(height: 14),
-                  _buildSection('৩. সাধারণ সঞ্চয় ও ডিপিএস বিধিমালা', 'প্রত্যেক সদস্যকে নিয়মিত মাসিক সঞ্চয় বা ডিপিএস কিস্তি প্রতি মাসের ১০ তারিখের মধ্যে পরিশোধ করতে হবে।'),
+                  if (info.registrationNo != null) _row(Icons.badge_outlined, 'somiti_registration'.tr, _digits(info.registrationNo!)),
+                  if (info.address != null) _row(Icons.place_outlined, 'somiti_address'.tr, info.address!),
+                  if (info.phone != null) _row(Icons.phone_outlined, 'somiti_phone'.tr, _digits(info.phone!)),
+                  if (info.email != null) _row(Icons.email_outlined, 'somiti_email'.tr, info.email!),
                 ],
               ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
-  Widget _buildSection(String title, String content) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: AppTextStyles.titleMedium),
-        const SizedBox(height: 4),
-        Text(content, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-      ],
+  Widget _row(IconData icon, String label, String value) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Icon(icon, color: AppColors.primary),
+      title: Text(label, style: AppTextStyles.caption),
+      subtitle: Text(value, style: AppTextStyles.bodyMedium),
     );
   }
+
+  String _digits(String text) => Get.locale?.languageCode == 'bn' ? BanglaNumberUtil.toBangla(text) : text;
 }

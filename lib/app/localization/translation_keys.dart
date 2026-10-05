@@ -235,4 +235,46 @@ class TranslationKeys {
   static const String statementNoRows = 'statement_no_rows';
   static const String statementPdf = 'statement_pdf';
   static const String statementPdfFailed = 'statement_pdf_failed';
+
+  // Shares, messages, profile
+  static const String sharesTitle = 'shares_title';
+  static const String sharesCurrent = 'shares_current';
+  static const String sharesHistory = 'shares_history';
+  static const String sharesFrom = 'shares_from';
+  static const String sharesAfter = 'shares_after';
+  static const String sharesRates = 'shares_rates';
+  static const String sharesRatesFrom = 'shares_rates_from';
+  static const String sharesNoRates = 'shares_no_rates';
+  static const String rateShareUnit = 'rate_share_unit';
+  static const String rateServiceCharge = 'rate_service_charge';
+  static const String rateRegistrationFee = 'rate_registration_fee';
+  static const String rateDueDay = 'rate_due_day';
+  static const String rateDueDayValue = 'rate_due_day_value';
+  static const String rateGraceDays = 'rate_grace_days';
+  static const String rateGraceDaysValue = 'rate_grace_days_value';
+  static const String rateLateFee = 'rate_late_fee';
+  static const String rateLateFeeCap = 'rate_late_fee_cap';
+  static const String messagesNone = 'messages_none';
+  static const String profileDetails = 'profile_details';
+  static const String profileNameBn = 'profile_name_bn';
+  static const String profileNameEn = 'profile_name_en';
+  static const String profileMobile = 'profile_mobile';
+  static const String profileJoined = 'profile_joined';
+  static const String profileStatus = 'profile_status';
+  static const String profileNoNominees = 'profile_no_nominees';
+  static const String profileEditNote = 'profile_edit_note';
+  static const String profileDividends = 'profile_dividends';
+  static const String profileMessages = 'profile_messages';
+  static const String profileAboutSomiti = 'profile_about_somiti';
+  static const String dividendsNone = 'dividends_none';
+  static const String dividendsShareMonths = 'dividends_share_months';
+  static const String somitiRegistration = 'somiti_registration';
+  static const String somitiAddress = 'somiti_address';
+  static const String somitiPhone = 'somiti_phone';
+  static const String somitiEmail = 'somiti_email';
+  static const String passwordCurrent = 'password_current';
+  static const String passwordNew = 'password_new';
+  static const String passwordConfirm = 'password_confirm';
+  static const String passwordMismatch = 'password_mismatch';
+  static const String passwordSaved = 'password_saved';
 }
