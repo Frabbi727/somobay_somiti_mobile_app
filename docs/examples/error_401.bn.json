@@ -1,0 +1,11 @@
+{
+    "status": 401,
+    "body": {
+        "success": false,
+        "statusCode": 401,
+        "message": "অনুগ্রহ করে আবার লগইন করুন।",
+        "data": null,
+        "errors": null,
+        "meta": null
+    }
+}

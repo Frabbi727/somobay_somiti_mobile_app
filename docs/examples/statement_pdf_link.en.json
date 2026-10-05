@@ -1,0 +1,13 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "url": "http://127.0.0.1:8002/api/v1/statement/pdf-signed?expires=1786508100&from=2026-07-01&member=1&until=2026-08-31&signature=42f0997f05e52845a68c2cd98f824b86c90060b4d1a6ba471a322179a95ee67e"
+        },
+        "errors": null,
+        "meta": null
+    }
+}

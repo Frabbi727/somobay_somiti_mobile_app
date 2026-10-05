@@ -1,0 +1,13 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "url": "http://127.0.0.1:8002/receipts/1?expires=1787112000&signature=741f42f45fe2cb823c26cd4edd43c8f7fcf14658475c769f6eaf8f1982257ddf"
+        },
+        "errors": null,
+        "meta": null
+    }
+}

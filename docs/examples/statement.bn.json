@@ -1,0 +1,128 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": {
+            "from": "2026-07-01",
+            "until": "2026-08-31",
+            "opening": {
+                "poisha": 0,
+                "display": "৳ ০.০০"
+            },
+            "rows": [
+                {
+                    "date": "2026-07-10",
+                    "description": "ভর্তি ফি · 2026-07",
+                    "charge": {
+                        "poisha": 20000,
+                        "display": "৳ ২০০.০০"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "balance": {
+                        "poisha": 20000,
+                        "display": "৳ ২০০.০০"
+                    }
+                },
+                {
+                    "date": "2026-07-10",
+                    "description": "জমা · 2026-07",
+                    "charge": {
+                        "poisha": 100000,
+                        "display": "৳ ১,০০০.০০"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "balance": {
+                        "poisha": 120000,
+                        "display": "৳ ১,২০০.০০"
+                    }
+                },
+                {
+                    "date": "2026-07-10",
+                    "description": "সার্ভিস চার্জ · 2026-07",
+                    "charge": {
+                        "poisha": 2000,
+                        "display": "৳ ২০.০০"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "balance": {
+                        "poisha": 122000,
+                        "display": "৳ ১,২২০.০০"
+                    }
+                },
+                {
+                    "date": "2026-07-20",
+                    "description": "RV-2026-27-000001 · নগদ",
+                    "charge": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "paid": {
+                        "poisha": 250000,
+                        "display": "৳ ২,৫০০.০০"
+                    },
+                    "balance": {
+                        "poisha": -128000,
+                        "display": "-৳ ১,২৮০.০০"
+                    }
+                },
+                {
+                    "date": "2026-08-10",
+                    "description": "জমা · 2026-08",
+                    "charge": {
+                        "poisha": 100000,
+                        "display": "৳ ১,০০০.০০"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "balance": {
+                        "poisha": -28000,
+                        "display": "-৳ ২৮০.০০"
+                    }
+                },
+                {
+                    "date": "2026-08-10",
+                    "description": "সার্ভিস চার্জ · 2026-08",
+                    "charge": {
+                        "poisha": 2000,
+                        "display": "৳ ২০.০০"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ ০.০০"
+                    },
+                    "balance": {
+                        "poisha": -26000,
+                        "display": "-৳ ২৬০.০০"
+                    }
+                }
+            ],
+            "total_charges": {
+                "poisha": 224000,
+                "display": "৳ ২,২৪০.০০"
+            },
+            "total_paid": {
+                "poisha": 250000,
+                "display": "৳ ২,৫০০.০০"
+            },
+            "closing": {
+                "poisha": -26000,
+                "display": "-৳ ২৬০.০০"
+            }
+        },
+        "errors": null,
+        "meta": null
+    }
+}

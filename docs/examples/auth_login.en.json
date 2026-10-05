@@ -1,0 +1,16 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "Signed in.",
+        "data": {
+            "access_token": "3|k87ix0SveTvC55tGh0jStxkBpIIhrMt3SYxEN4x5ca2ca475",
+            "refresh_token": "4|fz9fDsvlg6xD8w275Y9IsepyzI6YFHZRQtuzLz0r39503cdc",
+            "token_type": "Bearer",
+            "expires_in": 3600
+        },
+        "errors": null,
+        "meta": null
+    }
+}

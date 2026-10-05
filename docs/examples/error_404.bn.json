@@ -1,0 +1,11 @@
+{
+    "status": 404,
+    "body": {
+        "success": false,
+        "statusCode": 404,
+        "message": "পাওয়া যায়নি।",
+        "data": null,
+        "errors": null,
+        "meta": null
+    }
+}

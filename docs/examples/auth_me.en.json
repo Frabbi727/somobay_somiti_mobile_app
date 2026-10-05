@@ -1,0 +1,19 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "member_no": "M-30763",
+            "name": "Rahim Uddin",
+            "status": {
+                "value": "active",
+                "label": "Active",
+                "color": "success"
+            }
+        },
+        "errors": null,
+        "meta": null
+    }
+}

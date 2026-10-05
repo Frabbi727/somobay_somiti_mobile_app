@@ -1,0 +1,19 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": {
+            "member_no": "M-30763",
+            "name": "রহিম উদ্দিন",
+            "status": {
+                "value": "active",
+                "label": "সক্রিয়",
+                "color": "success"
+            }
+        },
+        "errors": null,
+        "meta": null
+    }
+}

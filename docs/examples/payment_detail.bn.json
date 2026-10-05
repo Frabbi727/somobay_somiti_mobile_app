@@ -1,0 +1,103 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": {
+            "id": 1,
+            "received_on": "2026-07-20",
+            "method": {
+                "value": "cash",
+                "label": "নগদ",
+                "color": null
+            },
+            "trx_id": null,
+            "amount": {
+                "poisha": 250000,
+                "display": "৳ ২,৫০০.০০"
+            },
+            "status": {
+                "value": "approved",
+                "label": "অনুমোদিত",
+                "color": "success"
+            },
+            "rejection_reason": null,
+            "approved_at": "2026-08-12T10:00:00+06:00",
+            "receipt_available": true,
+            "allocations": [
+                {
+                    "due_id": 3,
+                    "month": "2026-07",
+                    "type": {
+                        "value": "service_charge",
+                        "label": "সার্ভিস চার্জ",
+                        "color": "warning"
+                    },
+                    "amount": {
+                        "poisha": 2000,
+                        "display": "৳ ২০.০০"
+                    }
+                },
+                {
+                    "due_id": 1,
+                    "month": "2026-07",
+                    "type": {
+                        "value": "registration",
+                        "label": "ভর্তি ফি",
+                        "color": "info"
+                    },
+                    "amount": {
+                        "poisha": 20000,
+                        "display": "৳ ২০০.০০"
+                    }
+                },
+                {
+                    "due_id": 2,
+                    "month": "2026-07",
+                    "type": {
+                        "value": "deposit",
+                        "label": "জমা",
+                        "color": "success"
+                    },
+                    "amount": {
+                        "poisha": 100000,
+                        "display": "৳ ১,০০০.০০"
+                    }
+                },
+                {
+                    "due_id": 5,
+                    "month": "2026-08",
+                    "type": {
+                        "value": "service_charge",
+                        "label": "সার্ভিস চার্জ",
+                        "color": "warning"
+                    },
+                    "amount": {
+                        "poisha": 2000,
+                        "display": "৳ ২০.০০"
+                    }
+                },
+                {
+                    "due_id": 4,
+                    "month": "2026-08",
+                    "type": {
+                        "value": "deposit",
+                        "label": "জমা",
+                        "color": "success"
+                    },
+                    "amount": {
+                        "poisha": 100000,
+                        "display": "৳ ১,০০০.০০"
+                    }
+                }
+            ],
+            "to_advance": {
+                "poisha": 26000,
+                "display": "৳ ২৬০.০০"
+            }
+        },
+        "errors": null,
+        "meta": null
+    }
+}

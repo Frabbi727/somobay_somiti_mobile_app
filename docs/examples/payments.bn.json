@@ -1,0 +1,36 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": [
+            {
+                "id": 1,
+                "received_on": "2026-07-20",
+                "method": {
+                    "value": "cash",
+                    "label": "নগদ",
+                    "color": null
+                },
+                "trx_id": null,
+                "amount": {
+                    "poisha": 250000,
+                    "display": "৳ ২,৫০০.০০"
+                },
+                "status": {
+                    "value": "approved",
+                    "label": "অনুমোদিত",
+                    "color": "success"
+                }
+            }
+        ],
+        "errors": null,
+        "meta": {
+            "current_page": 1,
+            "last_page": 1,
+            "per_page": 20,
+            "total": 1
+        }
+    }
+}

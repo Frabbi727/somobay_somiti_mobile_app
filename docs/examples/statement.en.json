@@ -1,0 +1,128 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "from": "2026-07-01",
+            "until": "2026-08-31",
+            "opening": {
+                "poisha": 0,
+                "display": "৳ 0.00"
+            },
+            "rows": [
+                {
+                    "date": "2026-07-10",
+                    "description": "Registration fee · 2026-07",
+                    "charge": {
+                        "poisha": 20000,
+                        "display": "৳ 200.00"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "balance": {
+                        "poisha": 20000,
+                        "display": "৳ 200.00"
+                    }
+                },
+                {
+                    "date": "2026-07-10",
+                    "description": "Deposit · 2026-07",
+                    "charge": {
+                        "poisha": 100000,
+                        "display": "৳ 1,000.00"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "balance": {
+                        "poisha": 120000,
+                        "display": "৳ 1,200.00"
+                    }
+                },
+                {
+                    "date": "2026-07-10",
+                    "description": "Service charge · 2026-07",
+                    "charge": {
+                        "poisha": 2000,
+                        "display": "৳ 20.00"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "balance": {
+                        "poisha": 122000,
+                        "display": "৳ 1,220.00"
+                    }
+                },
+                {
+                    "date": "2026-07-20",
+                    "description": "RV-2026-27-000001 · Cash",
+                    "charge": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "paid": {
+                        "poisha": 250000,
+                        "display": "৳ 2,500.00"
+                    },
+                    "balance": {
+                        "poisha": -128000,
+                        "display": "-৳ 1,280.00"
+                    }
+                },
+                {
+                    "date": "2026-08-10",
+                    "description": "Deposit · 2026-08",
+                    "charge": {
+                        "poisha": 100000,
+                        "display": "৳ 1,000.00"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "balance": {
+                        "poisha": -28000,
+                        "display": "-৳ 280.00"
+                    }
+                },
+                {
+                    "date": "2026-08-10",
+                    "description": "Service charge · 2026-08",
+                    "charge": {
+                        "poisha": 2000,
+                        "display": "৳ 20.00"
+                    },
+                    "paid": {
+                        "poisha": 0,
+                        "display": "৳ 0.00"
+                    },
+                    "balance": {
+                        "poisha": -26000,
+                        "display": "-৳ 260.00"
+                    }
+                }
+            ],
+            "total_charges": {
+                "poisha": 224000,
+                "display": "৳ 2,240.00"
+            },
+            "total_paid": {
+                "poisha": 250000,
+                "display": "৳ 2,500.00"
+            },
+            "closing": {
+                "poisha": -26000,
+                "display": "-৳ 260.00"
+            }
+        },
+        "errors": null,
+        "meta": null
+    }
+}

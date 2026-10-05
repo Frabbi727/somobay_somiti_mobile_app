@@ -1,0 +1,15 @@
+{
+    "status": 422,
+    "body": {
+        "success": false,
+        "statusCode": 422,
+        "message": "চিহ্নিত ঘরগুলো দেখে আবার চেষ্টা করুন।",
+        "data": null,
+        "errors": {
+            "status": [
+                "নির্বাচিত অবস্থা সঠিক নয়।"
+            ]
+        },
+        "meta": null
+    }
+}

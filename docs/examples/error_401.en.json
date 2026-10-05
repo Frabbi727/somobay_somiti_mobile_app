@@ -1,0 +1,11 @@
+{
+    "status": 401,
+    "body": {
+        "success": false,
+        "statusCode": 401,
+        "message": "Please sign in again.",
+        "data": null,
+        "errors": null,
+        "meta": null
+    }
+}
