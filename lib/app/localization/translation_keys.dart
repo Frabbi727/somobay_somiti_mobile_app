@@ -220,4 +220,19 @@ class TranslationKeys {
   static const String payConfirmTitle = 'pay_confirm_title';
   static const String paySend = 'pay_send';
   static const String paySent = 'pay_sent';
+
+  // Statement
+  static const String statementTitle = 'statement_title';
+  static const String statementRange = 'statement_range';
+  static const String statementChangeRange = 'statement_change_range';
+  static const String statementOpening = 'statement_opening';
+  static const String statementClosing = 'statement_closing';
+  static const String statementCharges = 'statement_charges';
+  static const String statementPaid = 'statement_paid';
+  static const String statementCharge = 'statement_charge';
+  static const String statementPayment = 'statement_payment';
+  static const String statementBalance = 'statement_balance';
+  static const String statementNoRows = 'statement_no_rows';
+  static const String statementPdf = 'statement_pdf';
+  static const String statementPdfFailed = 'statement_pdf_failed';
 }

@@ -33,8 +33,6 @@ import '../../modules/share_capital/view/share_overview_page.dart';
 import '../../modules/members/view/member_list_page.dart';
 
 // Transactions
-import '../../modules/transactions/bindings/transaction_binding.dart';
-import '../../modules/transactions/view/transaction_details_page.dart';
 
 // Notifications
 import '../../modules/notifications/view/notification_page.dart';
@@ -106,11 +104,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.members,
       page: () => const MemberListPage(),
-    ),
-    GetPage(
-      name: AppRoutes.transactionDetails,
-      page: () => const TransactionDetailsPage(),
-      binding: TransactionBinding(),
     ),
     GetPage(
       name: AppRoutes.notifications,

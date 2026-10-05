@@ -220,4 +220,19 @@ const Map<String, String> bnBD = {
   TranslationKeys.payConfirmTitle: 'এই পরিশোধ পাঠাবেন?',
   TranslationKeys.paySend: 'পাঠান',
   TranslationKeys.paySent: 'পরিশোধ অনুমোদনের জন্য পাঠানো হয়েছে।',
+
+  // Statement
+  TranslationKeys.statementTitle: 'পাসবই',
+  TranslationKeys.statementRange: '@from – @until',
+  TranslationKeys.statementChangeRange: 'তারিখ বদলান',
+  TranslationKeys.statementOpening: 'শুরুর জের',
+  TranslationKeys.statementClosing: 'শেষ জের',
+  TranslationKeys.statementCharges: 'মোট ধার্য',
+  TranslationKeys.statementPaid: 'মোট পরিশোধ',
+  TranslationKeys.statementCharge: 'ধার্য',
+  TranslationKeys.statementPayment: 'পরিশোধ',
+  TranslationKeys.statementBalance: 'জের',
+  TranslationKeys.statementNoRows: 'এই সময়ে কোনো ধার্য বা পরিশোধ নেই।',
+  TranslationKeys.statementPdf: 'পিডিএফ ডাউনলোড',
+  TranslationKeys.statementPdfFailed: 'পিডিএফ খোলা যায়নি।',
 };

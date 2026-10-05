@@ -220,4 +220,19 @@ const Map<String, String> enUS = {
   TranslationKeys.payConfirmTitle: 'Send this payment?',
   TranslationKeys.paySend: 'Send',
   TranslationKeys.paySent: 'Payment sent for approval.',
+
+  // Statement
+  TranslationKeys.statementTitle: 'Passbook',
+  TranslationKeys.statementRange: '@from – @until',
+  TranslationKeys.statementChangeRange: 'Change dates',
+  TranslationKeys.statementOpening: 'Opening balance',
+  TranslationKeys.statementClosing: 'Closing balance',
+  TranslationKeys.statementCharges: 'Total charged',
+  TranslationKeys.statementPaid: 'Total paid',
+  TranslationKeys.statementCharge: 'Charged',
+  TranslationKeys.statementPayment: 'Paid',
+  TranslationKeys.statementBalance: 'Balance',
+  TranslationKeys.statementNoRows: 'No charges or payments in these dates.',
+  TranslationKeys.statementPdf: 'Download PDF',
+  TranslationKeys.statementPdfFailed: 'Could not open the PDF.',
 };
