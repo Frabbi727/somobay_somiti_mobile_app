@@ -173,6 +173,8 @@ class HomePage extends GetView<HomeController> {
               ),
               if (summary.payNowVisible)
                 ElevatedButton.icon(
+                  // The theme's full-width minimum size cannot lay out inside a Row.
+                  style: ElevatedButton.styleFrom(minimumSize: const Size(0, 40)),
                   onPressed: () => Get.toNamed(AppRoutes.payOnline),
                   icon: const Icon(Icons.payments_outlined, size: 18),
                   label: Text('home_pay_now'.tr),
