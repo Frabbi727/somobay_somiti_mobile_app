@@ -108,4 +108,10 @@ const Map<String, String> bnBD = {
   TranslationKeys.forceUpdateTitle: 'আপডেট প্রয়োজন',
   TranslationKeys.forceUpdateMessage: 'অ্যাপ্লিকেশনটির একটি নতুন সংস্করণ উপলব্ধ রয়েছে। চালিয়ে যেতে অনুগ্রহ করে অ্যাপ্লিকেশনটি আপডেট করুন।',
   TranslationKeys.updateNow: 'এখনই আপডেট করুন',
+
+  // Member API errors
+  TranslationKeys.errorForbidden: 'এটি দেখার অনুমতি নেই। অনুগ্রহ করে আবার লগইন করুন।',
+  TranslationKeys.errorNotFound: 'পাওয়া যায়নি।',
+  TranslationKeys.errorConflict: 'এটি আগেই অন্য তথ্যসহ জমা হয়েছে।',
+  TranslationKeys.errorTooMany: 'অনেকবার চেষ্টা হয়েছে। এক মিনিট পরে আবার চেষ্টা করুন।',
 };

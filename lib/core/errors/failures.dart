@@ -50,3 +50,27 @@ class UnknownFailure extends Failure {
     String? message,
   }) : super(message: message ?? 'error_unknown');
 }
+
+class ForbiddenFailure extends Failure {
+  const ForbiddenFailure({
+    String? message,
+  }) : super(message: message ?? 'error_forbidden', statusCode: 403);
+}
+
+class NotFoundFailure extends Failure {
+  const NotFoundFailure({
+    String? message,
+  }) : super(message: message ?? 'error_not_found', statusCode: 404);
+}
+
+class ConflictFailure extends Failure {
+  const ConflictFailure({
+    String? message,
+  }) : super(message: message ?? 'error_conflict', statusCode: 409);
+}
+
+class RateLimitFailure extends Failure {
+  const RateLimitFailure({
+    String? message,
+  }) : super(message: message ?? 'error_too_many', statusCode: 429);
+}

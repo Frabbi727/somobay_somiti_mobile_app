@@ -30,6 +30,9 @@ class ApiClient {
     }
   }
 
+  /// Test seam: an ApiClient over a prepared Dio (no interceptors are added).
+  ApiClient.forTesting(Dio dio) : _dio = dio;
+
   Dio get dio => _dio;
 
   Future<Response<T>> get<T>(

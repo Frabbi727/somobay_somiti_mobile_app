@@ -108,4 +108,10 @@ class TranslationKeys {
   static const String forceUpdateTitle = 'force_update_title';
   static const String forceUpdateMessage = 'force_update_message';
   static const String updateNow = 'force_update_button';
+
+  // Member API errors
+  static const String errorForbidden = 'error_forbidden';
+  static const String errorNotFound = 'error_not_found';
+  static const String errorConflict = 'error_conflict';
+  static const String errorTooMany = 'error_too_many';
 }

@@ -108,4 +108,10 @@ const Map<String, String> enUS = {
   TranslationKeys.forceUpdateTitle: 'Update Required',
   TranslationKeys.forceUpdateMessage: 'A new version of the application is available. Please update the application to continue.',
   TranslationKeys.updateNow: 'Update Now',
+
+  // Member API errors
+  TranslationKeys.errorForbidden: 'You do not have access to this. Please sign in again.',
+  TranslationKeys.errorNotFound: 'Not found.',
+  TranslationKeys.errorConflict: 'This was already submitted with different details.',
+  TranslationKeys.errorTooMany: 'Too many attempts. Please wait a minute and try again.',
 };

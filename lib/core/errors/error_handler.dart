@@ -53,12 +53,25 @@ class ErrorHandler {
           }
         }
 
-        if (statusCode == 401) {
-          return const AuthenticationFailure();
-        } else if (statusCode == 422) {
-          return ValidationFailure(message: message, errors: validationErrors);
-        } else {
-          return ServerFailure(message: message, statusCode: statusCode);
+        switch (statusCode) {
+          case 401:
+            return const AuthenticationFailure();
+          case 403:
+            return ForbiddenFailure(message: message);
+          case 404:
+            return NotFoundFailure(message: message);
+          case 409:
+            return ConflictFailure(message: message);
+          case 422:
+            return ValidationFailure(message: message, errors: validationErrors);
+          case 429:
+            return RateLimitFailure(message: message);
+          default:
+            // 5xx: never show the server's text (it may be technical); use the app's own message.
+            return ServerFailure(
+              message: (statusCode ?? 500) >= 500 ? 'error_server' : message,
+              statusCode: statusCode,
+            );
         }
 
       case DioExceptionType.connectionError:
