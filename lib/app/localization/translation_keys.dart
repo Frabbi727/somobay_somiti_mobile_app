@@ -181,4 +181,43 @@ class TranslationKeys {
   static const String duesDueDate = 'dues_due_date';
   static const String duesNoneOpen = 'dues_none_open';
   static const String duesNone = 'dues_none';
+
+  // Payments
+  static const String tabPayments = 'tab_payments';
+  static const String paymentsTitle = 'payments_title';
+  static const String paymentsFilterAll = 'payments_filter_all';
+  static const String paymentsFilterPending = 'payments_filter_pending';
+  static const String paymentsFilterApproved = 'payments_filter_approved';
+  static const String paymentsFilterRejected = 'payments_filter_rejected';
+  static const String paymentsNone = 'payments_none';
+  static const String paymentsPayOnline = 'payments_pay_online';
+  static const String paymentDetailTitle = 'payment_detail_title';
+  static const String paymentAmount = 'payment_amount';
+  static const String paymentMethod = 'payment_method';
+  static const String paymentTrx = 'payment_trx';
+  static const String paymentDate = 'payment_date';
+  static const String paymentApprovedAt = 'payment_approved_at';
+  static const String paymentRejectionReason = 'payment_rejection_reason';
+  static const String paymentAllocations = 'payment_allocations';
+  static const String paymentToAdvance = 'payment_to_advance';
+  static const String paymentPendingNote = 'payment_pending_note';
+  static const String paymentReceipt = 'payment_receipt';
+  static const String paymentReceiptOpenFailed = 'payment_receipt_open_failed';
+  static const String payTitle = 'pay_title';
+  static const String payIntro = 'pay_intro';
+  static const String payMethod = 'pay_method';
+  static const String payBkash = 'pay_bkash';
+  static const String payNagad = 'pay_nagad';
+  static const String payAmount = 'pay_amount';
+  static const String payAmountHint = 'pay_amount_hint';
+  static const String payTrx = 'pay_trx';
+  static const String payTrxHint = 'pay_trx_hint';
+  static const String payDate = 'pay_date';
+  static const String payProof = 'pay_proof';
+  static const String payProofChoose = 'pay_proof_choose';
+  static const String payProofTooLarge = 'pay_proof_too_large';
+  static const String payProofRequired = 'pay_proof_required';
+  static const String payConfirmTitle = 'pay_confirm_title';
+  static const String paySend = 'pay_send';
+  static const String paySent = 'pay_sent';
 }
