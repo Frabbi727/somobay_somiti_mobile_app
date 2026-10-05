@@ -7,6 +7,7 @@ import '../../../../core/widgets/app_buttons.dart';
 import '../../../../core/widgets/app_text_fields.dart';
 import '../../../../core/widgets/app_network_banner.dart';
 import '../controller/login_controller.dart';
+import 'package:somobay_somiti_mobile_app/core/widgets/app_logo.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({Key? key}) : super(key: key);
@@ -29,21 +30,7 @@ class LoginPage extends GetView<LoginController> {
                     children: [
                       const SizedBox(height: 20),
                       // Logo & Header
-                      Center(
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryContainer,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.account_balance_rounded,
-                            size: 42,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
+                      const Center(child: AppLogo(size: 96)),
                       const SizedBox(height: 24),
                       Center(
                         child: Text(

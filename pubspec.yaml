@@ -40,6 +40,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
+  # Only the in-app logo; the launcher/Play Store artwork is not bundled.
+  assets:
+    - assets/images/logo.jpg
+
   # assets:
   #   - assets/icons/
   #   - assets/images/

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../controller/splash_controller.dart';
+import 'package:somobay_somiti_mobile_app/core/widgets/app_logo.dart';
 
 class SplashPage extends GetView<SplashController> {
   const SplashPage({Key? key}) : super(key: key);
@@ -32,13 +33,7 @@ class SplashPage extends GetView<SplashController> {
                   ),
                 ],
               ),
-              child: const Center(
-                child: Icon(
-                  Icons.account_balance_rounded,
-                  size: 56,
-                  color: AppColors.primary,
-                ),
-              ),
+              child: const AppLogo(size: 100),
             ),
             const SizedBox(height: 24),
             Text(

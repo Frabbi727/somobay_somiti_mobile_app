@@ -9,6 +9,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_error_state.dart';
 import '../../../core/widgets/app_loading.dart';
 import '../controller/profile_controller.dart';
+import 'package:somobay_somiti_mobile_app/core/widgets/app_logo.dart';
 
 /// The society's name, registration, address and contact (`config/somiti-info`).
 class SomitiInfoPage extends GetView<SomitiInfoController> {
@@ -30,8 +31,8 @@ class SomitiInfoPage extends GetView<SomitiInfoController> {
           children: [
             Center(
               child: info.logoUrl == null
-                  ? const Icon(Icons.account_balance_rounded, size: 64, color: AppColors.primary)
-                  : CachedNetworkImage(imageUrl: info.logoUrl!, height: 80, errorWidget: (_, __, ___) => const Icon(Icons.account_balance_rounded, size: 64)),
+                  ? const AppLogo(size: 88)
+                  : CachedNetworkImage(imageUrl: info.logoUrl!, height: 80, errorWidget: (_, __, ___) => const AppLogo(size: 88)),
             ),
             const SizedBox(height: 12),
             Text(info.name, textAlign: TextAlign.center, style: AppTextStyles.h2),

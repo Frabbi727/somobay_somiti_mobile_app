@@ -5,6 +5,7 @@ import '../../../core/errors/failures.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/services/log_service.dart';
 import '../repository/splash_repository.dart';
+import '../../../app/routes/go_to_login.dart';
 
 /// Start-up: load the society's details (name, SMS-code sign-in on/off), then check the stored
 /// session with the backend. There is no app-version check (no backend support).
@@ -33,7 +34,7 @@ class SplashController extends GetxController {
 
       final token = await storageService.getAccessToken();
       if (token == null || token.isEmpty) {
-        Get.offAllNamed(AppRoutes.login);
+        goToLogin();
         return;
       }
 
@@ -44,11 +45,11 @@ class SplashController extends GetxController {
         Get.offAllNamed(AppRoutes.dashboard);
       } else {
         await storageService.clearAuthData();
-        Get.offAllNamed(AppRoutes.login);
+        goToLogin();
       }
     } catch (e) {
       LogService.e('Startup sequence failed', error: e, tag: 'STARTUP');
-      Get.offAllNamed(AppRoutes.login);
+      goToLogin();
     }
   }
 }

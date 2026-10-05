@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' as getx;
 import '../../constants/api_constants.dart';
 import '../../services/storage_service.dart';
 import '../../services/log_service.dart';
-import '../../../app/routes/app_routes.dart';
+import '../../../app/routes/go_to_login.dart';
 
 /// Adds the access token and language to every request. On 401 it refreshes the token pair once
 /// and retries. Errors are handled one at a time (QueuedInterceptor), so when several requests
@@ -22,7 +21,7 @@ class AuthInterceptor extends QueuedInterceptor {
     required this.storageService,
     required this.dio,
     void Function()? onSessionExpired,
-  }) : onSessionExpired = onSessionExpired ?? (() => getx.Get.offAllNamed(AppRoutes.login));
+  }) : onSessionExpired = onSessionExpired ?? goToLogin;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
