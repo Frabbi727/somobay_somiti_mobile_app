@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_dimensions.dart';
@@ -113,7 +114,7 @@ class AppSearchField extends StatelessWidget {
       onChanged: onChanged,
       style: AppTextStyles.bodyMedium,
       decoration: InputDecoration(
-        hintText: hint ?? 'Search...',
+        hintText: hint ?? 'common_search'.tr,
         prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textSecondary),
         suffixIcon: controller != null && controller!.text.isNotEmpty
             ? IconButton(

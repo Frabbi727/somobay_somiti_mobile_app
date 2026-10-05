@@ -277,4 +277,7 @@ const Map<String, String> enUS = {
   TranslationKeys.passwordConfirm: 'Confirm new password',
   TranslationKeys.passwordMismatch: 'The passwords do not match.',
   TranslationKeys.passwordSaved: 'Password changed. Other phones were signed out.',
+
+  // Splash
+  TranslationKeys.splashTagline: 'A trusted platform for savings and growth',
 };

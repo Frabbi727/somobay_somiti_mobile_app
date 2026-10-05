@@ -277,4 +277,7 @@ class TranslationKeys {
   static const String passwordConfirm = 'password_confirm';
   static const String passwordMismatch = 'password_mismatch';
   static const String passwordSaved = 'password_saved';
+
+  // Splash
+  static const String splashTagline = 'splash_tagline';
 }

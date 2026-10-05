@@ -50,7 +50,7 @@ class SplashPage extends GetView<SplashController> {
             ),
             const SizedBox(height: 8),
             Text(
-              'সঞ্চয় ও উন্নয়নের বিশ্বস্ত প্ল্যাটফর্ম',
+              'splash_tagline'.tr,
               style: AppTextStyles.bodyMedium.copyWith(
                 color: Colors.white70,
               ),

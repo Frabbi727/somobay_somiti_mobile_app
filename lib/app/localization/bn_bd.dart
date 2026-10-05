@@ -277,4 +277,7 @@ const Map<String, String> bnBD = {
   TranslationKeys.passwordConfirm: 'নতুন পাসওয়ার্ড আবার লিখুন',
   TranslationKeys.passwordMismatch: 'দুটি পাসওয়ার্ড মিলছে না।',
   TranslationKeys.passwordSaved: 'পাসওয়ার্ড বদলানো হয়েছে। অন্য ফোনগুলো থেকে লগআউট হয়েছে।',
+
+  // Splash
+  TranslationKeys.splashTagline: 'সঞ্চয় ও উন্নয়নের বিশ্বস্ত প্ল্যাটফর্ম',
 };

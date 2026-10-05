@@ -21,7 +21,7 @@ Login ── password or SMS code ──▶ Dashboard
 | 1 | Home (হোম) | Home | `HomePage` | Summary cards, Pay now, recent payments, links to Shares and Messages |
 | 2 | Dues (বকেয়া) | Savings & DPS | `DuesPage` (new) | Dues list with status/type filters |
 | 3 | Payments (পরিশোধ) | Loans | `PaymentsPage` (new) | Payments list, "Pay online" button |
-| 4 | Passbook (পাসবই) | Passbook | `TransactionHistoryPage` (now the statement) | Statement for a date range, PDF |
+| 4 | Passbook (খতিয়ান বই) | Passbook | `TransactionHistoryPage` (now the statement) | Statement for a date range, PDF |
 | 5 | Profile (প্রোফাইল) | Profile | `ProfilePage` | Details, nominees, links below |
 
 ## Secondary pages (pushed with `Get.toNamed`)

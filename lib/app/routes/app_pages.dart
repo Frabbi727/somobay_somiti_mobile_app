@@ -4,45 +4,36 @@ import 'app_routes.dart';
 // Splash & Startup
 import '../../modules/splash/bindings/splash_binding.dart';
 import '../../modules/splash/view/splash_page.dart';
-import '../../modules/splash/view/force_update_page.dart';
 
 // Auth
 import '../../modules/authentication/login/bindings/login_binding.dart';
 import '../../modules/authentication/login/view/login_page.dart';
-import '../../modules/authentication/register/view/register_page.dart';
-import '../../modules/authentication/forgot_password/view/forgot_password_page.dart';
-import '../../modules/authentication/otp_verification/view/otp_verification_page.dart';
 
 // Dashboard & Core Tabs
 import '../../modules/dashboard/bindings/dashboard_binding.dart';
 import '../../modules/dashboard/view/dashboard_page.dart';
 
-// Savings
-import '../../modules/savings_dps/bindings/savings_binding.dart';
-import '../../modules/savings_dps/view/new_deposit_page.dart';
-
-// Loans
-import '../../modules/loans/bindings/loan_binding.dart';
-import '../../modules/loans/view/loan_calculator_page.dart';
-import '../../modules/loans/view/loan_repayment_page.dart';
+// Payments
+import '../../modules/payments/bindings/payments_binding.dart';
+import '../../modules/payments/view/pay_online_page.dart';
+import '../../modules/payments/view/payment_detail_page.dart';
 
 // Shares
+import '../../modules/share_capital/bindings/shares_binding.dart';
 import '../../modules/share_capital/view/share_overview_page.dart';
 
-// Members
-import '../../modules/members/view/member_list_page.dart';
-
-// Transactions
-
-// Notifications
+// Notifications (SMS history)
+import '../../modules/notifications/bindings/notifications_binding.dart';
 import '../../modules/notifications/view/notification_page.dart';
 
 // Profile & Settings
 import '../../modules/profile_settings/bindings/profile_binding.dart';
 import '../../modules/profile_settings/view/language_selection_page.dart';
 import '../../modules/profile_settings/view/change_password_page.dart';
+import '../../modules/profile_settings/view/dividends_page.dart';
 import '../../modules/profile_settings/view/somiti_info_page.dart';
 
+/// Only member features the backend supports are registered (docs/MEMBER_NAVIGATION.md).
 class AppPages {
   AppPages._();
 
@@ -55,27 +46,8 @@ class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
-      name: AppRoutes.forceUpdate,
-      page: () => const ForceUpdatePage(),
-    ),
-    GetPage(
       name: AppRoutes.login,
       page: () => const LoginPage(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.register,
-      page: () => const RegisterPage(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.forgotPassword,
-      page: () => const ForgotPasswordPage(),
-      binding: LoginBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.otpVerification,
-      page: () => const OtpVerificationPage(),
       binding: LoginBinding(),
     ),
     GetPage(
@@ -84,30 +56,29 @@ class AppPages {
       binding: DashboardBinding(),
     ),
     GetPage(
-      name: AppRoutes.newDeposit,
-      page: () => const NewDepositPage(),
-      binding: SavingsBinding(),
+      name: AppRoutes.payOnline,
+      page: () => const PayOnlinePage(),
+      binding: PayOnlineBinding(),
     ),
     GetPage(
-      name: AppRoutes.loanCalculator,
-      page: () => const LoanCalculatorPage(),
-    ),
-    GetPage(
-      name: AppRoutes.loanRepay,
-      page: () => const LoanRepaymentPage(),
-      binding: LoanBinding(),
+      name: AppRoutes.paymentDetail,
+      page: () => const PaymentDetailPage(),
+      binding: PaymentDetailBinding(),
     ),
     GetPage(
       name: AppRoutes.shareOverview,
       page: () => const ShareOverviewPage(),
-    ),
-    GetPage(
-      name: AppRoutes.members,
-      page: () => const MemberListPage(),
+      binding: SharesBinding(),
     ),
     GetPage(
       name: AppRoutes.notifications,
       page: () => const NotificationPage(),
+      binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.dividends,
+      page: () => const DividendsPage(),
+      binding: ProfileBinding(),
     ),
     GetPage(
       name: AppRoutes.language,
@@ -122,6 +93,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.somitiInfo,
       page: () => const SomitiInfoPage(),
+      binding: ProfileBinding(),
     ),
   ];
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'app_loading.dart';
 import 'app_empty_state.dart';
 import 'app_error_state.dart';
@@ -74,7 +75,7 @@ class _AppPaginationViewState<T> extends State<AppPaginationView<T>> {
       return widget.emptyWidget ??
           AppEmptyState(
             onAction: widget.onRefresh,
-            actionText: 'Retry',
+            actionText: 'common_retry'.tr,
           );
     }
 
