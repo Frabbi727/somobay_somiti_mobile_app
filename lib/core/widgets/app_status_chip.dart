@@ -7,7 +7,7 @@ import '../models/enum_value_model.dart';
 class AppStatusChip extends StatelessWidget {
   final EnumValueModel status;
 
-  const AppStatusChip({Key? key, required this.status}) : super(key: key);
+  const AppStatusChip({super.key, required this.status});
 
   static Color colorOf(String? name) {
     switch (name) {
@@ -33,7 +33,7 @@ class AppStatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
