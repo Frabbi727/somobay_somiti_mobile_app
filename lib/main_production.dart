@@ -5,7 +5,7 @@ void main() async {
   await runSomitiApp(
     const AppConfig(
       appName: 'Somobay Somiti',
-      apiBaseUrl: 'https://api.somobaysomiti.com',
+      apiBaseUrl: 'https://shomiti.techrealify.com',
       connectTimeout: Duration(seconds: 30),
       receiveTimeout: Duration(seconds: 30),
       enableLogging: false,
