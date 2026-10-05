@@ -114,4 +114,22 @@ const Map<String, String> bnBD = {
   TranslationKeys.errorNotFound: 'পাওয়া যায়নি।',
   TranslationKeys.errorConflict: 'এটি আগেই অন্য তথ্যসহ জমা হয়েছে।',
   TranslationKeys.errorTooMany: 'অনেকবার চেষ্টা হয়েছে। এক মিনিট পরে আবার চেষ্টা করুন।',
+
+  // Member sign-in
+  TranslationKeys.errorTitle: 'ত্রুটি',
+  TranslationKeys.successTitle: 'সম্পন্ন',
+  TranslationKeys.passwordHelp: 'পাসওয়ার্ড সমিতির অফিস দেয়। পাসওয়ার্ড না থাকলে অফিসে যোগাযোগ করুন।',
+  TranslationKeys.usePassword: 'পাসওয়ার্ড',
+  TranslationKeys.useCode: 'এসএমএস কোড',
+  TranslationKeys.codeLabel: 'এসএমএস কোড',
+  TranslationKeys.codeHint: '৬ অঙ্কের কোড',
+  TranslationKeys.sendCode: 'কোড পাঠান',
+  TranslationKeys.resendIn: '@seconds সেকেন্ড পরে আবার পাঠান',
+  TranslationKeys.codeRequired: 'এসএমএসে আসা কোডটি লিখুন।',
+
+  // Member sign-in (code)
+  TranslationKeys.codeSent: 'এসএমএসে একটি কোড পাঠানো হয়েছে।',
+
+  // Unsupported
+  TranslationKeys.errorNotSupported: 'এটি এখন পাওয়া যায় না। সমিতির অফিসে যোগাযোগ করুন।',
 };

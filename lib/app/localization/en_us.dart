@@ -114,4 +114,22 @@ const Map<String, String> enUS = {
   TranslationKeys.errorNotFound: 'Not found.',
   TranslationKeys.errorConflict: 'This was already submitted with different details.',
   TranslationKeys.errorTooMany: 'Too many attempts. Please wait a minute and try again.',
+
+  // Member sign-in
+  TranslationKeys.errorTitle: 'Something went wrong',
+  TranslationKeys.successTitle: 'Done',
+  TranslationKeys.passwordHelp: 'Your password is set by the society office. Ask them if you do not have one.',
+  TranslationKeys.usePassword: 'Password',
+  TranslationKeys.useCode: 'SMS code',
+  TranslationKeys.codeLabel: 'SMS code',
+  TranslationKeys.codeHint: '6-digit code',
+  TranslationKeys.sendCode: 'Send code',
+  TranslationKeys.resendIn: 'Resend in @seconds s',
+  TranslationKeys.codeRequired: 'Enter the code from the SMS.',
+
+  // Member sign-in (code)
+  TranslationKeys.codeSent: 'A code has been sent by SMS.',
+
+  // Unsupported
+  TranslationKeys.errorNotSupported: 'This is not available. Please contact the society office.',
 };

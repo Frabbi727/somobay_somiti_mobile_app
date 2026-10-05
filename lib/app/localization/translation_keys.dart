@@ -114,4 +114,22 @@ class TranslationKeys {
   static const String errorNotFound = 'error_not_found';
   static const String errorConflict = 'error_conflict';
   static const String errorTooMany = 'error_too_many';
+
+  // Member sign-in
+  static const String errorTitle = 'common_error_title';
+  static const String successTitle = 'common_success_title';
+  static const String passwordHelp = 'auth_password_help';
+  static const String usePassword = 'auth_use_password';
+  static const String useCode = 'auth_use_code';
+  static const String codeLabel = 'auth_code_label';
+  static const String codeHint = 'auth_code_hint';
+  static const String sendCode = 'auth_send_code';
+  static const String resendIn = 'auth_resend_in';
+  static const String codeRequired = 'auth_code_required';
+
+  // Member sign-in (code)
+  static const String codeSent = 'auth_code_sent';
+
+  // Unsupported
+  static const String errorNotSupported = 'error_not_supported';
 }

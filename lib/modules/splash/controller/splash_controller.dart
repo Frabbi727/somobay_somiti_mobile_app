@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
+import '../../../core/constants/storage_keys.dart';
+import '../../../core/errors/failures.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/services/log_service.dart';
 import '../repository/splash_repository.dart';
 
+/// Start-up: load the society's details (name, SMS-code sign-in on/off), then check the stored
+/// session with the backend. There is no app-version check (no backend support).
 class SplashController extends GetxController {
   final ISplashRepository repository;
   final StorageService storageService;
@@ -21,23 +25,25 @@ class SplashController extends GetxController {
 
   Future<void> _handleAppStartup() async {
     try {
-      // 1. Minimum Version & Force Update Check
-      final versionResult = await repository.checkAppVersion();
-      if (versionResult.versionData != null && versionResult.versionData!.forceUpdate) {
-        Get.offAllNamed(
-          AppRoutes.forceUpdate,
-          arguments: versionResult.versionData,
-        );
+      final info = await repository.somitiInfo();
+      if (info.info != null) {
+        await storageService.saveString(StorageKeys.somitiName, info.info!.name);
+        await storageService.saveBool(StorageKeys.otpEnabled, info.info!.otpEnabled);
+      }
+
+      final token = await storageService.getAccessToken();
+      if (token == null || token.isEmpty) {
+        Get.offAllNamed(AppRoutes.login);
         return;
       }
 
-      // 2. Authentication Check
-      final token = await storageService.getAccessToken();
-      if (token != null && token.isNotEmpty) {
-        LogService.i('Active session found, navigating to Dashboard', tag: 'STARTUP');
+      final session = await repository.me();
+      if (session.isValid || session.failure is NetworkFailure || session.failure is TimeoutFailure) {
+        // Offline with a session: open the app; each screen shows its own offline state.
+        LogService.i('Session accepted (or offline), navigating to Dashboard', tag: 'STARTUP');
         Get.offAllNamed(AppRoutes.dashboard);
       } else {
-        LogService.i('No active session, navigating to Login', tag: 'STARTUP');
+        await storageService.clearAuthData();
         Get.offAllNamed(AppRoutes.login);
       }
     } catch (e) {

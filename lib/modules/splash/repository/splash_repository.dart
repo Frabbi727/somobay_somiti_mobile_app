@@ -1,10 +1,14 @@
+import '../../../core/constants/api_constants.dart';
 import '../../../core/errors/error_handler.dart';
 import '../../../core/errors/failures.dart';
-import '../../../core/models/app_version_model.dart';
 import '../../../core/network/api_client.dart';
+import '../../profile_settings/model/somiti_info_model.dart';
 
 abstract class ISplashRepository {
-  Future<({Failure? failure, AppVersionModel? versionData})> checkAppVersion();
+  Future<({Failure? failure, SomitiInfoModel? info})> somitiInfo();
+
+  /// Whether the stored session is still accepted by the backend.
+  Future<({Failure? failure, bool isValid})> me();
 }
 
 class SplashRepository implements ISplashRepository {
@@ -13,22 +17,23 @@ class SplashRepository implements ISplashRepository {
   SplashRepository({required this.apiClient});
 
   @override
-  Future<({Failure? failure, AppVersionModel? versionData})> checkAppVersion() async {
+  Future<({Failure? failure, SomitiInfoModel? info})> somitiInfo() async {
     try {
-      // Production fallback / demo simulation
-      await Future.delayed(const Duration(milliseconds: 1200));
-      return (
-        failure: null,
-        versionData: const AppVersionModel(
-          minimumVersion: '1.0.0',
-          latestVersion: '1.0.0',
-          forceUpdate: false,
-          updateUrl: 'https://play.google.com/store',
-          releaseNotes: 'Performance improvements and bug fixes',
-        ),
-      );
+      final response = await apiClient.get(ApiConstants.somitiInfo);
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+      return (failure: null, info: SomitiInfoModel.fromJson(data));
     } catch (e) {
-      return (failure: ErrorHandler.handleException(e), versionData: null);
+      return (failure: ErrorHandler.handleException(e), info: null);
+    }
+  }
+
+  @override
+  Future<({Failure? failure, bool isValid})> me() async {
+    try {
+      await apiClient.get(ApiConstants.me);
+      return (failure: null, isValid: true);
+    } catch (e) {
+      return (failure: ErrorHandler.handleException(e), isValid: false);
     }
   }
 }

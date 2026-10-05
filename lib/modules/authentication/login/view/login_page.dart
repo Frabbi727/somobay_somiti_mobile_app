@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../app/routes/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_dimensions.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/utils/app_validator.dart';
 import '../../../../core/widgets/app_buttons.dart';
@@ -77,61 +75,43 @@ class LoginPage extends GetView<LoginController> {
                       ),
                       const SizedBox(height: 18),
 
-                      // Password Input
-                      Obx(() => AppTextField(
-                            label: 'auth_password_label'.tr,
-                            hint: 'auth_password_hint'.tr,
-                            controller: controller.passwordController,
-                            validator: AppValidator.validatePassword,
-                            obscureText: !controller.isPasswordVisible.value,
-                            isRequired: true,
-                            prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.textSecondary),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                controller.isPasswordVisible.value
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: AppColors.textSecondary,
+                      // Sign-in method (only when the society allows SMS codes)
+                      Obx(() => controller.otpEnabled.value
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 18),
+                              child: SegmentedButton<bool>(
+                                segments: [
+                                  ButtonSegment(value: false, label: Text('auth_use_password'.tr), icon: const Icon(Icons.lock_outline_rounded)),
+                                  ButtonSegment(value: true, label: Text('auth_use_code'.tr), icon: const Icon(Icons.sms_outlined)),
+                                ],
+                                selected: {controller.useCode.value},
+                                onSelectionChanged: (selection) => controller.setUseCode(selection.first),
                               ),
-                              onPressed: controller.togglePasswordVisibility,
-                            ),
-                          )),
+                            )
+                          : const SizedBox.shrink()),
+
+                      Obx(() => controller.useCode.value ? _codeField() : _passwordField()),
                       const SizedBox(height: 12),
 
-                      // Remember Me & Forgot Password
+                      // Remember me
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Obx(() => SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: Checkbox(
-                                      value: controller.rememberMe.value,
-                                      onChanged: controller.toggleRememberMe,
-                                      activeColor: AppColors.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                    ),
-                                  )),
-                              const SizedBox(width: 8),
-                              Text(
-                                'auth_remember_me'.tr,
-                                style: AppTextStyles.bodySmall,
-                              ),
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () => Get.toNamed(AppRoutes.forgotPassword),
-                            child: Text(
-                              'auth_forgot_password'.tr,
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          Obx(() => SizedBox(
+                                height: 24,
+                                width: 24,
+                                child: Checkbox(
+                                  value: controller.rememberMe.value,
+                                  onChanged: controller.toggleRememberMe,
+                                  activeColor: AppColors.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              )),
+                          const SizedBox(width: 8),
+                          Text(
+                            'auth_remember_me'.tr,
+                            style: AppTextStyles.bodySmall,
                           ),
                         ],
                       ),
@@ -145,25 +125,11 @@ class LoginPage extends GetView<LoginController> {
                           )),
                       const SizedBox(height: 24),
 
-                      // Register Navigation Prompt
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'auth_register_prompt'.tr,
-                            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
-                          ),
-                          TextButton(
-                            onPressed: () => Get.toNamed(AppRoutes.register),
-                            child: Text(
-                              'auth_register_now'.tr,
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
+                      // Passwords are set by the society office (no self-registration or reset)
+                      Text(
+                        'auth_password_help'.tr,
+                        style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -171,6 +137,45 @@ class LoginPage extends GetView<LoginController> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _passwordField() {
+    return AppTextField(
+      label: 'auth_password_label'.tr,
+      hint: 'auth_password_hint'.tr,
+      controller: controller.passwordController,
+      validator: AppValidator.validatePassword,
+      obscureText: !controller.isPasswordVisible.value,
+      isRequired: true,
+      prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.textSecondary),
+      suffixIcon: IconButton(
+        icon: Icon(
+          controller.isPasswordVisible.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          color: AppColors.textSecondary,
+        ),
+        onPressed: controller.togglePasswordVisibility,
+      ),
+    );
+  }
+
+  Widget _codeField() {
+    return AppTextField(
+      label: 'auth_code_label'.tr,
+      hint: 'auth_code_hint'.tr,
+      controller: controller.codeController,
+      validator: (value) => (value == null || value.trim().isEmpty) ? 'auth_code_required'.tr : null,
+      keyboardType: TextInputType.number,
+      isRequired: true,
+      prefixIcon: const Icon(Icons.sms_outlined, color: AppColors.textSecondary),
+      suffixIcon: TextButton(
+        onPressed: controller.resendIn.value > 0 || controller.sendingCode.value ? null : controller.sendCode,
+        child: Text(
+          controller.resendIn.value > 0
+              ? 'auth_resend_in'.trParams({'seconds': '${controller.resendIn.value}'})
+              : 'auth_send_code'.tr,
         ),
       ),
     );
