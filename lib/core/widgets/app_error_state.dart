@@ -22,6 +22,7 @@ class AppErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     final displayMessage = message ?? failure?.message.tr ?? 'error_unknown'.tr;
     final isNetwork = failure is NetworkFailure;
+    final heading = isNetwork ? 'error_no_internet'.tr : 'error_server'.tr;
 
     return Center(
       child: Padding(
@@ -44,16 +45,19 @@ class AppErrorState extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.space16),
             Text(
-              isNetwork ? 'error_no_internet'.tr : 'error_server'.tr,
+              heading,
               style: AppTextStyles.h3,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppDimensions.space8),
-            Text(
-              displayMessage,
-              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
-              textAlign: TextAlign.center,
-            ),
+            // A network failure's message is usually the heading itself; don't say it twice.
+            if (displayMessage != heading) ...[
+              const SizedBox(height: AppDimensions.space8),
+              Text(
+                displayMessage,
+                style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
             if (onRetry != null) ...[
               const SizedBox(height: AppDimensions.space24),
               AppButton(
