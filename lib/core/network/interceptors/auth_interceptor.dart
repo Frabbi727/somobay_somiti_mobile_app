@@ -49,7 +49,17 @@ class AuthInterceptor extends QueuedInterceptor {
     final currentToken = await storageService.getAccessToken();
 
     // Another request already refreshed while this one waited in the queue: just retry.
-    final token = (currentToken != null && currentToken.isNotEmpty && currentToken != sentToken) ? currentToken : await _refresh();
+    final String? token;
+    if (currentToken != null && currentToken.isNotEmpty && currentToken != sentToken) {
+      token = currentToken;
+    } else {
+      final refreshed = await _refresh();
+      // The server could not be reached: keep the session and let this request fail as offline.
+      if (refreshed.unreachable) {
+        return handler.next(err);
+      }
+      token = refreshed.token;
+    }
 
     if (token == null) {
       await storageService.clearAuthData();
@@ -66,11 +76,13 @@ class AuthInterceptor extends QueuedInterceptor {
     }
   }
 
-  /// Exchanges the refresh token for a new pair; null when that is not possible.
-  Future<String?> _refresh() async {
+  /// Exchanges the refresh token for a new pair. [token] is null when the server refused it or
+  /// there is none; [unreachable] is true when no answer came back (offline, timeout), in which
+  /// case the session is kept.
+  Future<({String? token, bool unreachable})> _refresh() async {
     final refreshToken = await storageService.getRefreshToken();
     if (refreshToken == null || refreshToken.isEmpty) {
-      return null;
+      return (token: null, unreachable: false);
     }
 
     // A separate client: a refused refresh must not queue behind this interceptor.
@@ -89,14 +101,17 @@ class AuthInterceptor extends QueuedInterceptor {
       final refresh = data?['refresh_token'] as String?;
 
       if (access == null || refresh == null) {
-        return null;
+        return (token: null, unreachable: false);
       }
 
       await storageService.saveTokens(access: access, refresh: refresh);
-      return access;
+      return (token: access, unreachable: false);
+    } on DioException catch (e) {
+      LogService.e('Token refresh failed', error: e, tag: 'AUTH_INTERCEPTOR');
+      return (token: null, unreachable: e.response == null);
     } catch (e) {
       LogService.e('Token refresh failed', error: e, tag: 'AUTH_INTERCEPTOR');
-      return null;
+      return (token: null, unreachable: false);
     }
   }
 }

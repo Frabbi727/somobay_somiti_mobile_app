@@ -87,6 +87,23 @@ void main() {
     expect(expired, 1);
   });
 
+  test('keeps the session when the refresh cannot reach the server', () async {
+    final storage = MemoryStorage(access: 'old', refresh: 'r1');
+    final api = FakeApi({
+      'GET ${ApiConstants.profile}': (r) => (401, envelopeError(401, 'x')),
+      'POST ${ApiConstants.refreshToken}': (r) => throw DioException.connectionError(requestOptions: r, reason: 'offline'),
+    });
+    final dio = api.dio();
+    var expired = 0;
+    dio.interceptors.add(AuthInterceptor(storageService: storage, dio: dio, onSessionExpired: () => expired++));
+
+    await expectLater(dio.get(ApiConstants.profile), throwsA(isA<DioException>()));
+
+    expect(storage.cleared, isFalse);
+    expect(storage.refresh, 'r1');
+    expect(expired, 0);
+  });
+
   test('never tries to refresh for a failed sign-in', () async {
     final storage = MemoryStorage();
     final api = FakeApi({
