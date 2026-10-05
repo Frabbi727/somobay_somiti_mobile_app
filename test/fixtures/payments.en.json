@@ -1,0 +1,33 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "OK",
+ "data": [
+  {
+   "id": 1,
+   "received_on": "2026-07-20",
+   "method": {
+    "value": "cash",
+    "label": "Cash",
+    "color": null
+   },
+   "trx_id": null,
+   "amount": {
+    "poisha": 250000,
+    "display": "৳ 2,500.00"
+   },
+   "status": {
+    "value": "approved",
+    "label": "Approved",
+    "color": "success"
+   }
+  }
+ ],
+ "errors": null,
+ "meta": {
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 20,
+  "total": 1
+ }
+}

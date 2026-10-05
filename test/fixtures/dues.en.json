@@ -1,0 +1,149 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "OK",
+ "data": [
+  {
+   "id": 4,
+   "month": "2026-08",
+   "type": {
+    "value": "deposit",
+    "label": "Deposit",
+    "color": "success"
+   },
+   "amount": {
+    "poisha": 100000,
+    "display": "৳ 1,000.00"
+   },
+   "paid": {
+    "poisha": 100000,
+    "display": "৳ 1,000.00"
+   },
+   "outstanding": {
+    "poisha": 0,
+    "display": "৳ 0.00"
+   },
+   "due_date": "2026-08-10",
+   "status": {
+    "value": "settled",
+    "label": "Settled",
+    "color": "success"
+   }
+  },
+  {
+   "id": 5,
+   "month": "2026-08",
+   "type": {
+    "value": "service_charge",
+    "label": "Service charge",
+    "color": "warning"
+   },
+   "amount": {
+    "poisha": 2000,
+    "display": "৳ 20.00"
+   },
+   "paid": {
+    "poisha": 2000,
+    "display": "৳ 20.00"
+   },
+   "outstanding": {
+    "poisha": 0,
+    "display": "৳ 0.00"
+   },
+   "due_date": "2026-08-10",
+   "status": {
+    "value": "settled",
+    "label": "Settled",
+    "color": "success"
+   }
+  },
+  {
+   "id": 1,
+   "month": "2026-07",
+   "type": {
+    "value": "registration",
+    "label": "Registration fee",
+    "color": "info"
+   },
+   "amount": {
+    "poisha": 20000,
+    "display": "৳ 200.00"
+   },
+   "paid": {
+    "poisha": 20000,
+    "display": "৳ 200.00"
+   },
+   "outstanding": {
+    "poisha": 0,
+    "display": "৳ 0.00"
+   },
+   "due_date": "2026-07-10",
+   "status": {
+    "value": "settled",
+    "label": "Settled",
+    "color": "success"
+   }
+  },
+  {
+   "id": 2,
+   "month": "2026-07",
+   "type": {
+    "value": "deposit",
+    "label": "Deposit",
+    "color": "success"
+   },
+   "amount": {
+    "poisha": 100000,
+    "display": "৳ 1,000.00"
+   },
+   "paid": {
+    "poisha": 100000,
+    "display": "৳ 1,000.00"
+   },
+   "outstanding": {
+    "poisha": 0,
+    "display": "৳ 0.00"
+   },
+   "due_date": "2026-07-10",
+   "status": {
+    "value": "settled",
+    "label": "Settled",
+    "color": "success"
+   }
+  },
+  {
+   "id": 3,
+   "month": "2026-07",
+   "type": {
+    "value": "service_charge",
+    "label": "Service charge",
+    "color": "warning"
+   },
+   "amount": {
+    "poisha": 2000,
+    "display": "৳ 20.00"
+   },
+   "paid": {
+    "poisha": 2000,
+    "display": "৳ 20.00"
+   },
+   "outstanding": {
+    "poisha": 0,
+    "display": "৳ 0.00"
+   },
+   "due_date": "2026-07-10",
+   "status": {
+    "value": "settled",
+    "label": "Settled",
+    "color": "success"
+   }
+  }
+ ],
+ "errors": null,
+ "meta": {
+  "current_page": 1,
+  "last_page": 1,
+  "per_page": 20,
+  "total": 5
+ }
+}

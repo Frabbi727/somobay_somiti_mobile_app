@@ -132,4 +132,35 @@ const Map<String, String> enUS = {
 
   // Unsupported
   TranslationKeys.errorNotSupported: 'This is not available. Please contact the society office.',
+
+  // Month names
+  TranslationKeys.month1: 'January',
+  TranslationKeys.month2: 'February',
+  TranslationKeys.month3: 'March',
+  TranslationKeys.month4: 'April',
+  TranslationKeys.month5: 'May',
+  TranslationKeys.month6: 'June',
+  TranslationKeys.month7: 'July',
+  TranslationKeys.month8: 'August',
+  TranslationKeys.month9: 'September',
+  TranslationKeys.month10: 'October',
+  TranslationKeys.month11: 'November',
+  TranslationKeys.month12: 'December',
+
+  // Home
+  TranslationKeys.homeSavings: 'Savings',
+  TranslationKeys.homeAdvance: 'Advance',
+  TranslationKeys.homeOutstanding: 'Outstanding',
+  TranslationKeys.homePaidThrough: 'Paid through',
+  TranslationKeys.homePaidThroughNone: 'No month fully paid yet',
+  TranslationKeys.homeAdvanceEstimate: 'Advance covers about @months more months (estimate, at current rates)',
+  TranslationKeys.homeShares: 'Shares',
+  TranslationKeys.homeSharesCount: '@count shares',
+  TranslationKeys.homePayNow: 'Pay now',
+  TranslationKeys.homeRecentPayments: 'Recent payments',
+  TranslationKeys.homeNoPayments: 'No payments yet.',
+  TranslationKeys.memberNo: 'Member no.',
+
+  // Notifications
+  TranslationKeys.notificationsTitle: 'Messages',
 };

@@ -132,4 +132,35 @@ const Map<String, String> bnBD = {
 
   // Unsupported
   TranslationKeys.errorNotSupported: 'এটি এখন পাওয়া যায় না। সমিতির অফিসে যোগাযোগ করুন।',
+
+  // Month names
+  TranslationKeys.month1: 'জানুয়ারি',
+  TranslationKeys.month2: 'ফেব্রুয়ারি',
+  TranslationKeys.month3: 'মার্চ',
+  TranslationKeys.month4: 'এপ্রিল',
+  TranslationKeys.month5: 'মে',
+  TranslationKeys.month6: 'জুন',
+  TranslationKeys.month7: 'জুলাই',
+  TranslationKeys.month8: 'আগস্ট',
+  TranslationKeys.month9: 'সেপ্টেম্বর',
+  TranslationKeys.month10: 'অক্টোবর',
+  TranslationKeys.month11: 'নভেম্বর',
+  TranslationKeys.month12: 'ডিসেম্বর',
+
+  // Home
+  TranslationKeys.homeSavings: 'সঞ্চয়',
+  TranslationKeys.homeAdvance: 'অগ্রিম জমা',
+  TranslationKeys.homeOutstanding: 'বকেয়া',
+  TranslationKeys.homePaidThrough: 'পরিশোধিত',
+  TranslationKeys.homePaidThroughNone: 'এখনো কোনো মাস পুরো পরিশোধ হয়নি',
+  TranslationKeys.homeAdvanceEstimate: 'অগ্রিম দিয়ে আনুমানিক আরও @months মাস চলবে (বর্তমান হারে)',
+  TranslationKeys.homeShares: 'শেয়ার',
+  TranslationKeys.homeSharesCount: '@count টি শেয়ার',
+  TranslationKeys.homePayNow: 'এখন পরিশোধ করুন',
+  TranslationKeys.homeRecentPayments: 'সাম্প্রতিক পরিশোধ',
+  TranslationKeys.homeNoPayments: 'এখনো কোনো পরিশোধ নেই।',
+  TranslationKeys.memberNo: 'সদস্য নং',
+
+  // Notifications
+  TranslationKeys.notificationsTitle: 'বার্তা',
 };

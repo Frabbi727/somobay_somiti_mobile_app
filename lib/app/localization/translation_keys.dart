@@ -132,4 +132,35 @@ class TranslationKeys {
 
   // Unsupported
   static const String errorNotSupported = 'error_not_supported';
+
+  // Month names
+  static const String month1 = 'month_1';
+  static const String month2 = 'month_2';
+  static const String month3 = 'month_3';
+  static const String month4 = 'month_4';
+  static const String month5 = 'month_5';
+  static const String month6 = 'month_6';
+  static const String month7 = 'month_7';
+  static const String month8 = 'month_8';
+  static const String month9 = 'month_9';
+  static const String month10 = 'month_10';
+  static const String month11 = 'month_11';
+  static const String month12 = 'month_12';
+
+  // Home
+  static const String homeSavings = 'home_savings';
+  static const String homeAdvance = 'home_advance';
+  static const String homeOutstanding = 'home_outstanding';
+  static const String homePaidThrough = 'home_paid_through';
+  static const String homePaidThroughNone = 'home_paid_through_none';
+  static const String homeAdvanceEstimate = 'home_advance_estimate';
+  static const String homeShares = 'home_shares';
+  static const String homeSharesCount = 'home_shares_count';
+  static const String homePayNow = 'home_pay_now';
+  static const String homeRecentPayments = 'home_recent_payments';
+  static const String homeNoPayments = 'home_no_payments';
+  static const String memberNo = 'member_no';
+
+  // Notifications
+  static const String notificationsTitle = 'notifications_title';
 }

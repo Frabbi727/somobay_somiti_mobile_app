@@ -1,0 +1,51 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "OK",
+ "data": {
+  "current_shares": 2,
+  "history": [
+   {
+    "type": {
+     "value": "increase",
+     "label": "Increase",
+     "color": "success"
+    },
+    "shares": 2,
+    "shares_after": 2,
+    "effective_from": "2026-07",
+    "reason": "Joined"
+   }
+  ],
+  "rates": {
+   "effective_from": "2026-07",
+   "share_unit": {
+    "poisha": 50000,
+    "display": "৳ 500.00"
+   },
+   "service_charge_per_share": {
+    "poisha": 1000,
+    "display": "৳ 10.00"
+   },
+   "registration_fee_per_share": {
+    "poisha": 10000,
+    "display": "৳ 100.00"
+   },
+   "due_day": 10,
+   "grace_days": 5,
+   "late_fee": {
+    "mode": {
+     "value": "none",
+     "label": "None",
+     "color": null
+    },
+    "fixed": null,
+    "percent": null,
+    "cap": null,
+    "frequency": null
+   }
+  }
+ },
+ "errors": null,
+ "meta": null
+}

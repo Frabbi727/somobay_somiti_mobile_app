@@ -24,4 +24,7 @@ class AppRoutes {
   static const String language = '/profile/language';
   static const String changePassword = '/profile/change-password';
   static const String somitiInfo = '/profile/somiti-info';
+  static const String dividends = '/profile/dividends';
+  static const String payOnline = '/payments/pay-online';
+  static const String paymentDetail = '/payments/detail';
 }

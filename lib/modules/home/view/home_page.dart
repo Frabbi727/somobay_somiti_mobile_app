@@ -4,13 +4,21 @@ import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_dimensions.dart';
 import '../../../app/theme/app_text_styles.dart';
-import '../../../core/extensions/number_extensions.dart';
+import '../../../core/constants/storage_keys.dart';
+import '../../../core/models/money_model.dart';
+import '../../../core/services/storage_service.dart';
+import '../../../core/utils/api_date_format.dart';
+import '../../../core/utils/bangla_number_util.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_loading.dart';
 import '../../../core/widgets/app_error_state.dart';
+import '../../../core/widgets/app_status_chip.dart';
+import '../../payments/model/payment_summary_model.dart';
 import '../controller/home_controller.dart';
-import '../model/somiti_summary_model.dart';
+import '../model/dashboard_summary_model.dart';
 
+/// The member's position at a glance — the web portal's dashboard. Every figure comes from the
+/// backend as is; nothing is calculated here.
 class HomePage extends GetView<HomeController> {
   const HomePage({Key? key}) : super(key: key);
 
@@ -26,23 +34,14 @@ class HomePage extends GetView<HomeController> {
             return const AppLoading();
           }
 
-          if (state.isError && state.data == null) {
+          if (state.isError || state.data == null) {
             return AppErrorState(
               failure: state.failure,
               onRetry: controller.fetchSummary,
             );
           }
 
-          final summary = state.data ??
-              const SomitiSummaryModel(
-                memberName: 'সদস্য',
-                memberId: '---',
-                somitiName: 'সমবায় সমিতি',
-                totalSavings: 0,
-                activeLoanBalance: 0,
-                totalSharesCount: 0,
-                totalSharesValue: 0,
-              );
+          final summary = state.data!;
 
           return RefreshIndicator(
             onRefresh: controller.fetchSummary,
@@ -52,20 +51,13 @@ class HomePage extends GetView<HomeController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header Card with Somiti Name & Member Info
                   _buildHeader(summary),
                   const SizedBox(height: 16),
-
-                  // Financial Summary Cards
-                  _buildFinancialSummaryCards(summary),
+                  _buildMoneyCards(summary),
+                  const SizedBox(height: 12),
+                  _buildPositionCard(summary),
                   const SizedBox(height: 20),
-
-                  // Quick Action Grid
-                  _buildQuickActionGrid(),
-                  const SizedBox(height: 20),
-
-                  // Notice / Important Alert Card
-                  if (summary.nextDueDate != null) _buildDueNoticeCard(summary),
+                  _buildRecentPayments(summary.recentPayments),
                 ],
               ),
             ),
@@ -75,7 +67,9 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildHeader(SomitiSummaryModel summary) {
+  Widget _buildHeader(DashboardSummaryModel summary) {
+    final somitiName = Get.find<StorageService>().getString(StorageKeys.somitiName) ?? 'app_name'.tr;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -97,21 +91,20 @@ class HomePage extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      summary.somitiName,
+                      somitiName,
                       style: AppTextStyles.bodySmall.copyWith(color: Colors.white70),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      summary.memberName,
+                      summary.member.name,
                       style: AppTextStyles.h2.copyWith(color: Colors.white),
                     ),
                   ],
@@ -119,6 +112,7 @@ class HomePage extends GetView<HomeController> {
               ),
               IconButton(
                 icon: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+                tooltip: 'notifications_title'.tr,
                 onPressed: () => Get.toNamed(AppRoutes.notifications),
               ),
             ],
@@ -131,7 +125,7 @@ class HomePage extends GetView<HomeController> {
               borderRadius: BorderRadius.circular(AppDimensions.radiusRound),
             ),
             child: Text(
-              '${'dash_member_id'.tr}: ${summary.memberId}',
+              '${'member_no'.tr}: ${_digits(summary.member.memberNo)}',
               style: AppTextStyles.caption.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -140,174 +134,177 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget _buildFinancialSummaryCards(SomitiSummaryModel summary) {
-    return Row(
+  Widget _buildMoneyCards(DashboardSummaryModel summary) {
+    return Column(
       children: [
-        Expanded(
-          child: AppCard(
-            backgroundColor: AppColors.primaryContainer.withOpacity(0.5),
-            margin: EdgeInsets.zero,
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.savings_rounded, color: AppColors.primary, size: 20),
-                    const SizedBox(width: 6),
-                    Text('dash_total_savings'.tr, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  summary.totalSavings.toCurrency(),
-                  style: AppTextStyles.amountMedium.copyWith(color: AppColors.primary),
-                ),
-              ],
-            ),
-          ),
+        Row(
+          children: [
+            Expanded(child: _moneyCard('home_savings'.tr, summary.savings, Icons.savings_rounded, AppColors.primary)),
+            const SizedBox(width: 12),
+            Expanded(child: _moneyCard('home_advance'.tr, summary.advance, Icons.account_balance_wallet_rounded, AppColors.secondary)),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: AppCard(
-            backgroundColor: AppColors.secondaryContainer.withOpacity(0.5),
-            margin: EdgeInsets.zero,
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+        const SizedBox(height: 12),
+        AppCard(
+          margin: EdgeInsets.zero,
+          padding: const EdgeInsets.all(14),
+          backgroundColor: summary.outstanding.isPositive ? Colors.amber.shade50 : AppColors.surface,
+          child: Row(
+            children: [
+              Icon(
+                Icons.event_note_rounded,
+                color: summary.outstanding.isPositive ? AppColors.overdue : AppColors.success,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.account_balance_wallet_rounded, color: AppColors.withdraw, size: 20),
-                    const SizedBox(width: 6),
-                    Text('dash_active_loans'.tr, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600)),
+                    Text('home_outstanding'.tr, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 4),
+                    Text(
+                      summary.outstanding.display,
+                      style: AppTextStyles.amountMedium.copyWith(
+                        color: summary.outstanding.isPositive ? AppColors.overdue : AppColors.success,
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  summary.activeLoanBalance.toCurrency(),
-                  style: AppTextStyles.amountMedium.copyWith(color: AppColors.withdraw),
+              ),
+              if (summary.payNowVisible)
+                ElevatedButton.icon(
+                  onPressed: () => Get.toNamed(AppRoutes.payOnline),
+                  icon: const Icon(Icons.payments_outlined, size: 18),
+                  label: Text('home_pay_now'.tr),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _buildQuickActionGrid() {
+  Widget _moneyCard(String label, MoneyModel amount, IconData icon, Color color) {
+    return AppCard(
+      backgroundColor: color.withOpacity(0.08),
+      margin: EdgeInsets.zero,
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(label, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w600)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(amount.display, style: AppTextStyles.amountMedium.copyWith(color: color)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPositionCard(DashboardSummaryModel summary) {
+    return AppCard(
+      margin: EdgeInsets.zero,
+      child: Column(
+        children: [
+          _infoRow(
+            Icons.verified_outlined,
+            'home_paid_through'.tr,
+            summary.paidThrough == null ? 'home_paid_through_none'.tr : ApiDateFormat.month(summary.paidThrough),
+          ),
+          if (summary.advance.isPositive && summary.advanceMonthsEstimate > 0) ...[
+            const Divider(height: 20),
+            Row(
+              children: [
+                const Icon(Icons.info_outline_rounded, size: 18, color: AppColors.textSecondary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'home_advance_estimate'.trParams({'months': _digits('${summary.advanceMonthsEstimate}')}),
+                    style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          const Divider(height: 20),
+          InkWell(
+            onTap: () => Get.toNamed(AppRoutes.shareOverview),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _infoRow(
+                    Icons.pie_chart_outline_rounded,
+                    'home_shares'.tr,
+                    'home_shares_count'.trParams({'count': _digits('${summary.shares}')}),
+                  ),
+                ),
+                const Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _infoRow(IconData icon, String label, String value) {
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.primary),
+        const SizedBox(width: 10),
+        Expanded(child: Text(label, style: AppTextStyles.bodyMedium)),
+        Text(value, style: AppTextStyles.titleMedium),
+      ],
+    );
+  }
+
+  Widget _buildRecentPayments(List<PaymentSummaryModel> payments) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('dash_quick_actions'.tr, style: AppTextStyles.titleLarge),
-        const SizedBox(height: 12),
-        GridView.count(
-          crossAxisCount: 4,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          children: [
-            _buildActionItem(
-              icon: Icons.add_circle_outline_rounded,
-              color: AppColors.primary,
-              label: 'dash_deposit_money'.tr,
-              onTap: () => Get.toNamed(AppRoutes.newDeposit),
+        Text('home_recent_payments'.tr, style: AppTextStyles.titleLarge),
+        const SizedBox(height: 10),
+        if (payments.isEmpty)
+          Text('home_no_payments'.tr, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary))
+        else
+          ...payments.map(
+            (payment) => AppCard(
+              margin: const EdgeInsets.only(bottom: 10),
+              onTap: () => Get.toNamed(AppRoutes.paymentDetail, arguments: payment.id),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(payment.method.label, style: AppTextStyles.titleMedium),
+                        const SizedBox(height: 2),
+                        Text(ApiDateFormat.date(payment.receivedOn), style: AppTextStyles.caption),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(payment.amount.display, style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      AppStatusChip(status: payment.status),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            _buildActionItem(
-              icon: Icons.payments_outlined,
-              color: AppColors.withdraw,
-              label: 'dash_pay_installment'.tr,
-              onTap: () => Get.toNamed(AppRoutes.loanRepay),
-            ),
-            _buildActionItem(
-              icon: Icons.calculate_outlined,
-              color: AppColors.info,
-              label: 'dash_loan_calculator'.tr,
-              onTap: () => Get.toNamed(AppRoutes.loanCalculator),
-            ),
-            _buildActionItem(
-              icon: Icons.pie_chart_outline_rounded,
-              color: AppColors.secondary,
-              label: 'dash_total_shares'.tr,
-              onTap: () => Get.toNamed(AppRoutes.shareOverview),
-            ),
-          ],
-        ),
+          ),
       ],
     );
   }
 
-  Widget _buildActionItem({
-    required IconData icon,
-    required Color color,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radius12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 24),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDueNoticeCard(SomitiSummaryModel summary) {
-    return AppCard(
-      backgroundColor: Colors.amber.shade50,
-      border: Border.all(color: Colors.amber.shade200),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.amber.shade100,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.event_note_rounded, color: Colors.amber.shade900, size: 24),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'পরবর্তী কিস্তির তারিখ: ${summary.nextDueDate ?? ''}',
-                  style: AppTextStyles.titleMedium.copyWith(color: Colors.amber.shade900),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'কিস্তির পরিমাণ: ${summary.nextDueAmount?.toCurrency() ?? ''}',
-                  style: AppTextStyles.bodySmall.copyWith(color: Colors.brown.shade800),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  String _digits(String text) => Get.locale?.languageCode == 'bn' ? BanglaNumberUtil.toBangla(text) : text;
 }
