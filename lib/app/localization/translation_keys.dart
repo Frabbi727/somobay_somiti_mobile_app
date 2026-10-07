@@ -283,6 +283,48 @@ class TranslationKeys {
   static const String passwordMismatch = 'password_mismatch';
   static const String passwordSaved = 'password_saved';
 
+  // Registration
+  static const String registrationTitle = 'registration_title';
+  static const String registrationStatusTitle = 'registration_status_title';
+  static const String registrationStepPersonal = 'registration_step_personal';
+  static const String registrationStepContact = 'registration_step_contact';
+  static const String registrationStepNominees = 'registration_step_nominees';
+  static const String registrationStepShares = 'registration_step_shares';
+  static const String registrationStepReview = 'registration_step_review';
+  static const String registrationNameBn = 'registration_name_bn';
+  static const String registrationNameEn = 'registration_name_en';
+  static const String registrationGuardian = 'registration_guardian';
+  static const String registrationNid = 'registration_nid';
+  static const String registrationDob = 'registration_dob';
+  static const String registrationPhoto = 'registration_photo';
+  static const String registrationPhotoPick = 'registration_photo_pick';
+  static const String registrationMobile = 'registration_mobile';
+  static const String registrationEmail = 'registration_email';
+  static const String registrationAddress = 'registration_address';
+  static const String registrationNominee = 'registration_nominee';
+  static const String registrationNomineeName = 'registration_nominee_name';
+  static const String registrationLogout = 'registration_logout';
+  static const String registrationNomineeAdd = 'registration_nominee_add';
+  static const String registrationNomineeRemove = 'registration_nominee_remove';
+  static const String registrationNomineeRelation = 'registration_nominee_relation';
+  static const String registrationNomineeShare = 'registration_nominee_share';
+  static const String registrationNomineeTotal = 'registration_nominee_total';
+  static const String registrationSharesRequested = 'registration_shares_requested';
+  static const String registrationSharesHelp = 'registration_shares_help';
+  static const String registrationNext = 'registration_next';
+  static const String registrationBack = 'registration_back';
+  static const String registrationEdit = 'registration_edit';
+  static const String registrationSubmit = 'registration_submit';
+  static const String registrationSubmitConfirmTitle = 'registration_submit_confirm_title';
+  static const String registrationSubmitConfirmMessage = 'registration_submit_confirm_message';
+  static const String registrationSubmitted = 'registration_submitted';
+  static const String registrationActionComplete = 'registration_action_complete';
+  static const String registrationActionResubmit = 'registration_action_resubmit';
+  static const String registrationReason = 'registration_reason';
+  static const String registrationRequired = 'registration_required';
+  static const String registrationNomineeNeeded = 'registration_nominee_needed';
+  static const String registrationTotalNot100 = 'registration_total_not_100';
+
   // Splash
   static const String splashTagline = 'splash_tagline';
 }
