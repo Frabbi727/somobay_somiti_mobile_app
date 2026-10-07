@@ -33,6 +33,10 @@ import '../../modules/profile_settings/view/change_password_page.dart';
 import '../../modules/profile_settings/view/dividends_page.dart';
 import '../../modules/profile_settings/view/somiti_info_page.dart';
 
+// Registration
+import '../../modules/registration/bindings/registration_binding.dart';
+import '../../modules/registration/view/registration_status_page.dart';
+
 /// Only member features the backend supports are registered (docs/MEMBER_NAVIGATION.md).
 class AppPages {
   AppPages._();
@@ -94,6 +98,11 @@ class AppPages {
       name: AppRoutes.somitiInfo,
       page: () => const SomitiInfoPage(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.registration,
+      page: () => const RegistrationStatusPage(),
+      binding: RegistrationStatusBinding(),
     ),
   ];
 }
