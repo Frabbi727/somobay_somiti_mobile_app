@@ -35,6 +35,7 @@ import '../../modules/profile_settings/view/somiti_info_page.dart';
 
 // Registration
 import '../../modules/registration/bindings/registration_binding.dart';
+import '../../modules/registration/view/registration_form_page.dart';
 import '../../modules/registration/view/registration_status_page.dart';
 
 /// Only member features the backend supports are registered (docs/MEMBER_NAVIGATION.md).
@@ -103,6 +104,11 @@ class AppPages {
       name: AppRoutes.registration,
       page: () => const RegistrationStatusPage(),
       binding: RegistrationStatusBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.registrationForm,
+      page: () => const RegistrationFormPage(),
+      binding: RegistrationFormBinding(),
     ),
   ];
 }
