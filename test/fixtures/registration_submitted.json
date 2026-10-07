@@ -1,0 +1,75 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": {
+    "status": {
+      "value": "submitted",
+      "label": "অনুমোদনের অপেক্ষায়",
+      "color": "info"
+    },
+    "next_action": "wait",
+    "can_edit": false,
+    "headline": "সম্পাদক-এর অনুমোদনের অপেক্ষায়",
+    "message": "চালিয়ে যেতে আপনার সদস্য নিবন্ধন সম্পূর্ণ করুন।",
+    "timeline": [
+      {
+        "key": "submitted",
+        "label": "তথ্য জমা",
+        "state": "done",
+        "acted_at": "2026-10-07T10:00:00+06:00",
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "step_0",
+        "label": "সম্পাদক-এর অনুমোদন",
+        "state": "pending",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "step_1",
+        "label": "সভাপতি-এর অনুমোদন",
+        "state": "waiting",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "activation",
+        "label": "সদস্যপদ চালু",
+        "state": "waiting",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      }
+    ],
+    "decision": null,
+    "data": {
+      "name_bn": "করিম মিয়া",
+      "name_en": null,
+      "guardian_name": null,
+      "nid": null,
+      "date_of_birth": null,
+      "mobile": "01811111111",
+      "email": null,
+      "address": null,
+      "photo_url": null,
+      "requested_shares": 2,
+      "nominees": [
+        {
+          "name": "করিমা",
+          "relation_id": 3,
+          "relation": "স্বামী/স্ত্রী",
+          "mobile": null,
+          "nid": "1234567890",
+          "share_percent": "100.00"
+        }
+      ]
+    }
+  }
+}

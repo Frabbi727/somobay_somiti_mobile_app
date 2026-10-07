@@ -13,6 +13,13 @@ class ApiConstants {
   // Society
   static const String somitiInfo = '/api/v1/config/somiti-info';
 
+  static const String nomineeRelations = '/api/v1/config/nominee-relations';
+
+  // Self-registration (applicant token)
+  static const String registration = '/api/v1/registration';
+  static const String registrationPhoto = '/api/v1/registration/photo';
+  static const String registrationSubmit = '/api/v1/registration/submit';
+
   // Member
   static const String dashboardSummary = '/api/v1/dashboard/summary';
   static const String dues = '/api/v1/dues';

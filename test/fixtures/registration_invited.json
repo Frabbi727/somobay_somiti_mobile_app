@@ -1,0 +1,66 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": {
+    "status": {
+      "value": "invited",
+      "label": "এখনও জমা হয়নি",
+      "color": "gray"
+    },
+    "next_action": "complete",
+    "can_edit": true,
+    "headline": "আপনার নিবন্ধন অসম্পূর্ণ",
+    "message": "চালিয়ে যেতে আপনার সদস্য নিবন্ধন সম্পূর্ণ করুন।",
+    "timeline": [
+      {
+        "key": "submitted",
+        "label": "তথ্য জমা",
+        "state": "pending",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "step_0",
+        "label": "সম্পাদক-এর অনুমোদন",
+        "state": "waiting",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "step_1",
+        "label": "সভাপতি-এর অনুমোদন",
+        "state": "waiting",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      },
+      {
+        "key": "activation",
+        "label": "সদস্যপদ চালু",
+        "state": "waiting",
+        "acted_at": null,
+        "actor": null,
+        "reason": null
+      }
+    ],
+    "decision": null,
+    "data": {
+      "name_bn": "করিম মিয়া",
+      "name_en": null,
+      "guardian_name": null,
+      "nid": null,
+      "date_of_birth": null,
+      "mobile": "01811111111",
+      "email": null,
+      "address": null,
+      "photo_url": null,
+      "requested_shares": null,
+      "nominees": []
+    }
+  }
+}

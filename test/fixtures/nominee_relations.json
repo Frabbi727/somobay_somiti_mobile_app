@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": [
+    {
+      "id": 1,
+      "key": "father",
+      "label": "পিতা"
+    },
+    {
+      "id": 3,
+      "key": "spouse",
+      "label": "স্বামী/স্ত্রী"
+    }
+  ]
+}
