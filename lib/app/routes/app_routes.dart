@@ -4,6 +4,9 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String login = '/login';
   static const String dashboard = '/dashboard';
+  // Self-registration (docs/MEMBER_NAVIGATION.md)
+  static const String registration = '/registration';
+  static const String registrationForm = '/registration/form';
 
   // Member pages (docs/MEMBER_NAVIGATION.md)
   static const String payOnline = '/payments/pay-online';

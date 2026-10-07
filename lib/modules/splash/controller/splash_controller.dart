@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '../../../app/routes/app_routes.dart';
+import '../../../app/routes/home_route.dart';
 import '../../../core/constants/storage_keys.dart';
 import '../../../core/errors/failures.dart';
 import '../../../core/services/storage_service.dart';
@@ -40,9 +40,9 @@ class SplashController extends GetxController {
 
       final session = await repository.me();
       if (session.isValid || session.failure is NetworkFailure || session.failure is TimeoutFailure) {
-        // Offline with a session: open the app; each screen shows its own offline state.
-        LogService.i('Session accepted (or offline), navigating to Dashboard', tag: 'STARTUP');
-        Get.offAllNamed(AppRoutes.dashboard);
+        // Offline with a session: open the app (as a member — the registration screens need the network anyway).
+        LogService.i('Session accepted (or offline), opening ${session.accountType ?? 'member'} home', tag: 'STARTUP');
+        Get.offAllNamed(homeRouteFor(session.accountType));
       } else {
         await storageService.clearAuthData();
         goToLogin();

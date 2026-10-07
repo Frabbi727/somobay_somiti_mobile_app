@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:somobay_somiti_mobile_app/core/constants/api_constants.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
+import 'package:somobay_somiti_mobile_app/modules/authentication/model/auth_token_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/authentication/model/login_request_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/authentication/repository/auth_repository.dart';
 import 'package:somobay_somiti_mobile_app/modules/splash/repository/splash_repository.dart';
@@ -33,6 +34,24 @@ void main() {
 
     await repository.login(const LoginRequestModel(mobile: '01712345678', code: '482913'));
     expect(api.last.data, {'mobile': '01712345678', 'code': '482913'});
+  });
+
+  test('reads the account type from the login answer, member when missing', () async {
+    final api = FakeApi({
+      'POST ${ApiConstants.login}': (_) => (200, envelope({'access_token': 'a', 'refresh_token': 'r', 'token_type': 'Bearer', 'expires_in': 3600, 'account_type': 'applicant'})),
+    });
+    final applicant = await AuthRepository(apiClient: api.client()).login(const LoginRequestModel(mobile: '01811111111', password: 'secret-123'));
+
+    expect(applicant.tokens!.accountType, 'applicant');
+    expect(AuthTokenModel.fromJson({'access_token': 'a', 'refresh_token': 'r'}).accountType, 'member');
+  });
+
+  test('me() reports the account type, member when the backend sends none', () async {
+    final applicantApi = FakeApi({'GET ${ApiConstants.me}': (_) => (200, envelope({'account_type': 'applicant'}))});
+    expect((await SplashRepository(apiClient: applicantApi.client()).me()).accountType, 'applicant');
+
+    final oldApi = FakeApi({'GET ${ApiConstants.me}': (_) => (200, envelope({'id': 1}))});
+    expect((await SplashRepository(apiClient: oldApi.client()).me()).accountType, 'member');
   });
 
   test('turns a wrong password into a validation failure with the backend field message', () async {

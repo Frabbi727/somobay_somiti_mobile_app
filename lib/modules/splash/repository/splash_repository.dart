@@ -7,8 +7,8 @@ import '../../profile_settings/model/somiti_info_model.dart';
 abstract class ISplashRepository {
   Future<({Failure? failure, SomitiInfoModel? info})> somitiInfo();
 
-  /// Whether the stored session is still accepted by the backend.
-  Future<({Failure? failure, bool isValid})> me();
+  /// Whether the stored session is still accepted, and whose it is (member or applicant).
+  Future<({Failure? failure, bool isValid, String? accountType})> me();
 }
 
 class SplashRepository implements ISplashRepository {
@@ -28,12 +28,13 @@ class SplashRepository implements ISplashRepository {
   }
 
   @override
-  Future<({Failure? failure, bool isValid})> me() async {
+  Future<({Failure? failure, bool isValid, String? accountType})> me() async {
     try {
-      await apiClient.get(ApiConstants.me);
-      return (failure: null, isValid: true);
+      final response = await apiClient.get(ApiConstants.me);
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+      return (failure: null, isValid: true, accountType: (data['account_type'] as String?) ?? 'member');
     } catch (e) {
-      return (failure: ErrorHandler.handleException(e), isValid: false);
+      return (failure: ErrorHandler.handleException(e), isValid: false, accountType: null);
     }
   }
 }

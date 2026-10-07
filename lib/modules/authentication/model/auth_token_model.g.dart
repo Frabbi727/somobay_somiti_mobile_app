@@ -12,6 +12,7 @@ AuthTokenModel _$AuthTokenModelFromJson(Map<String, dynamic> json) =>
       refreshToken: json['refresh_token'] as String,
       tokenType: json['token_type'] as String? ?? 'Bearer',
       expiresIn: (json['expires_in'] as num?)?.toInt() ?? 3600,
+      accountType: json['account_type'] as String? ?? 'member',
     );
 
 Map<String, dynamic> _$AuthTokenModelToJson(AuthTokenModel instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$AuthTokenModelToJson(AuthTokenModel instance) =>
       'refresh_token': instance.refreshToken,
       'token_type': instance.tokenType,
       'expires_in': instance.expiresIn,
+      'account_type': instance.accountType,
     };

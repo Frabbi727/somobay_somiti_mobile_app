@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../app/routes/app_routes.dart';
+import '../../../../app/routes/home_route.dart';
 import '../../../../core/constants/storage_keys.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/models/ui_state.dart';
@@ -99,7 +99,7 @@ class LoginController extends GetxController {
         refresh: result.tokens!.refreshToken,
       );
       loginState.value = UIState.success(true);
-      Get.offAllNamed(AppRoutes.dashboard);
+      Get.offAllNamed(homeRouteFor(result.tokens!.accountType));
     }
   }
 
