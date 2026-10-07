@@ -28,8 +28,7 @@ class RegistrationStatusController extends GetxController {
   }
 
   /// The route to leave for, or null to stay on this screen.
-  @override
-  Future<String?> refresh() async {
+  Future<String?> load() async {
     state.value = UIState.loading();
 
     final account = await repository.accountType();

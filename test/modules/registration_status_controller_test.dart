@@ -30,7 +30,7 @@ void main() {
     final repository = FakeRegistrationRepository();
     final controller = RegistrationStatusController(repository: repository);
 
-    expect(await controller.refresh(), isNull);
+    expect(await controller.load(), isNull);
     expect(controller.state.value.data!.headline, contains('অনুমোদনের অপেক্ষায়'));
   });
 
@@ -38,7 +38,7 @@ void main() {
     final repository = FakeRegistrationRepository()..account = 'member';
     final controller = RegistrationStatusController(repository: repository);
 
-    expect(await controller.refresh(), AppRoutes.dashboard);
+    expect(await controller.load(), AppRoutes.dashboard);
     expect(repository.registrationCalls, 0);
   });
 
@@ -46,7 +46,7 @@ void main() {
     final repository = FakeRegistrationRepository()..accountFailure = const NetworkFailure();
     final controller = RegistrationStatusController(repository: repository);
 
-    expect(await controller.refresh(), isNull);
+    expect(await controller.load(), isNull);
     expect(controller.state.value.isError, isTrue);
   });
 }

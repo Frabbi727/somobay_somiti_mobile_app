@@ -30,7 +30,7 @@ class _RegistrationStatusPageState extends State<RegistrationStatusPage> {
   }
 
   Future<void> _refresh() async {
-    final leaveFor = await controller.refresh();
+    final leaveFor = await controller.load();
     if (leaveFor != null) Get.offAllNamed(leaveFor);
   }
 
