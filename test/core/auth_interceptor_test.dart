@@ -10,9 +10,10 @@ import '../support/fake_api.dart';
 class MemoryStorage extends StorageService {
   String? access;
   String? refresh;
+  String? accountType;
   bool cleared = false;
 
-  MemoryStorage({this.access, this.refresh});
+  MemoryStorage({this.access, this.refresh, this.accountType});
 
   @override
   Future<void> saveTokens({required String access, required String refresh}) async {
@@ -30,15 +31,33 @@ class MemoryStorage extends StorageService {
   Future<void> clearAuthData() async {
     access = null;
     refresh = null;
+    accountType = null;
     cleared = true;
   }
+
+  @override
+  Future<void> saveAccountType(String accountType) async => this.accountType = accountType;
+
+  @override
+  String? getAccountType() => accountType;
+
+  @override
+  Future<void> saveString(String key, String value) async {}
+
+  @override
+  Future<void> saveBool(String key, bool value) async {}
 
   @override
   String getLanguageCode() => 'bn';
 }
 
-Map<String, dynamic> tokens(String access, String refresh) =>
-    envelope({'access_token': access, 'refresh_token': refresh, 'token_type': 'Bearer', 'expires_in': 3600});
+Map<String, dynamic> tokens(String access, String refresh, {String? accountType}) => envelope({
+      'access_token': access,
+      'refresh_token': refresh,
+      'token_type': 'Bearer',
+      'expires_in': 3600,
+      if (accountType != null) 'account_type': accountType,
+    });
 
 void main() {
   test('sends the token and language, refreshes once when parallel requests expire, and retries them', () async {
@@ -64,6 +83,20 @@ void main() {
     expect(storage.refresh, 'r2');
     expect(expired, 0);
     expect(api.requests.first.headers['Accept-Language'], 'bn');
+  });
+
+  test('remembers the account type the refresh returns (a member token after approval)', () async {
+    final storage = MemoryStorage(access: 'old', refresh: 'r1', accountType: 'applicant');
+    final api = FakeApi({
+      'GET ${ApiConstants.profile}': (r) => r.headers['Authorization'] == 'Bearer new' ? (200, envelope({'ok': 1})) : (401, envelopeError(401, 'x')),
+      'POST ${ApiConstants.refreshToken}': (r) => (200, tokens('new', 'r2', accountType: 'member')),
+    });
+    final dio = api.dio();
+    dio.interceptors.add(AuthInterceptor(storageService: storage, dio: dio, onSessionExpired: () {}));
+
+    await dio.get(ApiConstants.profile);
+
+    expect(storage.accountType, 'member');
   });
 
   test('signs out once when the refresh is refused, without looping', () async {

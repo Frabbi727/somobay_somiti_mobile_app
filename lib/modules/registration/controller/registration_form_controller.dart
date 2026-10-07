@@ -69,10 +69,15 @@ class RegistrationFormController extends GetxController {
   Future<void> load() async {
     loadState.value = UIState.loading();
     final relationList = await repository.relations();
-    final result = await repository.getRegistration();
+    // Without the relations the nominee step cannot be filled in: show the error with Retry.
+    if (relationList.failure != null) {
+      loadState.value = UIState.error(relationList.failure!);
+      return;
+    }
 
+    final result = await repository.getRegistration();
     if (result.registration == null) {
-      loadState.value = UIState.error(result.failure ?? relationList.failure ?? const UnknownFailure());
+      loadState.value = UIState.error(result.failure ?? const UnknownFailure());
       return;
     }
 
@@ -92,10 +97,45 @@ class RegistrationFormController extends GetxController {
       row.dispose();
     }
     nominees.assignAll(data.nominees.isEmpty ? [NomineeFormRow()] : data.nominees.map(NomineeFormRow.fromModel));
+    // A saved relation that is no longer offered must be chosen again (the dropdown cannot show it).
+    final relationIds = relations.map((relation) => relation.id).toSet();
+    for (final row in nominees) {
+      if (!relationIds.contains(row.relationId.value)) {
+        row.relationId.value = null;
+      }
+    }
     loadState.value = UIState.success(result.registration!);
   }
 
   String? errorFor(String field) => failure.value?.validationErrors?[field]?.first;
+
+  static const nomineeFields = ['name', 'relation_id', 'nid', 'mobile', 'share_percent'];
+
+  /// The 422 field keys the page shows under the fields of [step].
+  Set<String> errorKeysShownOn(int step) => switch (step) {
+    0 => {'name_bn', 'name_en', 'guardian_name', 'nid', 'date_of_birth'},
+    1 => {'email', 'address'},
+    2 => {
+      'nominees',
+      for (var i = 0; i < nominees.length; i++)
+        for (final field in nomineeFields) 'nominees.$i.$field',
+    },
+    3 => {'requested_shares'},
+    _ => const <String>{},
+  };
+
+  /// The first 422 message when none of the errors has a place on [step], so it can be shown
+  /// another way; null when there are no field errors or one of them is already visible.
+  String? unshownValidationMessage(int step) {
+    final errors = failure.value?.validationErrors;
+    if (errors == null || errors.isEmpty) return null;
+    final shown = errorKeysShownOn(step);
+    if (errors.keys.any(shown.contains)) return null;
+    for (final messages in errors.values) {
+      if (messages.isNotEmpty) return messages.first;
+    }
+    return failure.value!.message;
+  }
 
   int get nomineeTotalHundredths => nominees.fold(0, (total, row) => total + (percentToHundredths(row.shareController.text) ?? 0));
 

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/utils/app_validator.dart';
+import '../../../core/utils/bangla_number_util.dart';
 import '../../../core/utils/snackbar_margin.dart';
 import '../../../core/widgets/app_app_bar.dart';
 import '../../../core/widgets/app_buttons.dart';
@@ -84,6 +85,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
         _error('name_en'),
         const SizedBox(height: 12),
         AppTextField(label: 'registration_guardian'.tr, controller: controller.guardianController),
+        _error('guardian_name'),
         const SizedBox(height: 12),
         AppTextField(
           label: 'registration_nid'.tr,
@@ -100,7 +102,11 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
             subtitle: Text(controller.dateOfBirth.value ?? '—'),
             trailing: const Icon(Icons.calendar_today),
             onTap: () async {
-              final picked = await showDatePicker(context: context, initialDate: DateTime(1990), firstDate: DateTime(1920), lastDate: DateTime.now());
+              final now = DateTime.now();
+              final yesterday = DateTime(now.year, now.month, now.day - 1);
+              final saved = DateTime.tryParse(controller.dateOfBirth.value ?? '');
+              final initial = saved == null || saved.isAfter(yesterday) || saved.isBefore(DateTime(1920)) ? DateTime(1990) : saved;
+              final picked = await showDatePicker(context: context, initialDate: initial, firstDate: DateTime(1920), lastDate: yesterday);
               if (picked != null) {
                 controller.dateOfBirth.value = picked.toIso8601String().substring(0, 10);
               }
@@ -132,6 +138,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
     key: controller.formKeys[2],
     child: Obx(() {
       final total = controller.nomineeTotalHundredths;
+      controller.failure.value; // rebuild the cards when the server's field errors change
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -142,6 +149,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
               relations: controller.relations,
               onRemove: controller.nominees.length > 1 ? () => controller.removeNominee(i) : null,
               onShareChanged: controller.nominees.refresh,
+              errorFor: (field) => controller.errorFor('nominees.$i.$field'),
             ),
           OutlinedButton.icon(onPressed: controller.addNominee, icon: const Icon(Icons.person_add), label: Text('registration_nominee_add'.tr)),
           const SizedBox(height: 8),
@@ -165,7 +173,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
           controller: controller.sharesController,
           keyboardType: TextInputType.number,
           isRequired: true,
-          validator: (v) => (int.tryParse(v ?? '') ?? 0) < 1 ? 'registration_required'.tr : null,
+          validator: (v) => (int.tryParse(BanglaNumberUtil.toEnglish((v ?? '').trim())) ?? 0) < 1 ? 'registration_required'.tr : null,
         ),
         const SizedBox(height: 8),
         Text('registration_shares_help'.tr, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
@@ -240,9 +248,14 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
       Get.snackbar('common_error_title'.tr, 'registration_total_not_100'.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
       return;
     }
+    final step = controller.currentStep.value;
     final saved = await controller.next();
-    if (!saved && controller.failure.value != null && controller.failure.value!.validationErrors == null) {
-      Get.snackbar('common_error_title'.tr, controller.failure.value!.message.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
+    final failure = controller.failure.value;
+    if (saved || failure == null) return;
+    // Field errors are shown under their fields; one with no field on this step still needs a message.
+    final message = failure.validationErrors == null ? failure.message : controller.unshownValidationMessage(step);
+    if (message != null) {
+      Get.snackbar('common_error_title'.tr, message.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
     }
   }
 

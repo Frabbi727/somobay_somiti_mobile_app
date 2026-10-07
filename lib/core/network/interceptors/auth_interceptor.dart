@@ -104,6 +104,8 @@ class AuthInterceptor extends QueuedInterceptor {
       }
 
       await storageService.saveTokens(access: access, refresh: refresh);
+      // After an approval the refresh hands back a member token: remember it for an offline start.
+      await storageService.saveAccountType((data?['account_type'] as String?) ?? 'member');
       return (token: access, unreachable: false);
     } on DioException catch (e) {
       LogService.e('Token refresh failed', error: e, tag: 'AUTH_INTERCEPTOR');

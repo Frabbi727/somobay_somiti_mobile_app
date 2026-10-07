@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../../../app/routes/app_routes.dart';
 import '../../../app/routes/home_route.dart';
 import '../../../core/constants/storage_keys.dart';
 import '../../../core/errors/failures.dart';
@@ -25,6 +26,17 @@ class SplashController extends GetxController {
   }
 
   Future<void> _handleAppStartup() async {
+    final route = await startRoute();
+    if (route == AppRoutes.login) {
+      goToLogin();
+    } else {
+      Get.offAllNamed(route);
+    }
+  }
+
+  /// The first screen: login without a usable session, otherwise the home screen for the account
+  /// type. Offline, the last known account type is used, so an applicant is not sent to member screens.
+  Future<String> startRoute() async {
     try {
       final info = await repository.somitiInfo();
       if (info.info != null) {
@@ -34,22 +46,28 @@ class SplashController extends GetxController {
 
       final token = await storageService.getAccessToken();
       if (token == null || token.isEmpty) {
-        goToLogin();
-        return;
+        return AppRoutes.login;
       }
 
       final session = await repository.me();
-      if (session.isValid || session.failure is NetworkFailure || session.failure is TimeoutFailure) {
-        // Offline with a session: open the app (as a member — the registration screens need the network anyway).
-        LogService.i('Session accepted (or offline), opening ${session.accountType ?? 'member'} home', tag: 'STARTUP');
-        Get.offAllNamed(homeRouteFor(session.accountType));
-      } else {
-        await storageService.clearAuthData();
-        goToLogin();
+      if (session.isValid) {
+        final accountType = session.accountType ?? 'member';
+        await storageService.saveAccountType(accountType);
+        LogService.i('Session accepted, opening $accountType home', tag: 'STARTUP');
+        return homeRouteFor(accountType);
       }
+
+      if (session.failure is NetworkFailure || session.failure is TimeoutFailure) {
+        final accountType = storageService.getAccountType();
+        LogService.i('Offline, opening ${accountType ?? 'member'} home', tag: 'STARTUP');
+        return homeRouteFor(accountType);
+      }
+
+      await storageService.clearAuthData();
+      return AppRoutes.login;
     } catch (e) {
       LogService.e('Startup sequence failed', error: e, tag: 'STARTUP');
-      goToLogin();
+      return AppRoutes.login;
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:somobay_somiti_mobile_app/app/localization/app_translations.dart';
+import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/view/registration_form_page.dart';
 
@@ -21,6 +22,45 @@ void main() {
 
     expect(repository.saved.single['name_en'], 'Karim Mia');
     expect(find.text('Email'), findsOneWidget);
+
+    Get.reset();
+  });
+
+  testWidgets("shows the server's error under the nominee field it belongs to", (tester) async {
+    final repository = RecordingRegistrationRepository()
+      ..answers.add(const ValidationFailure(message: 'invalid', errors: {'nominees.0.nid': ['This NID is already a nominee.']}));
+    final controller = Get.put(RegistrationFormController(repository: repository))..skipValidationForTests = true;
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 2;
+    controller.nominees.first.shareController.text = '100';
+    controller.nominees.refresh();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Save and continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('This NID is already a nominee.'), findsOneWidget);
+    expect(controller.currentStep.value, 2);
+
+    Get.reset();
+  });
+
+  testWidgets('accepts the requested shares typed in Bangla digits', (tester) async {
+    final repository = RecordingRegistrationRepository();
+    final controller = Get.put(RegistrationFormController(repository: repository));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 3;
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byType(TextFormField).first, '৫');
+    await tester.tap(find.text('Save and continue'));
+    await tester.pumpAndSettle();
+
+    expect(repository.saved.single, {'requested_shares': 5});
 
     Get.reset();
   });

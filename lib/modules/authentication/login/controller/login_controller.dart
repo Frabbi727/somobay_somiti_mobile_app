@@ -98,6 +98,7 @@ class LoginController extends GetxController {
         access: result.tokens!.accessToken,
         refresh: result.tokens!.refreshToken,
       );
+      await storageService.saveAccountType(result.tokens!.accountType);
       loginState.value = UIState.success(true);
       Get.offAllNamed(homeRouteFor(result.tokens!.accountType));
     }

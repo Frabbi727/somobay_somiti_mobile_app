@@ -10,11 +10,14 @@ route list change.
 Splash ── config/somiti-info ──┬─ no token ─────────────────────────▶ Login
                                └─ token ── auth/me ──┬─ 200 ─────────▶ Dashboard (Home tab)
                                                      ├─ 401/403 ─────▶ Login (tokens cleared)
-                                                     └─ offline ─────▶ Dashboard (screens show offline)
+                                                     └─ offline ─────▶ home for the last known account type
+                                                                       (registration status or Dashboard; screens show offline)
 Login ── password or SMS code ──▶ Dashboard
 ```
 
 Rule for start-up and login: `account_type` `applicant` → registration status (`/registration`); `member` → Dashboard.
+The app remembers the `account_type` from sign-in, every token refresh and `auth/me`; an offline start uses
+that last known value (none remembered → Dashboard).
 When an applicant is approved the access token is rejected (401); the refresh returns a member token and the
 app opens the Dashboard without asking for a sign-in.
 

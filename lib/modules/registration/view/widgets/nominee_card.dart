@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/utils/app_validator.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_fields.dart';
@@ -15,7 +17,23 @@ class NomineeCard extends StatelessWidget {
   final VoidCallback? onRemove;
   final VoidCallback onShareChanged;
 
-  const NomineeCard({super.key, required this.index, required this.row, required this.relations, required this.onRemove, required this.onShareChanged});
+  /// The server's message for one of this nominee's fields ('name', 'relation_id', …), or null.
+  final String? Function(String field) errorFor;
+
+  const NomineeCard({
+    super.key,
+    required this.index,
+    required this.row,
+    required this.relations,
+    required this.onRemove,
+    required this.onShareChanged,
+    required this.errorFor,
+  });
+
+  Widget _error(String field) {
+    final message = errorFor(field);
+    return message == null ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(top: 4), child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +49,7 @@ class NomineeCard extends StatelessWidget {
             ],
           ),
           AppTextField(label: 'registration_nominee_name'.tr, controller: row.nameController, isRequired: true, validator: (v) => AppValidator.validateRequired(v)),
+          _error('name'),
           const SizedBox(height: 12),
           Obx(
             () => DropdownButtonFormField<int>(
@@ -41,8 +60,10 @@ class NomineeCard extends StatelessWidget {
               validator: (value) => value == null ? 'registration_required'.tr : null,
             ),
           ),
+          _error('relation_id'),
           const SizedBox(height: 12),
           AppTextField(label: 'registration_nid'.tr, controller: row.nidController, isRequired: true, keyboardType: TextInputType.number, validator: AppValidator.validateNID),
+          _error('nid'),
           const SizedBox(height: 12),
           AppTextField(
             label: 'registration_mobile'.tr,
@@ -50,6 +71,7 @@ class NomineeCard extends StatelessWidget {
             keyboardType: TextInputType.phone,
             validator: (v) => (v == null || v.trim().isEmpty) ? null : AppValidator.validatePhone(v),
           ),
+          _error('mobile'),
           const SizedBox(height: 12),
           AppTextField(
             label: 'registration_nominee_share'.tr,
@@ -59,6 +81,7 @@ class NomineeCard extends StatelessWidget {
             validator: (v) => percentToHundredths(v ?? '') == null ? 'registration_required'.tr : null,
             onChanged: (_) => onShareChanged(),
           ),
+          _error('share_percent'),
         ],
       ),
     );

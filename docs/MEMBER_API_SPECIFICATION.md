@@ -42,7 +42,7 @@ feature tests in `tests/Feature/Api/*` of the backend. **Real responses** captur
 | 200 / 201 | OK / created | show data |
 | 401 | not signed in, token expired, revoked or wrong type | refresh once (single-flight); if that fails → login |
 | 403 | not a member any more (exited) — tokens revoked | go to login with the message |
-| 403 `member_only` | an applicant token used on a member endpoint | stay on registration status; never shown as an error page |
+| 403 `member_only` | an applicant token used on a member endpoint | not expected: applicants start on registration status (also offline, from the last known account type); if it happens, the message is shown |
 | 404 | not found or not yours; unknown route | show the message |
 | 405 | wrong method | treat as a bug |
 | 409 | idempotency conflict (pay online) | show the message |
@@ -410,7 +410,7 @@ Read-only.
 
 ## Self-registration (applicants)
 
-The office invites a mobile + password in the admin; the person signs in with them and gets an `applicant` token (ability `applicant`; `auth/me`, `auth/logout`, `auth/refresh-token` also accept it). Member endpoints answer an applicant token with **403 `api.registration.member_only`**. On approval the applicant token is revoked; the next refresh returns a member token.
+The office invites a mobile + password in the admin; the person signs in with them and gets an `applicant` token (ability `applicant`; `auth/me` and `auth/logout` also accept it, and `auth/refresh-token` accepts the applicant's refresh token). Member endpoints answer an applicant token with **403 `api.registration.member_only`**. On approval the applicant token is revoked; the next refresh returns a member token.
 
 ### `auth/me` for an applicant
 `GET /api/v1/auth/me` · Bearer · 200 `data`:
