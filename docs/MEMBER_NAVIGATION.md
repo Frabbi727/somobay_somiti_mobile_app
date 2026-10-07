@@ -14,6 +14,10 @@ Splash ── config/somiti-info ──┬─ no token ────────�
 Login ── password or SMS code ──▶ Dashboard
 ```
 
+Rule for start-up and login: `account_type` `applicant` → registration status (`/registration`); `member` → Dashboard.
+When an applicant is approved the access token is rejected (401); the refresh returns a member token and the
+app opens the Dashboard without asking for a sign-in.
+
 ## Bottom navigation (5 tabs, same widget as today)
 
 | # | Tab | Was | Page | Content |
@@ -36,6 +40,8 @@ Login ── password or SMS code ──▶ Dashboard
 | `/profile/somiti-info` | About the society | Profile |
 | `/profile/change-password` | Change password | Profile |
 | `/profile/language` | Language | Profile |
+| `/registration` | Registration status (headline, timeline, one button per `next_action`, pull to refresh, sign out) | Start-up / login for applicants |
+| `/registration/form` | Five-step registration form (draft saved on Next; review → confirm → submit) | Registration status |
 
 Receipts and the statement PDF open **outside** the app (browser / PDF viewer) via `url_launcher` with
 signed links; there is no in-app PDF route.
@@ -45,7 +51,7 @@ re-checks ownership on every request, so a wrong id shows "not found", never ano
 
 ## Routes removed from `AppRoutes`/`AppPages` (files kept)
 
-`/register`, `/forgot-password`, `/otp-verification`, `/force-update`, `/savings/details`,
+`/register` (the old open sign-up; registration is now invite-only at `/registration`), `/forgot-password`, `/otp-verification`, `/force-update`, `/savings/details`,
 `/savings/deposit`, `/loans/details`, `/loans/calculator`, `/loans/repay`, `/members`,
 `/members/details`, `/transactions/details` — no backend support (MEMBER_FEATURES.md).
 

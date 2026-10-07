@@ -25,10 +25,11 @@ endpoint (MEMBER_API_SPECIFICATION.md). Unsupported features are listed at the e
 | Dividends | See yearly dividends | `GET dividends` | DividendModel | Profile → Dividends | Paginated list | Empty state "No dividends yet" |
 | Society info page | Contact the office | `GET config/somiti-info` | SomitiInfoModel | Profile → About the society | Name, registration, address, phone, email, logo | — |
 | Change password | Set a new password | `POST profile/change-password` | ChangePasswordRequest | Profile → Change password | Success; other devices signed out | 422 wrong current / too short / mismatch |
+| Self-registration | Finish joining the society after the office invites the mobile | `GET config/nominee-relations`, `GET\|PUT registration`, `POST registration/photo`, `POST registration/submit` | RegistrationModel, NomineeRelationModel | Sign in with the invited mobile + password → status screen → "Complete registration" → five steps (personal, contact, nominees, shares, review) → confirm → submit | Draft saved on each Next; status, timeline and next action come from the server; pull to refresh; when approved the dashboard opens with the new member number, no new sign-in | 422 field errors (nominee NID, shares total); 422 `not_editable`; 409 idempotency conflict; photo > 1 MB rejected |
 | Language | Bangla or English | (all requests send `Accept-Language`) | — | Profile → Language | UI and server text switch; data re-fetched | — |
 
 ## Not in the app (no backend support)
 
-Self-registration · forgot/reset password · editing profile, nominees or photo · loans · savings/DPS
+Forgot/reset password · editing profile, nominees or photo · loans · savings/DPS
 products · member directory · notices/announcements · notification read state · push notifications ·
 app version check / force update · cash or bank payments, refunds and reversals (staff only).

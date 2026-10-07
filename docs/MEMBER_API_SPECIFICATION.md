@@ -42,6 +42,7 @@ feature tests in `tests/Feature/Api/*` of the backend. **Real responses** captur
 | 200 / 201 | OK / created | show data |
 | 401 | not signed in, token expired, revoked or wrong type | refresh once (single-flight); if that fails → login |
 | 403 | not a member any more (exited) — tokens revoked | go to login with the message |
+| 403 `member_only` | an applicant token used on a member endpoint | stay on registration status; never shown as an error page |
 | 404 | not found or not yours; unknown route | show the message |
 | 405 | wrong method | treat as a bug |
 | 409 | idempotency conflict (pay online) | show the message |
@@ -100,10 +101,12 @@ or, when `otp_enabled`:
 ```json
 {
   "success": true, "statusCode": 200, "message": "Signed in.",
-  "data": { "access_token": "1|…", "refresh_token": "2|…", "token_type": "Bearer", "expires_in": 3600 },
+  "data": { "access_token": "1|…", "refresh_token": "2|…", "token_type": "Bearer", "expires_in": 3600, "account_type": "member" },
   "errors": null, "meta": null
 }
 ```
+
+`account_type` is `"member"` or `"applicant"` (invited, not yet approved). The same field is returned by `auth/refresh-token` and `auth/me`; the app opens the dashboard for `member` and the registration status for `applicant`.
 
 ### Validation
 `mobile` required string ≤ 20; `password` required without `code` (≤ 200); `code` required without `password` (≤ 10).
@@ -405,9 +408,69 @@ Read-only.
 
 ---
 
+## Self-registration (applicants)
+
+The office invites a mobile + password in the admin; the person signs in with them and gets an `applicant` token (ability `applicant`; `auth/me`, `auth/logout`, `auth/refresh-token` also accept it). Member endpoints answer an applicant token with **403 `api.registration.member_only`**. On approval the applicant token is revoked; the next refresh returns a member token.
+
+### `auth/me` for an applicant
+`GET /api/v1/auth/me` · Bearer · 200 `data`:
+
+```json
+{ "account_type": "applicant", "mobile": "01712345678",
+  "registration": { "status": {"value":"submitted","label":"…","color":"warning"}, "next_action": "wait" } }
+```
+
+A member gets the member fields plus `"account_type": "member"`.
+
+### Nominee relations
+`GET /api/v1/config/nominee-relations` · public · `data: [{ "id": 1, "key": "father", "label": "পিতা" }]`, active only, ordered by `sort`.
+
+### Get the registration
+`GET /api/v1/registration` · Bearer (applicant) · 200 `data`:
+
+```json
+{
+  "status": {"value":"submitted","label":"অনুমোদনের অপেক্ষায়","color":"warning"},
+  "next_action": "wait",
+  "can_edit": false,
+  "headline": "সভাপতির অনুমোদনের অপেক্ষায়",
+  "message": "সম্পাদক আপনার নিবন্ধন যাচাই করেছেন। এখন সভাপতির অনুমোদনের অপেক্ষায়।",
+  "timeline": [
+    {"key":"submitted","label":"তথ্য জমা","state":"done","acted_at":"2026-10-07T10:00:00+06:00","actor":null,"reason":null},
+    {"key":"step_0","label":"সম্পাদকের অনুমোদন","state":"done","acted_at":"…","actor":"…","reason":null},
+    {"key":"step_1","label":"সভাপতির অনুমোদন","state":"pending","acted_at":null,"actor":null,"reason":null},
+    {"key":"activation","label":"সদস্যপদ চালু","state":"waiting","acted_at":null,"actor":null,"reason":null}
+  ],
+  "decision": null,
+  "data": {
+    "name_bn": "…", "name_en": "…", "guardian_name": null, "nid": null, "date_of_birth": null,
+    "mobile": "01712345678", "email": null, "address": null, "photo_url": null,
+    "requested_shares": 2,
+    "nominees": [{"name":"…","relation_id":1,"relation":"পিতা","mobile":null,"nid":"…","share_percent":"100.00"}]
+  }
+}
+```
+
+- `status.value` drives the screen; `next_action` is the one main button: `complete` / `resubmit` open the form, `wait` shows only pull-to-refresh.
+- `timeline[].state`: `done | pending | waiting | returned | rejected`. Labels are role labels, already localised; the app never translates roles.
+- `decision` (returned or rejected, else `null`): `{ "type": {value,label,color}, "by_role": "সভাপতি", "at": "2026-10-07T12:00:00+06:00", "reason": "…" }`.
+- `share_percent` is a decimal string with up to 2 places (`"100.00"`); the app only shows a running total and never computes money.
+- `photo_url` is a short-lived signed URL.
+
+### Save the draft
+`PUT /api/v1/registration` · Bearer (applicant) · any subset of `name_bn, name_en, guardian_name, nid, date_of_birth, email, address, requested_shares, nominees[]`. `nominees` replaces the whole list; each `{name, relation_id, mobile?, nid, share_percent}`. 200 returns the **Get the registration** shape. 422 field errors; 422 `registration.errors.not_editable` unless the status is `invited` or `returned`.
+
+### Upload the photo
+`POST /api/v1/registration/photo` · Bearer (applicant) · `multipart/form-data` field `photo` (jpg/png, ≤ 1 MB). 200 returns the **Get the registration** shape.
+
+### Submit
+`POST /api/v1/registration/submit` · Bearer (applicant) · `{ "idempotency_key": "<uuid>" }` (one UUID per attempt; reused on retry). 200 returns the **Get the registration** shape with status `submitted`. 422 field errors (`nominees`, `nominees.0.nid`, …) or a rule message; 409 `registration.errors.idempotency_conflict`; 422 `not_editable`.
+
+---
+
 ## Endpoints the existing app referenced that do not exist
 
-`auth/register`, `auth/forgot-password`, `auth/verify-otp`, `auth/reset-password`, `config/version-check`,
+`auth/register` (sign-up is by invitation only; see Self-registration), `auth/forgot-password`, `auth/verify-otp`, `auth/reset-password`, `config/version-check`,
 `savings/*`, `loans/*`, `members`, `transactions` — **not supported**; remove them from `ApiConstants`.
 `shares/overview`, `notifications`, `profile`, `profile/change-password`, `dashboard/summary`, `config/somiti-info`,
 `auth/login`, `auth/refresh-token`, `auth/logout` exist with the shapes above.
