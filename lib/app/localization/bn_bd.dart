@@ -299,6 +299,7 @@ const Map<String, String> bnBD = {
   TranslationKeys.registrationPhoto: 'ছবি',
   TranslationKeys.registrationPhotoPick: 'ছবি বাছুন',
   TranslationKeys.registrationMobile: 'মোবাইল (আপনার লগইন)',
+  TranslationKeys.registrationNomineeMobile: 'মোবাইল',
   TranslationKeys.registrationEmail: 'ইমেইল',
   TranslationKeys.registrationAddress: 'ঠিকানা',
   TranslationKeys.registrationNominee: 'নমিনি',

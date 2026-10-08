@@ -299,6 +299,7 @@ class TranslationKeys {
   static const String registrationPhoto = 'registration_photo';
   static const String registrationPhotoPick = 'registration_photo_pick';
   static const String registrationMobile = 'registration_mobile';
+  static const String registrationNomineeMobile = 'registration_nominee_mobile';
   static const String registrationEmail = 'registration_email';
   static const String registrationAddress = 'registration_address';
   static const String registrationNominee = 'registration_nominee';

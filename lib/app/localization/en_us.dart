@@ -299,6 +299,7 @@ const Map<String, String> enUS = {
   TranslationKeys.registrationPhoto: 'Photo',
   TranslationKeys.registrationPhotoPick: 'Choose photo',
   TranslationKeys.registrationMobile: 'Mobile (your login)',
+  TranslationKeys.registrationNomineeMobile: 'Mobile',
   TranslationKeys.registrationEmail: 'Email',
   TranslationKeys.registrationAddress: 'Address',
   TranslationKeys.registrationNominee: 'Nominee',

@@ -16,6 +16,7 @@ import '../../../core/widgets/app_loading.dart';
 import '../../../core/widgets/app_step_indicator.dart';
 import '../../../core/widgets/app_text_fields.dart';
 import '../controller/registration_form_controller.dart';
+import '../model/registration_model.dart';
 import 'widgets/nominee_card.dart';
 
 class RegistrationFormPage extends GetView<RegistrationFormController> {
@@ -39,13 +40,19 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
-                child: switch (step) {
-                  0 => _personal(context),
-                  1 => _contact(),
-                  2 => _nominees(),
-                  3 => _shares(),
-                  _ => _review(),
-                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (state.data?.decision?.reason != null) _returnedBanner(state.data!.decision!),
+                    switch (step) {
+                      0 => _personal(context),
+                      1 => _contact(),
+                      2 => _nominees(),
+                      3 => _shares(),
+                      _ => _review(),
+                    },
+                  ],
+                ),
               ),
             ),
             _bottomBar(),
@@ -54,6 +61,14 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
       }),
     );
   }
+
+  static String _digits(String text) => Get.locale?.languageCode == 'bn' ? BanglaNumberUtil.toBangla(text) : text;
+
+  /// Why the registration came back, kept in sight while the member corrects it.
+  Widget _returnedBanner(RegistrationDecisionModel decision) => AppCard(
+    margin: const EdgeInsets.only(bottom: 16),
+    child: Text('${'registration_reason'.tr} (${decision.byRole}): ${decision.reason}', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error)),
+  );
 
   Widget _error(String field) {
     final message = controller.errorFor(field);
@@ -154,7 +169,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
           OutlinedButton.icon(onPressed: controller.addNominee, icon: const Icon(Icons.person_add), label: Text('registration_nominee_add'.tr)),
           const SizedBox(height: 8),
           Text(
-            'registration_nominee_total'.trParams({'total': '${total ~/ 100}${total % 100 == 0 ? '' : '.${(total % 100).toString().padLeft(2, '0')}'}'}),
+            'registration_nominee_total'.trParams({'total': _digits('${total ~/ 100}${total % 100 == 0 ? '' : '.${(total % 100).toString().padLeft(2, '0')}'}')}),
             style: AppTextStyles.titleMedium.copyWith(color: total == 10000 ? AppColors.success : AppColors.error),
           ),
           _error('nominees'),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/utils/app_validator.dart';
+import '../../../../core/utils/bangla_number_util.dart';
 import '../../../../core/widgets/app_card.dart';
 import '../../../../core/widgets/app_text_fields.dart';
 import '../../controller/nominee_form_row.dart';
@@ -30,6 +31,8 @@ class NomineeCard extends StatelessWidget {
     required this.errorFor,
   });
 
+  static String _digits(String text) => Get.locale?.languageCode == 'bn' ? BanglaNumberUtil.toBangla(text) : text;
+
   Widget _error(String field) {
     final message = errorFor(field);
     return message == null ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(top: 4), child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)));
@@ -44,7 +47,7 @@ class NomineeCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text('${'registration_nominee'.tr} ${index + 1}', style: Theme.of(context).textTheme.titleMedium)),
+              Expanded(child: Text('${'registration_nominee'.tr} ${_digits('${index + 1}')}', style: Theme.of(context).textTheme.titleMedium)),
               if (onRemove != null) TextButton(onPressed: onRemove, child: Text('registration_nominee_remove'.tr)),
             ],
           ),
@@ -66,7 +69,7 @@ class NomineeCard extends StatelessWidget {
           _error('nid'),
           const SizedBox(height: 12),
           AppTextField(
-            label: 'registration_mobile'.tr,
+            label: 'registration_nominee_mobile'.tr,
             controller: row.mobileController,
             keyboardType: TextInputType.phone,
             validator: (v) => (v == null || v.trim().isEmpty) ? null : AppValidator.validatePhone(v),

@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:somobay_somiti_mobile_app/app/localization/app_translations.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
+import 'package:somobay_somiti_mobile_app/modules/registration/model/registration_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/view/registration_form_page.dart';
+
+import '../support/fixtures.dart';
 
 import 'registration_form_controller_test.dart' show RecordingRegistrationRepository;
 
@@ -43,6 +46,28 @@ void main() {
 
     expect(find.text('This NID is already a nominee.'), findsOneWidget);
     expect(controller.currentStep.value, 2);
+
+    Get.reset();
+  });
+
+  testWidgets('keeps the reason in sight while correcting a returned registration', (tester) async {
+    final repository = RecordingRegistrationRepository()
+      ..draft = () {
+        final json = fixture('registration_invited')['data'] as Map<String, dynamic>;
+        json['decision'] = {
+          'type': {'value': 'return', 'label': 'Sent back', 'color': 'warning'},
+          'by_role': 'President',
+          'at': '2026-10-08T01:06:00+06:00',
+          'reason': 'Please add a photo',
+        };
+        return RegistrationModel.fromJson(json);
+      };
+    Get.put(RegistrationFormController(repository: repository));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Reason (President): Please add a photo'), findsOneWidget);
 
     Get.reset();
   });
