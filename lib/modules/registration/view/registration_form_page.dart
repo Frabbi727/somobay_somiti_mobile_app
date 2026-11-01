@@ -166,6 +166,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
         children: [
           for (var i = 0; i < controller.nominees.length; i++)
             NomineeCard(
+              key: ObjectKey(controller.nominees[i]),
               index: i,
               row: controller.nominees[i],
               relations: controller.relations,
@@ -208,11 +209,13 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
   List<String> _personLines(PersonFormState person) {
     final language = Get.locale?.languageCode ?? 'bn';
     final gender = person.gender.value;
+    final present = person.present.summary(language);
+    final permanent = (person.permanentSameAsPresent.value ? person.present : person.permanent).summary(language);
     return [
       if (gender != null) '${'registration_gender'.tr}: ${'registration_gender_$gender'.tr}',
       if (person.passport != null) '${'registration_passport'.tr}: ${person.passport}',
-      '${'registration_present_address'.tr}: ${person.present.summary(language)}',
-      '${'registration_permanent_address'.tr}: ${(person.permanentSameAsPresent.value ? person.present : person.permanent).summary(language)}',
+      if (present.isNotEmpty) '${'registration_present_address'.tr}: $present',
+      if (permanent.isNotEmpty) '${'registration_permanent_address'.tr}: $permanent',
     ];
   }
 

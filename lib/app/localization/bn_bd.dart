@@ -339,7 +339,6 @@ const Map<String, String> bnBD = {
   TranslationKeys.geoDistrict: 'জেলা',
   TranslationKeys.geoUpazila: 'উপজেলা',
   TranslationKeys.geoUnion: 'ইউনিয়ন',
-  TranslationKeys.registrationPlace: 'ঠিকানা',
 
   // Geography
   TranslationKeys.geoSelect: 'নির্বাচন করুন',

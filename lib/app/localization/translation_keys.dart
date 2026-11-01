@@ -339,7 +339,6 @@ class TranslationKeys {
   static const String geoDistrict = 'geo_district';
   static const String geoUpazila = 'geo_upazila';
   static const String geoUnion = 'geo_union';
-  static const String registrationPlace = 'registration_place';
 
   // Geography
   static const String geoSelect = 'geo_select';

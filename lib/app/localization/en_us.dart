@@ -339,7 +339,6 @@ const Map<String, String> enUS = {
   TranslationKeys.geoDistrict: 'District',
   TranslationKeys.geoUpazila: 'Upazila',
   TranslationKeys.geoUnion: 'Union',
-  TranslationKeys.registrationPlace: 'Address',
 
   // Geography
   TranslationKeys.geoSelect: 'Select',

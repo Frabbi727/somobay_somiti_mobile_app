@@ -117,10 +117,11 @@ class AddressFields extends StatelessWidget {
             name: 'union',
             level: state.unions,
             selectedId: () => state.unionId.value,
-            enabled: state.upazilaId.value != null && state.unionsAvailable.value,
+            // Stays open while the load failed, so the sheet's Retry is reachable.
+            enabled: state.upazilaId.value != null && (state.unionsAvailable.value || state.unions.failure.value != null || state.unions.loading.value),
             onSelected: state.selectUnion,
             onRetry: state.reloadUnions,
-            isRequired: () => state.unionsAvailable.value,
+            isRequired: () => state.unionRequired,
           ),
         ),
         _error('${prefix}_union_id'),

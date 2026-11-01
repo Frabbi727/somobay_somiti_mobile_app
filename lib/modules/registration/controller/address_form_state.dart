@@ -31,8 +31,17 @@ class AddressFormState {
   final unionId = RxnInt();
   final lineController = TextEditingController();
 
-  /// False until the chosen upazila's unions are loaded, and when that upazila has none.
+  /// True only after a successful load of a non-empty union list for the chosen upazila.
   final unionsAvailable = false.obs;
+
+  /// True once the chosen upazila's unions loaded successfully (the list may be empty). While false
+  /// (loading, failed, nothing chosen) availability is unknown: the union stays required and is kept.
+  final unionsLoaded = false.obs;
+
+  int _epoch = 0;
+
+  /// Whether the union must be chosen: unless the upazila is known to have none.
+  bool get unionRequired => upazilaId.value != null && !(unionsLoaded.value && !unionsAvailable.value);
 
   final divisions = GeoLevel();
   final districts = GeoLevel();
@@ -56,23 +65,37 @@ class AddressFormState {
     upazilaId.value = id;
     _clearBelow(unions: true);
     if (id != null) {
-      await _load(unions, () => geo.unions(id), () => upazilaId.value == id);
-      unionsAvailable.value = unions.places.isNotEmpty;
+      _applyUnions(await _load(unions, () => geo.unions(id), () => upazilaId.value == id));
     }
   }
 
   void selectUnion(int? id) => unionId.value = id;
 
-  Future<void> loadDivisions() => _load(divisions, geo.divisions, () => true);
+  Future<void> loadDivisions() async {
+    await _load(divisions, geo.divisions, () => true);
+  }
 
   /// Reloads the list that failed (the picker's Retry).
-  Future<void> reloadDistricts() => divisionId.value == null ? Future.value() : _load(districts, () => geo.districts(divisionId.value!), () => true);
+  Future<void> reloadDistricts() async {
+    final id = divisionId.value;
+    if (id != null) await _load(districts, () => geo.districts(id), () => divisionId.value == id);
+  }
 
-  Future<void> reloadUpazilas() => districtId.value == null ? Future.value() : _load(upazilas, () => geo.upazilas(districtId.value!), () => true);
+  Future<void> reloadUpazilas() async {
+    final id = districtId.value;
+    if (id != null) await _load(upazilas, () => geo.upazilas(id), () => districtId.value == id);
+  }
 
   Future<void> reloadUnions() async {
-    if (upazilaId.value == null) return;
-    await _load(unions, () => geo.unions(upazilaId.value!), () => true);
+    final id = upazilaId.value;
+    if (id == null) return;
+    _applyUnions(await _load(unions, () => geo.unions(id), () => upazilaId.value == id));
+  }
+
+  /// Availability changes only after a successful load; a failure leaves it unknown.
+  void _applyUnions(bool loaded) {
+    if (!loaded) return;
+    unionsLoaded.value = true;
     unionsAvailable.value = unions.places.isNotEmpty;
   }
 
@@ -88,35 +111,40 @@ class AddressFormState {
     unionId.value = null;
     this.unions.clear();
     unionsAvailable.value = false;
+    unionsLoaded.value = false;
   }
 
   /// [stillWanted] drops an answer that arrives after the member chose something else.
-  Future<void> _load(GeoLevel level, Future<GeoResult> Function() fetch, bool Function() stillWanted) async {
+  /// True when the list was loaded and applied; false on failure or when the answer is outdated.
+  Future<bool> _load(GeoLevel level, Future<GeoResult> Function() fetch, bool Function() stillWanted) async {
+    final epoch = _epoch;
     level.loading.value = true;
     level.failure.value = null;
     final result = await fetch();
-    if (!stillWanted()) return;
+    if (!stillWanted() || epoch != _epoch) return false;
     level.loading.value = false;
     level.failure.value = result.failure;
     level.places.assignAll(result.places);
+    return result.failure == null;
   }
 
   /// Fills the whole chain from a saved address (the server derives division and district).
   Future<void> fromModel(RegistrationAddressModel? model) async {
-    await loadDivisions();
+    // Before the first await: the form may be closed while the lists load.
     lineController.text = model?.line ?? '';
+    await loadDivisions();
     if (model?.upazilaId == null) return;
 
     divisionId.value = model!.divisionId;
     districtId.value = model.districtId;
     upazilaId.value = model.upazilaId;
     unionId.value = model.unionId;
-    await Future.wait([
+    final results = await Future.wait([
       if (model.divisionId != null) _load(districts, () => geo.districts(model.divisionId!), () => true),
       if (model.districtId != null) _load(upazilas, () => geo.upazilas(model.districtId!), () => true),
       _load(unions, () => geo.unions(model.upazilaId!), () => true),
     ]);
-    unionsAvailable.value = unions.places.isNotEmpty;
+    _applyUnions(results.last);
   }
 
   /// A copy of [other]'s choices (for "permanent is the same as present").
@@ -127,9 +155,13 @@ class AddressFormState {
     unionId.value = other.unionId.value;
     lineController.text = other.lineController.text;
     unionsAvailable.value = other.unionsAvailable.value;
-    districts.places.assignAll(other.districts.places);
-    upazilas.places.assignAll(other.upazilas.places);
-    unions.places.assignAll(other.unions.places);
+    unionsLoaded.value = other.unionsLoaded.value;
+    _epoch++; // loads still running here must not overwrite the copied lists
+    for (final (mine, theirs) in [(divisions, other.divisions), (districts, other.districts), (upazilas, other.upazilas), (unions, other.unions)]) {
+      mine.places.assignAll(theirs.places);
+      mine.failure.value = theirs.failure.value;
+      mine.loading.value = theirs.loading.value;
+    }
   }
 
   /// "Gulshan-1, Gulshan, Dhaka, Dhaka" followed by the street line, for the review step.
@@ -148,7 +180,7 @@ class AddressFormState {
   /// Flat API keys: `{prefix}_upazila_id`, `{prefix}_union_id`, `{prefix}_address_line`.
   Map<String, dynamic> toJson(String prefix) {
     final line = lineController.text.trim();
-    return {'${prefix}_upazila_id': upazilaId.value, '${prefix}_union_id': unionsAvailable.value ? unionId.value : null, '${prefix}_address_line': line.isEmpty ? null : line};
+    return {'${prefix}_upazila_id': upazilaId.value, '${prefix}_union_id': unionsLoaded.value && !unionsAvailable.value ? null : unionId.value, '${prefix}_address_line': line.isEmpty ? null : line};
   }
 
   void dispose() => lineController.dispose();

@@ -170,4 +170,71 @@ void main() {
 
     Get.reset();
   });
+
+  testWidgets('the union picker stays open after a failed load so Retry can be reached', (tester) async {
+    final geo = FakeGeoRepository()..unionsFailure = const NetworkFailure();
+    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: geo));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 1;
+    await tester.pumpAndSettle();
+    await controller.person.present.selectDivision(6);
+    await controller.person.present.selectDistrict(47);
+    await controller.person.present.selectUpazila(495);
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.byKey(const Key('member_present_union_field')));
+    await tester.tap(find.byKey(const Key('member_present_union_field')));
+    await tester.pumpAndSettle();
+    expect(find.text('Retry'), findsOneWidget);
+
+    geo.unionsFailure = null;
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+    expect(find.text('Gulshan-1'), findsOneWidget);
+
+    Get.reset();
+  });
+
+  testWidgets('next is blocked while gender and the address are empty', (tester) async {
+    final repository = RecordingRegistrationRepository();
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 1;
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Save and continue'));
+    await tester.pumpAndSettle();
+
+    expect(repository.saved, isEmpty);
+    expect(controller.currentStep.value, 1);
+
+    Get.reset();
+  });
+
+  testWidgets('the review step lists the place names, and skips an empty address', (tester) async {
+    final repository = RecordingRegistrationRepository()..draft = () => RegistrationModel.fromJson(fixture('registration_submitted')['data'] as Map<String, dynamic>);
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 4;
+    await tester.pumpAndSettle();
+
+    expect(find.text('Present address: House 12, Road 3, Gulshan-1, Gulshan, Dhaka, Dhaka', skipOffstage: false), findsWidgets);
+
+    controller.person.present.lineController.clear();
+    await controller.person.present.selectDivision(null);
+    controller.person.setSameAsPresent(false);
+    controller.person.permanent.lineController.clear();
+    await controller.person.permanent.selectDivision(null);
+    controller.nominees.refresh();
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Present address: ', skipOffstage: false), findsOneWidget, reason: 'only the nominee keeps its address lines');
+
+    Get.reset();
+  });
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/geo_repository.dart';
 
@@ -10,6 +12,10 @@ List<GeoPlaceModel> _places(String name) => (fixture(name)['data'] as List<dynam
 class FakeGeoRepository implements IGeoRepository {
   final List<String> calls = [];
   Failure? districtsFailure;
+  Failure? unionsFailure;
+
+  /// Each queued gate holds back the next unions() answer until it completes.
+  final List<Completer<void>> unionsGates = [];
 
   @override
   Future<GeoResult> divisions() async => (failure: null, places: _places('geo_divisions'));
@@ -30,6 +36,8 @@ class FakeGeoRepository implements IGeoRepository {
   @override
   Future<GeoResult> unions(int upazilaId) async {
     calls.add('unions:$upazilaId');
+    if (unionsGates.isNotEmpty) await unionsGates.removeAt(0).future;
+    if (unionsFailure != null) return (failure: unionsFailure, places: const <GeoPlaceModel>[]);
     return (failure: null, places: upazilaId == 495 ? _places('geo_unions_495') : const <GeoPlaceModel>[]);
   }
 }

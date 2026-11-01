@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/address_form_state.dart';
@@ -197,6 +199,48 @@ void main() {
 
     expect(address.unionsAvailable.value, isFalse);
     expect(address.toJson('present')['present_union_id'], isNull);
+  });
+
+  test('a failed unions load leaves availability unknown, keeps the union and can be retried', () async {
+    final geo = FakeGeoRepository()..unionsFailure = const NetworkFailure();
+    final address = AddressFormState(geo: geo);
+    await address.selectDivision(6);
+    await address.selectDistrict(47);
+    address.unionId.value = 4541; // as loaded from a saved draft
+    await address.selectUpazila(495);
+    address.unionId.value = 4541;
+
+    expect(address.unions.failure.value, isA<NetworkFailure>());
+    expect(address.unionsLoaded.value, isFalse);
+    expect(address.unionsAvailable.value, isFalse);
+    expect(address.unionRequired, isTrue);
+    expect(address.toJson('present')['present_union_id'], 4541, reason: 'the saved union is not erased while the list is unknown');
+
+    geo.unionsFailure = null;
+    await address.reloadUnions();
+
+    expect(address.unions.failure.value, isNull);
+    expect(address.unionsLoaded.value, isTrue);
+    expect(address.unionsAvailable.value, isTrue);
+  });
+
+  test('a late unions answer for an earlier upazila is dropped', () async {
+    final geo = FakeGeoRepository();
+    final address = AddressFormState(geo: geo);
+    await address.selectDivision(6);
+    await address.selectDistrict(47);
+    final gate = Completer<void>();
+    geo.unionsGates.add(gate);
+
+    final first = address.selectUpazila(495);
+    await address.selectUpazila(496); // Banani: no unions
+    gate.complete();
+    await first;
+
+    expect(address.upazilaId.value, 496);
+    expect(address.unions.places, isEmpty);
+    expect(address.unionsLoaded.value, isTrue);
+    expect(address.unionsAvailable.value, isFalse);
   });
 
   test('nominee row sends its addresses', () async {
