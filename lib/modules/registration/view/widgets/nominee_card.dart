@@ -10,6 +10,7 @@ import '../../../../core/widgets/app_text_fields.dart';
 import '../../controller/nominee_form_row.dart';
 import '../../controller/registration_form_controller.dart';
 import '../../model/registration_model.dart';
+import 'person_fields.dart';
 
 class NomineeCard extends StatelessWidget {
   final int index;
@@ -21,21 +22,18 @@ class NomineeCard extends StatelessWidget {
   /// The server's message for one of this nominee's fields ('name', 'relation_id', …), or null.
   final String? Function(String field) errorFor;
 
-  const NomineeCard({
-    super.key,
-    required this.index,
-    required this.row,
-    required this.relations,
-    required this.onRemove,
-    required this.onShareChanged,
-    required this.errorFor,
-  });
+  const NomineeCard({super.key, required this.index, required this.row, required this.relations, required this.onRemove, required this.onShareChanged, required this.errorFor});
 
   static String _digits(String text) => Get.locale?.languageCode == 'bn' ? BanglaNumberUtil.toBangla(text) : text;
 
   Widget _error(String field) {
     final message = errorFor(field);
-    return message == null ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(top: 4), child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)));
+    return message == null
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)),
+          );
   }
 
   @override
@@ -85,6 +83,8 @@ class NomineeCard extends StatelessWidget {
             onChanged: (_) => onShareChanged(),
           ),
           _error('share_percent'),
+          const SizedBox(height: 16),
+          PersonFields(person: row.person, keyPrefix: 'nominee_$index', errorFor: errorFor),
         ],
       ),
     );

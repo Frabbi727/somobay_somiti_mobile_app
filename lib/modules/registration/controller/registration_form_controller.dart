@@ -7,8 +7,10 @@ import '../../../core/models/ui_state.dart';
 import '../../../core/utils/bangla_number_util.dart';
 import '../../../core/utils/image_compressor.dart';
 import '../model/registration_model.dart';
+import '../repository/geo_repository.dart';
 import '../repository/registration_repository.dart';
 import 'nominee_form_row.dart';
+import 'person_form_state.dart';
 
 /// "33.3" → 3330 hundredths of a percent (100% = 10000). Null when it is not a percentage with at
 /// most two decimals. Integers only: the app never does floating-point arithmetic on shares.
@@ -23,16 +25,14 @@ int? percentToHundredths(String text) {
 /// the server, so nothing is lost if the app closes. Submit uses one idempotency key per form.
 class RegistrationFormController extends GetxController {
   final IRegistrationRepository repository;
+  final IGeoRepository geoRepository;
 
-  RegistrationFormController({required this.repository});
+  RegistrationFormController({required this.repository, required this.geoRepository}) : person = PersonFormState(geo: geoRepository);
 
-  static const stepLabels = [
-    'registration_step_personal',
-    'registration_step_contact',
-    'registration_step_nominees',
-    'registration_step_shares',
-    'registration_step_review',
-  ];
+  /// The member's own gender, passport and addresses.
+  final PersonFormState person;
+
+  static const stepLabels = ['registration_step_personal', 'registration_step_contact', 'registration_step_nominees', 'registration_step_shares', 'registration_step_review'];
 
   /// Lets unit tests drive steps without a widget tree (the Form widgets validate in the app).
   @visibleForTesting
@@ -55,7 +55,6 @@ class RegistrationFormController extends GetxController {
   final guardianController = TextEditingController();
   final nidController = TextEditingController();
   final emailController = TextEditingController();
-  final addressController = TextEditingController();
   final sharesController = TextEditingController();
 
   String _idempotencyKey = const Uuid().v4();
@@ -88,7 +87,6 @@ class RegistrationFormController extends GetxController {
     guardianController.text = data.guardianName ?? '';
     nidController.text = data.nid ?? '';
     emailController.text = data.email ?? '';
-    addressController.text = data.address ?? '';
     sharesController.text = data.requestedShares?.toString() ?? '';
     dateOfBirth.value = data.dateOfBirth;
     photoUrl.value = data.photoUrl;
@@ -96,7 +94,11 @@ class RegistrationFormController extends GetxController {
     for (final row in nominees) {
       row.dispose();
     }
-    nominees.assignAll(data.nominees.isEmpty ? [NomineeFormRow()] : data.nominees.map(NomineeFormRow.fromModel));
+    nominees.assignAll(data.nominees.isEmpty ? [_newNominee()] : data.nominees.map((nominee) => NomineeFormRow.fromModel(nominee, geo: geoRepository)));
+    await Future.wait([
+      person.load(savedGender: data.gender, savedPassport: data.passportNo, savedPresent: data.presentAddress, savedPermanent: data.permanentAddress),
+      for (final row in nominees) row.geoReady,
+    ]);
     // A saved relation that is no longer offered must be chosen again (the dropdown cannot show it).
     final relationIds = relations.map((relation) => relation.id).toSet();
     for (final row in nominees) {
@@ -109,12 +111,24 @@ class RegistrationFormController extends GetxController {
 
   String? errorFor(String field) => failure.value?.validationErrors?[field]?.first;
 
-  static const nomineeFields = ['name', 'relation_id', 'nid', 'mobile', 'share_percent'];
+  static const addressKeys = [
+    'gender',
+    'passport_no',
+    'present_upazila_id',
+    'present_union_id',
+    'present_address_line',
+    'permanent_upazila_id',
+    'permanent_union_id',
+    'permanent_address_line',
+    'permanent_same_as_present',
+  ];
+
+  static const nomineeFields = ['name', 'relation_id', 'nid', 'mobile', 'share_percent', ...addressKeys];
 
   /// The 422 field keys the page shows under the fields of [step].
   Set<String> errorKeysShownOn(int step) => switch (step) {
     0 => {'name_bn', 'name_en', 'guardian_name', 'nid', 'date_of_birth'},
-    1 => {'email', 'address'},
+    1 => {'email', ...addressKeys},
     2 => {
       'nominees',
       for (var i = 0; i < nominees.length; i++)
@@ -139,7 +153,13 @@ class RegistrationFormController extends GetxController {
 
   int get nomineeTotalHundredths => nominees.fold(0, (total, row) => total + (percentToHundredths(row.shareController.text) ?? 0));
 
-  void addNominee() => nominees.add(NomineeFormRow());
+  NomineeFormRow _newNominee() {
+    final row = NomineeFormRow(geo: geoRepository);
+    row.loadGeo();
+    return row;
+  }
+
+  void addNominee() => nominees.add(_newNominee());
 
   void removeNominee(int index) {
     if (nominees.length <= 1) return;
@@ -162,7 +182,7 @@ class RegistrationFormController extends GetxController {
         'nid': nid == null ? null : BanglaNumberUtil.toEnglish(nid),
         'date_of_birth': dateOfBirth.value,
       },
-      1 => {'email': _text(emailController), 'address': _text(addressController)},
+      1 => {'email': _text(emailController), ...person.toJson()},
       2 => {'nominees': nominees.map((row) => row.toJson()).toList()},
       3 => {'requested_shares': int.tryParse(BanglaNumberUtil.toEnglish(sharesController.text.trim()))},
       _ => const <String, dynamic>{},
@@ -236,12 +256,13 @@ class RegistrationFormController extends GetxController {
 
   @override
   void onClose() {
-    for (final controller in [nameBnController, nameEnController, guardianController, nidController, emailController, addressController, sharesController]) {
+    for (final controller in [nameBnController, nameEnController, guardianController, nidController, emailController, sharesController]) {
       controller.dispose();
     }
     for (final row in nominees) {
       row.dispose();
     }
+    person.dispose();
     super.onClose();
   }
 }

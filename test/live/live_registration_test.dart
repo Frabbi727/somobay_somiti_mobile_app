@@ -9,6 +9,7 @@ import 'package:somobay_somiti_mobile_app/core/network/api_client.dart';
 import 'package:somobay_somiti_mobile_app/modules/authentication/model/login_request_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/authentication/repository/auth_repository.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
+import 'package:somobay_somiti_mobile_app/modules/registration/repository/geo_repository.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/registration_repository.dart';
 
 /// Contract check of the registration screens against a running backend: an invited applicant
@@ -28,14 +29,8 @@ void main() {
 
   test('an applicant fills in and submits the registration on the live backend', () async {
     String? token;
-    ApiClient client(String language) => ApiClient.forTesting(Dio(BaseOptions(
-          baseUrl: baseUrl!,
-          headers: {
-            'Accept': 'application/json',
-            'Accept-Language': language,
-            if (token != null) 'Authorization': 'Bearer $token',
-          },
-        )));
+    ApiClient client(String language) =>
+        ApiClient.forTesting(Dio(BaseOptions(baseUrl: baseUrl!, headers: {'Accept': 'application/json', 'Accept-Language': language, if (token != null) 'Authorization': 'Bearer $token'})));
 
     final login = await AuthRepository(apiClient: client('bn')).login(LoginRequestModel(mobile: mobile!, password: password!));
     expect(login.failure, isNull, reason: 'login: ${login.failure?.message}');
@@ -61,7 +56,10 @@ void main() {
     print('before: ${before.registration!.status.value} · ${before.registration!.headline} · reason: ${before.registration!.decision?.reason}');
 
     if (before.registration!.canEdit) {
-      final form = RegistrationFormController(repository: repository)..skipValidationForTests = true;
+      final form = RegistrationFormController(
+        repository: repository,
+        geoRepository: GeoRepository(apiClient: client('bn')),
+      )..skipValidationForTests = true;
       await form.load();
       expect(form.loadState.value.isSuccess, isTrue, reason: 'form load');
 
@@ -70,7 +68,13 @@ void main() {
       form.guardianController.text = 'Abdul Live';
       form.nidController.text = '৫৫৬৬৭৭৮৮৯৬';
       form.dateOfBirth.value = '1992-03-04';
-      form.addressController.text = 'Mirpur, Dhaka';
+      form.person.gender.value = 'male';
+      await form.person.present.selectDivision(6);
+      await form.person.present.selectDistrict(47);
+      await form.person.present.selectUpazila(495);
+      form.person.present.selectUnion(4541);
+      form.person.present.lineController.text = 'House 12, Road 3';
+      form.person.setSameAsPresent(true);
       while (form.nominees.length > 1) {
         form.removeNominee(form.nominees.length - 1);
       }
@@ -79,12 +83,26 @@ void main() {
         ..relationId.value = form.relations.first.id
         ..nidController.text = '1234567893'
         ..shareController.text = '60';
+      form.nominees.first.person.gender.value = 'female';
+      await form.nominees.first.person.present.selectDivision(6);
+      await form.nominees.first.person.present.selectDistrict(47);
+      await form.nominees.first.person.present.selectUpazila(495);
+      form.nominees.first.person.present.selectUnion(4541);
+      form.nominees.first.person.present.lineController.text = 'House 12, Road 3';
+      form.nominees.first.person.setSameAsPresent(true);
       form.addNominee();
       form.nominees.last
         ..nameController.text = 'Rahim'
         ..relationId.value = form.relations.last.id
         ..nidController.text = '1234567894'
         ..shareController.text = '৪০';
+      form.nominees.last.person.gender.value = 'male';
+      await form.nominees.last.person.present.selectDivision(6);
+      await form.nominees.last.person.present.selectDistrict(47);
+      await form.nominees.last.person.present.selectUpazila(495);
+      form.nominees.last.person.present.selectUnion(4541);
+      form.nominees.last.person.present.lineController.text = 'House 12, Road 3';
+      form.nominees.last.person.setSameAsPresent(true);
       form.sharesController.text = '২';
 
       for (var step = 0; step < 4; step++) {
@@ -103,7 +121,9 @@ void main() {
     expect(data.nominees.map((nominee) => nominee.sharePercent), ['60.00', '40.00']);
     expect(data.requestedShares, 2);
     // ignore: avoid_print
-    print('after: ${after.registration!.status.value} · ${after.registration!.headline} · '
-        '${after.registration!.timeline.map((step) => '${step.label}=${step.state}').join(', ')}');
+    print(
+      'after: ${after.registration!.status.value} · ${after.registration!.headline} · '
+      '${after.registration!.timeline.map((step) => '${step.label}=${step.state}').join(', ')}',
+    );
   }, skip: baseUrl == null || mobile == null || password == null ? 'Set LIVE_API_URL, LIVE_APPLICANT_MOBILE and LIVE_APPLICANT_PASSWORD' : false);
 }

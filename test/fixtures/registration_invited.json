@@ -60,7 +60,11 @@
       "address": null,
       "photo_url": null,
       "requested_shares": null,
-      "nominees": []
+      "nominees": [],
+      "gender": null,
+      "passport_no": null,
+      "present_address": null,
+      "permanent_address": null
     }
   }
 }

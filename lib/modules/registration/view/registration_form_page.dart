@@ -15,9 +15,11 @@ import '../../../core/widgets/app_error_state.dart';
 import '../../../core/widgets/app_loading.dart';
 import '../../../core/widgets/app_step_indicator.dart';
 import '../../../core/widgets/app_text_fields.dart';
+import '../controller/person_form_state.dart';
 import '../controller/registration_form_controller.dart';
 import '../model/registration_model.dart';
 import 'widgets/nominee_card.dart';
+import 'widgets/person_fields.dart';
 
 class RegistrationFormPage extends GetView<RegistrationFormController> {
   const RegistrationFormPage({super.key});
@@ -72,7 +74,12 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
 
   Widget _error(String field) {
     final message = controller.errorFor(field);
-    return message == null ? const SizedBox.shrink() : Padding(padding: const EdgeInsets.only(top: 4), child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)));
+    return message == null
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(message, style: AppTextStyles.bodySmall.copyWith(color: AppColors.error)),
+          );
   }
 
   Widget _personal(BuildContext context) => Form(
@@ -143,8 +150,8 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
         AppTextField(label: 'registration_email'.tr, controller: controller.emailController, keyboardType: TextInputType.emailAddress),
         _error('email'),
         const SizedBox(height: 12),
-        AppTextField(label: 'registration_address'.tr, controller: controller.addressController, maxLines: 3),
-        _error('address'),
+        const SizedBox(height: 16),
+        PersonFields(person: controller.person, keyPrefix: 'member', errorFor: controller.errorFor),
       ],
     ),
   );
@@ -197,6 +204,18 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
     ),
   );
 
+  /// Gender, passport and both addresses as plain lines (place names in the app language).
+  List<String> _personLines(PersonFormState person) {
+    final language = Get.locale?.languageCode ?? 'bn';
+    final gender = person.gender.value;
+    return [
+      if (gender != null) '${'registration_gender'.tr}: ${'registration_gender_$gender'.tr}',
+      if (person.passport != null) '${'registration_passport'.tr}: ${person.passport}',
+      '${'registration_present_address'.tr}: ${person.present.summary(language)}',
+      '${'registration_permanent_address'.tr}: ${(person.permanentSameAsPresent.value ? person.present : person.permanent).summary(language)}',
+    ];
+  }
+
   Widget _review() {
     Widget section(int step, String title, List<String> lines) => AppCard(
       margin: const EdgeInsets.only(bottom: 12),
@@ -225,8 +244,10 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
           if (controller.nidController.text.isNotEmpty) '${'registration_nid'.tr}: ${controller.nidController.text}',
           if (controller.dateOfBirth.value != null) '${'registration_dob'.tr}: ${controller.dateOfBirth.value}',
         ]),
-        section(1, 'registration_step_contact', [controller.mobile.value, controller.emailController.text, controller.addressController.text].where((s) => s.isNotEmpty).toList()),
-        section(2, 'registration_step_nominees', [for (final row in controller.nominees) '${row.nameController.text} (${relationOf(row.relationId.value)}) — ${row.shareController.text}%']),
+        section(1, 'registration_step_contact', [controller.mobile.value, controller.emailController.text, ..._personLines(controller.person)].where((s) => s.isNotEmpty).toList()),
+        section(2, 'registration_step_nominees', [
+          for (final row in controller.nominees) ...['${row.nameController.text} (${relationOf(row.relationId.value)}) — ${row.shareController.text}%', ..._personLines(row.person)],
+        ]),
         section(3, 'registration_step_shares', [controller.sharesController.text]),
         if (controller.failure.value != null) Text(controller.failure.value!.message.tr, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error)),
       ],
@@ -275,11 +296,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
   }
 
   Future<void> _submit() async {
-    final confirmed = await AppConfirmationDialog.show(
-      title: 'registration_submit_confirm_title'.tr,
-      message: 'registration_submit_confirm_message'.tr,
-      confirmText: 'registration_submit'.tr,
-    );
+    final confirmed = await AppConfirmationDialog.show(title: 'registration_submit_confirm_title'.tr, message: 'registration_submit_confirm_message'.tr, confirmText: 'registration_submit'.tr);
     if (confirmed != true) {
       return;
     }

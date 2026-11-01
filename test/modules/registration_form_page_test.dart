@@ -7,6 +7,7 @@ import 'package:somobay_somiti_mobile_app/modules/registration/controller/regist
 import 'package:somobay_somiti_mobile_app/modules/registration/model/registration_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/view/registration_form_page.dart';
 
+import '../support/fake_geo_repository.dart';
 import '../support/fixtures.dart';
 
 import 'registration_form_controller_test.dart' show RecordingRegistrationRepository;
@@ -14,7 +15,7 @@ import 'registration_form_controller_test.dart' show RecordingRegistrationReposi
 void main() {
   testWidgets('walks from personal details to contact after saving', (tester) async {
     final repository = RecordingRegistrationRepository();
-    Get.put(RegistrationFormController(repository: repository));
+    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -31,8 +32,15 @@ void main() {
 
   testWidgets("shows the server's error under the nominee field it belongs to", (tester) async {
     final repository = RecordingRegistrationRepository()
-      ..answers.add(const ValidationFailure(message: 'invalid', errors: {'nominees.0.nid': ['This NID is already a nominee.']}));
-    final controller = Get.put(RegistrationFormController(repository: repository))..skipValidationForTests = true;
+      ..answers.add(
+        const ValidationFailure(
+          message: 'invalid',
+          errors: {
+            'nominees.0.nid': ['This NID is already a nominee.'],
+          },
+        ),
+      );
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()))..skipValidationForTests = true;
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -62,7 +70,7 @@ void main() {
         };
         return RegistrationModel.fromJson(json);
       };
-    Get.put(RegistrationFormController(repository: repository));
+    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -74,7 +82,7 @@ void main() {
 
   testWidgets('accepts the requested shares typed in Bangla digits', (tester) async {
     final repository = RecordingRegistrationRepository();
-    final controller = Get.put(RegistrationFormController(repository: repository));
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -86,6 +94,79 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(repository.saved.single, {'requested_shares': 5});
+
+    Get.reset();
+  });
+
+  testWidgets('server errors for nominees.0.present_upazila_id show on the nominee card', (tester) async {
+    final repository = RecordingRegistrationRepository()
+      ..answers.add(
+        const ValidationFailure(
+          message: 'invalid',
+          errors: {
+            'nominees.0.present_upazila_id': ['The upazila does not exist.'],
+          },
+        ),
+      );
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()))..skipValidationForTests = true;
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 2;
+    controller.nominees.first.shareController.text = '100';
+    controller.nominees.refresh();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Save and continue'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('The upazila does not exist.', skipOffstage: false), findsOneWidget);
+    expect(controller.currentStep.value, 2);
+
+    Get.reset();
+  });
+
+  testWidgets('choosing a division keeps the choice and offers its districts', (tester) async {
+    final repository = RecordingRegistrationRepository();
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 1;
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.byKey(const Key('member_present_division_field')));
+    await tester.tap(find.byKey(const Key('member_present_division_field')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dhaka').last);
+    await tester.pumpAndSettle();
+
+    expect(controller.person.present.divisionId.value, 6);
+    expect(find.descendant(of: find.byKey(const Key('member_present_division_field')), matching: find.text('Dhaka')), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const Key('member_present_district_field')));
+    await tester.tap(find.byKey(const Key('member_present_district_field')));
+    await tester.pumpAndSettle();
+    expect(find.text('Gazipur'), findsOneWidget);
+
+    Get.reset();
+  });
+
+  testWidgets('ticking same as present hides the permanent address', (tester) async {
+    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: FakeGeoRepository()));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 1;
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('member_permanent_division_field'), skipOffstage: false), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const Key('member_same_as_present')));
+    await tester.tap(find.byKey(const Key('member_same_as_present')));
+    await tester.pumpAndSettle();
+
+    expect(controller.person.permanentSameAsPresent.value, isTrue);
+    expect(find.byKey(const Key('member_permanent_division_field'), skipOffstage: false), findsNothing);
 
     Get.reset();
   });

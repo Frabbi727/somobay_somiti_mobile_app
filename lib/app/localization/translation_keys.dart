@@ -301,7 +301,6 @@ class TranslationKeys {
   static const String registrationMobile = 'registration_mobile';
   static const String registrationNomineeMobile = 'registration_nominee_mobile';
   static const String registrationEmail = 'registration_email';
-  static const String registrationAddress = 'registration_address';
   static const String registrationNominee = 'registration_nominee';
   static const String registrationNomineeName = 'registration_nominee_name';
   static const String registrationLogout = 'registration_logout';
@@ -325,6 +324,22 @@ class TranslationKeys {
   static const String registrationRequired = 'registration_required';
   static const String registrationNomineeNeeded = 'registration_nominee_needed';
   static const String registrationTotalNot100 = 'registration_total_not_100';
+
+  static const String registrationGender = 'registration_gender';
+  static const String registrationGenderMale = 'registration_gender_male';
+  static const String registrationGenderFemale = 'registration_gender_female';
+  static const String registrationGenderOther = 'registration_gender_other';
+  static const String registrationPassport = 'registration_passport';
+  static const String registrationPassportInvalid = 'registration_passport_invalid';
+  static const String registrationPresentAddress = 'registration_present_address';
+  static const String registrationPermanentAddress = 'registration_permanent_address';
+  static const String registrationSameAsPresent = 'registration_same_as_present';
+  static const String registrationAddressLine = 'registration_address_line';
+  static const String geoDivision = 'geo_division';
+  static const String geoDistrict = 'geo_district';
+  static const String geoUpazila = 'geo_upazila';
+  static const String geoUnion = 'geo_union';
+  static const String registrationPlace = 'registration_place';
 
   // Geography
   static const String geoSelect = 'geo_select';

@@ -87,6 +87,20 @@ RegistrationDataModel _$RegistrationDataModelFromJson(
   mobile: json['mobile'] as String,
   email: json['email'] as String?,
   address: json['address'] as String?,
+  gender: json['gender'] == null
+      ? null
+      : EnumValueModel.fromJson(json['gender'] as Map<String, dynamic>),
+  passportNo: json['passport_no'] as String?,
+  presentAddress: json['present_address'] == null
+      ? null
+      : RegistrationAddressModel.fromJson(
+          json['present_address'] as Map<String, dynamic>,
+        ),
+  permanentAddress: json['permanent_address'] == null
+      ? null
+      : RegistrationAddressModel.fromJson(
+          json['permanent_address'] as Map<String, dynamic>,
+        ),
   photoUrl: json['photo_url'] as String?,
   requestedShares: (json['requested_shares'] as num?)?.toInt(),
   nominees: (json['nominees'] as List<dynamic>)
@@ -105,9 +119,35 @@ Map<String, dynamic> _$RegistrationDataModelToJson(
   'mobile': instance.mobile,
   'email': instance.email,
   'address': instance.address,
+  'gender': instance.gender?.toJson(),
+  'passport_no': instance.passportNo,
+  'present_address': instance.presentAddress?.toJson(),
+  'permanent_address': instance.permanentAddress?.toJson(),
   'photo_url': instance.photoUrl,
   'requested_shares': instance.requestedShares,
   'nominees': instance.nominees.map((e) => e.toJson()).toList(),
+};
+
+RegistrationAddressModel _$RegistrationAddressModelFromJson(
+  Map<String, dynamic> json,
+) => RegistrationAddressModel(
+  upazilaId: (json['upazila_id'] as num?)?.toInt(),
+  unionId: (json['union_id'] as num?)?.toInt(),
+  divisionId: (json['division_id'] as num?)?.toInt(),
+  districtId: (json['district_id'] as num?)?.toInt(),
+  line: json['address_line'] as String?,
+  placeName: json['place_name'] as String?,
+);
+
+Map<String, dynamic> _$RegistrationAddressModelToJson(
+  RegistrationAddressModel instance,
+) => <String, dynamic>{
+  'upazila_id': instance.upazilaId,
+  'union_id': instance.unionId,
+  'division_id': instance.divisionId,
+  'district_id': instance.districtId,
+  'address_line': instance.line,
+  'place_name': instance.placeName,
 };
 
 RegistrationNomineeModel _$RegistrationNomineeModelFromJson(
@@ -119,6 +159,20 @@ RegistrationNomineeModel _$RegistrationNomineeModelFromJson(
   mobile: json['mobile'] as String?,
   nid: json['nid'] as String?,
   sharePercent: json['share_percent'] as String,
+  gender: json['gender'] == null
+      ? null
+      : EnumValueModel.fromJson(json['gender'] as Map<String, dynamic>),
+  passportNo: json['passport_no'] as String?,
+  presentAddress: json['present_address'] == null
+      ? null
+      : RegistrationAddressModel.fromJson(
+          json['present_address'] as Map<String, dynamic>,
+        ),
+  permanentAddress: json['permanent_address'] == null
+      ? null
+      : RegistrationAddressModel.fromJson(
+          json['permanent_address'] as Map<String, dynamic>,
+        ),
 );
 
 Map<String, dynamic> _$RegistrationNomineeModelToJson(
@@ -130,6 +184,10 @@ Map<String, dynamic> _$RegistrationNomineeModelToJson(
   'mobile': instance.mobile,
   'nid': instance.nid,
   'share_percent': instance.sharePercent,
+  'gender': instance.gender?.toJson(),
+  'passport_no': instance.passportNo,
+  'present_address': instance.presentAddress?.toJson(),
+  'permanent_address': instance.permanentAddress?.toJson(),
 };
 
 NomineeRelationModel _$NomineeRelationModelFromJson(

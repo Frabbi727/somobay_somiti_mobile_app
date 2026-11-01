@@ -80,7 +80,16 @@ class RegistrationDataModel {
   final String? dateOfBirth;
   final String mobile;
   final String? email;
+
+  /// The old free-text address; older drafts may still carry it. The form no longer uses it.
   final String? address;
+  final EnumValueModel? gender;
+  @JsonKey(name: 'passport_no')
+  final String? passportNo;
+  @JsonKey(name: 'present_address')
+  final RegistrationAddressModel? presentAddress;
+  @JsonKey(name: 'permanent_address')
+  final RegistrationAddressModel? permanentAddress;
   @JsonKey(name: 'photo_url')
   final String? photoUrl;
   @JsonKey(name: 'requested_shares')
@@ -96,6 +105,10 @@ class RegistrationDataModel {
     required this.mobile,
     this.email,
     this.address,
+    this.gender,
+    this.passportNo,
+    this.presentAddress,
+    this.permanentAddress,
     this.photoUrl,
     this.requestedShares,
     required this.nominees,
@@ -106,7 +119,33 @@ class RegistrationDataModel {
   Map<String, dynamic> toJson() => _$RegistrationDataModelToJson(this);
 }
 
+/// A saved address; division and district are derived by the server from the upazila.
 @JsonSerializable()
+class RegistrationAddressModel {
+  @JsonKey(name: 'upazila_id')
+  final int? upazilaId;
+  @JsonKey(name: 'union_id')
+  final int? unionId;
+  @JsonKey(name: 'division_id')
+  final int? divisionId;
+  @JsonKey(name: 'district_id')
+  final int? districtId;
+  @JsonKey(name: 'address_line')
+  final String? line;
+  @JsonKey(name: 'place_name')
+  final String? placeName;
+
+  const RegistrationAddressModel({this.upazilaId, this.unionId, this.divisionId, this.districtId, this.line, this.placeName});
+
+  factory RegistrationAddressModel.fromJson(Map<String, dynamic> json) => _$RegistrationAddressModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegistrationAddressModelToJson(this);
+
+  /// Same place and line (the saved draft has no "same as present" flag, so it is inferred).
+  bool sameAs(RegistrationAddressModel? other) => other != null && other.upazilaId == upazilaId && other.unionId == unionId && (other.line ?? '') == (line ?? '');
+}
+
+@JsonSerializable(explicitToJson: true)
 class RegistrationNomineeModel {
   final String name;
   @JsonKey(name: 'relation_id')
@@ -116,8 +155,26 @@ class RegistrationNomineeModel {
   final String? nid;
   @JsonKey(name: 'share_percent')
   final String sharePercent;
+  final EnumValueModel? gender;
+  @JsonKey(name: 'passport_no')
+  final String? passportNo;
+  @JsonKey(name: 'present_address')
+  final RegistrationAddressModel? presentAddress;
+  @JsonKey(name: 'permanent_address')
+  final RegistrationAddressModel? permanentAddress;
 
-  const RegistrationNomineeModel({required this.name, this.relationId, this.relation, this.mobile, this.nid, required this.sharePercent});
+  const RegistrationNomineeModel({
+    required this.name,
+    this.relationId,
+    this.relation,
+    this.mobile,
+    this.nid,
+    required this.sharePercent,
+    this.gender,
+    this.passportNo,
+    this.presentAddress,
+    this.permanentAddress,
+  });
 
   factory RegistrationNomineeModel.fromJson(Map<String, dynamic> json) => _$RegistrationNomineeModelFromJson(json);
 

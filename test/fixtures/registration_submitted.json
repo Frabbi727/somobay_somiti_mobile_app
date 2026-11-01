@@ -57,7 +57,7 @@
       "date_of_birth": null,
       "mobile": "01811111111",
       "email": null,
-      "address": null,
+      "address": "Mirpur, Dhaka",
       "photo_url": null,
       "requested_shares": 2,
       "nominees": [
@@ -67,9 +67,53 @@
           "relation": "স্বামী/স্ত্রী",
           "mobile": null,
           "nid": "1234567890",
-          "share_percent": "100.00"
+          "share_percent": "100.00",
+          "gender": {
+            "value": "female",
+            "label": "Female",
+            "color": "warning"
+          },
+          "passport_no": null,
+          "present_address": {
+            "upazila_id": 495,
+            "union_id": 4541,
+            "division_id": 6,
+            "district_id": 47,
+            "address_line": "House 12, Road 3",
+            "place_name": "Gulshan-1, Gulshan, Dhaka, Dhaka"
+          },
+          "permanent_address": {
+            "upazila_id": 495,
+            "union_id": 4541,
+            "division_id": 6,
+            "district_id": 47,
+            "address_line": "House 12, Road 3",
+            "place_name": "Gulshan-1, Gulshan, Dhaka, Dhaka"
+          }
         }
-      ]
+      ],
+      "gender": {
+        "value": "male",
+        "label": "Male",
+        "color": "info"
+      },
+      "passport_no": null,
+      "present_address": {
+        "upazila_id": 495,
+        "union_id": 4541,
+        "division_id": 6,
+        "district_id": 47,
+        "address_line": "House 12, Road 3",
+        "place_name": "Gulshan-1, Gulshan, Dhaka, Dhaka"
+      },
+      "permanent_address": {
+        "upazila_id": 495,
+        "union_id": 4541,
+        "division_id": 6,
+        "district_id": 47,
+        "address_line": "House 12, Road 3",
+        "place_name": "Gulshan-1, Gulshan, Dhaka, Dhaka"
+      }
     }
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
+import 'package:somobay_somiti_mobile_app/modules/registration/controller/address_form_state.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/model/registration_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/registration_repository.dart';
 
+import '../support/fake_geo_repository.dart';
 import '../support/fixtures.dart';
 
 RegistrationModel invited() => RegistrationModel.fromJson(fixture('registration_invited')['data'] as Map<String, dynamic>);
@@ -52,7 +54,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('starts from the saved draft', () async {
-    final controller = RegistrationFormController(repository: RecordingRegistrationRepository());
+    final controller = RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: FakeGeoRepository());
     await controller.load();
 
     expect(controller.nameBnController.text, 'করিম মিয়া');
@@ -63,7 +65,7 @@ void main() {
 
   test('saves only the current step and moves on', () async {
     final repository = RecordingRegistrationRepository();
-    final controller = RegistrationFormController(repository: repository)..skipValidationForTests = true;
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
     await controller.load();
     controller.nameEnController.text = 'Karim Mia';
 
@@ -75,7 +77,7 @@ void main() {
 
   test('stays on the step with the typed values when the network is down', () async {
     final repository = RecordingRegistrationRepository()..answers.add(const NetworkFailure());
-    final controller = RegistrationFormController(repository: repository)..skipValidationForTests = true;
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
     await controller.load();
     controller.nameEnController.text = 'Karim Mia';
 
@@ -87,7 +89,7 @@ void main() {
 
   test('sends nominees as the API expects', () async {
     final repository = RecordingRegistrationRepository();
-    final controller = RegistrationFormController(repository: repository)..skipValidationForTests = true;
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
     await controller.load();
     controller.currentStep.value = 2;
     controller.nominees.first
@@ -98,16 +100,168 @@ void main() {
 
     await controller.next();
 
+    final nominee = (repository.saved.single['nominees'] as List).single as Map<String, dynamic>;
+    expect(nominee, containsPair('name', 'করিমা'));
+    expect(nominee, containsPair('nid', '1234567890'));
+    expect(nominee, containsPair('share_percent', '100'));
+  });
+
+  /// A saved draft whose member and nominee both live at Gulshan-1.
+  RegistrationModel Function() draftAtGulshan() => () {
+    final json = fixture('registration_submitted')['data'] as Map<String, dynamic>;
+    return RegistrationModel.fromJson(json);
+  };
+
+  test('contact step sends gender, passport and both addresses', () async {
+    final repository = RecordingRegistrationRepository();
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
+    await controller.load();
+    controller.currentStep.value = 1;
+    controller.person.gender.value = 'male';
+    controller.person.passportController.text = 'ab 123456';
+    await controller.person.present.selectDivision(6);
+    await controller.person.present.selectDistrict(47);
+    await controller.person.present.selectUpazila(495);
+    controller.person.present.selectUnion(4541);
+    controller.person.present.lineController.text = 'House 12';
+    controller.person.permanent.lineController.text = 'Village Road';
+    await controller.person.permanent.selectDivision(6);
+    await controller.person.permanent.selectDistrict(47);
+    await controller.person.permanent.selectUpazila(496); // Banani has no unions
+
+    await controller.next();
+
     expect(repository.saved.single, {
-      'nominees': [
-        {'name': 'করিমা', 'relation_id': 3, 'nid': '1234567890', 'mobile': null, 'share_percent': '100'},
-      ],
+      'email': null,
+      'gender': 'male',
+      'passport_no': 'AB123456',
+      'present_upazila_id': 495,
+      'present_union_id': 4541,
+      'present_address_line': 'House 12',
+      'permanent_upazila_id': 496,
+      'permanent_union_id': null,
+      'permanent_address_line': 'Village Road',
+      'permanent_same_as_present': false,
     });
+    expect(repository.saved.single.containsKey('address'), isFalse);
+  });
+
+  test('same as present copies the present address', () async {
+    final repository = RecordingRegistrationRepository();
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
+    await controller.load();
+    controller.currentStep.value = 1;
+    final person = controller.person;
+    await person.present.selectDivision(6);
+    await person.present.selectDistrict(47);
+    await person.present.selectUpazila(495);
+    person.present.selectUnion(4542);
+    person.present.lineController.text = 'Road 5';
+
+    person.setSameAsPresent(true);
+
+    expect(person.permanent.upazilaId.value, 495);
+    expect(person.permanent.unionId.value, 4542);
+    expect(person.permanent.lineController.text, 'Road 5');
+
+    person.present.lineController.text = 'Road 6'; // edited after ticking: the sent copy follows
+    await controller.next();
+    expect(repository.saved.single['permanent_address_line'], 'Road 6');
+    expect(repository.saved.single['permanent_union_id'], 4542);
+    expect(repository.saved.single['permanent_same_as_present'], isTrue);
+  });
+
+  test('changing district clears upazila and union', () async {
+    final address = AddressFormState(geo: FakeGeoRepository());
+    await address.selectDivision(6);
+    await address.selectDistrict(47);
+    await address.selectUpazila(495);
+    address.selectUnion(4541);
+    expect(address.unionsAvailable.value, isTrue);
+
+    final reload = address.selectDistrict(52);
+    expect(address.districtId.value, 52, reason: 'the choice is set before the child list loads');
+    expect(address.upazilaId.value, isNull);
+    expect(address.unionId.value, isNull);
+    expect(address.unions.places, isEmpty);
+    expect(address.unionsAvailable.value, isFalse);
+    await reload;
+    expect(address.upazilas.places, isEmpty);
+  });
+
+  test('an upazila without unions leaves the union optional', () async {
+    final address = AddressFormState(geo: FakeGeoRepository());
+    await address.selectDivision(6);
+    await address.selectDistrict(47);
+    await address.selectUpazila(496);
+
+    expect(address.unionsAvailable.value, isFalse);
+    expect(address.toJson('present')['present_union_id'], isNull);
+  });
+
+  test('nominee row sends its addresses', () async {
+    final repository = RecordingRegistrationRepository();
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
+    await controller.load();
+    controller.currentStep.value = 2;
+    final row = controller.nominees.first;
+    row.nameController.text = 'করিমা';
+    row.person.gender.value = 'female';
+    row.person.passportController.text = 'x9y8z7w6';
+    await row.person.present.selectDivision(6);
+    await row.person.present.selectDistrict(47);
+    await row.person.present.selectUpazila(495);
+    row.person.present.selectUnion(4541);
+    row.person.present.lineController.text = 'Flat 4';
+    row.person.setSameAsPresent(true);
+
+    await controller.next();
+
+    final nominee = (repository.saved.single['nominees'] as List).single as Map<String, dynamic>;
+    expect(nominee, containsPair('gender', 'female'));
+    expect(nominee, containsPair('passport_no', 'X9Y8Z7W6'));
+    expect(nominee, containsPair('present_upazila_id', 495));
+    expect(nominee, containsPair('present_union_id', 4541));
+    expect(nominee, containsPair('present_address_line', 'Flat 4'));
+    expect(nominee, containsPair('permanent_upazila_id', 495));
+    expect(nominee, containsPair('permanent_address_line', 'Flat 4'));
+    expect(nominee, containsPair('permanent_same_as_present', true));
+  });
+
+  test('loading a saved draft fills the whole address chain', () async {
+    final repository = RecordingRegistrationRepository()..draft = draftAtGulshan();
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository());
+    await controller.load();
+
+    final present = controller.person.present;
+    expect([present.divisionId.value, present.districtId.value, present.upazilaId.value, present.unionId.value], [6, 47, 495, 4541]);
+    expect(present.lineController.text, 'House 12, Road 3');
+    expect(present.districts.places.any((p) => p.id == 47), isTrue);
+    expect(present.upazilas.places.any((p) => p.id == 495), isTrue);
+    expect(present.unions.places.any((p) => p.id == 4541), isTrue);
+    expect(present.unionsAvailable.value, isTrue);
+    expect(controller.person.gender.value, 'male');
+    expect(controller.person.permanentSameAsPresent.value, isTrue);
+    expect(controller.person.present.summary('en'), 'House 12, Road 3, Gulshan-1, Gulshan, Dhaka, Dhaka');
+
+    final nominee = controller.nominees.single.person;
+    expect(nominee.gender.value, 'female');
+    expect(nominee.present.unionId.value, 4541);
+    expect(nominee.present.unions.places, isNotEmpty);
+  });
+
+  test('server errors for the new fields are shown on their steps', () async {
+    final controller = RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: FakeGeoRepository());
+    await controller.load();
+
+    expect(controller.errorKeysShownOn(1), containsAll(['gender', 'passport_no', 'present_upazila_id', 'present_union_id', 'permanent_address_line', 'permanent_same_as_present']));
+    expect(controller.errorKeysShownOn(1), isNot(contains('address')));
+    expect(controller.errorKeysShownOn(2), containsAll(['nominees.0.gender', 'nominees.0.present_upazila_id', 'nominees.0.permanent_union_id', 'nominees.0.passport_no']));
   });
 
   test('reuses the submit key after a failure and renews it after success', () async {
     final repository = RecordingRegistrationRepository()..answers.addAll([const TimeoutFailure(), null, null]);
-    final controller = RegistrationFormController(repository: repository);
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository());
     await controller.load();
 
     expect(await controller.submit(), isFalse);
@@ -121,10 +275,10 @@ void main() {
   test('clears a saved nominee relation that is no longer offered', () async {
     final repository = RecordingRegistrationRepository()
       ..draft = () => invitedWithNominees([
-            {'name': 'করিমা', 'relation_id': 3, 'share_percent': '50'},
-            {'name': 'রহিম', 'relation_id': 99, 'share_percent': '50'},
-          ]);
-    final controller = RegistrationFormController(repository: repository);
+        {'name': 'করিমা', 'relation_id': 3, 'share_percent': '50'},
+        {'name': 'রহিম', 'relation_id': 99, 'share_percent': '50'},
+      ]);
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository());
     await controller.load();
 
     expect(controller.nominees.map((row) => row.relationId.value), [3, null]);
@@ -132,7 +286,7 @@ void main() {
 
   test('ends in the error state (with Retry) when the relations cannot be loaded', () async {
     final repository = RecordingRegistrationRepository()..relationsFailure = const NetworkFailure();
-    final controller = RegistrationFormController(repository: repository);
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository());
     await controller.load();
 
     expect(controller.loadState.value.isError, isTrue);
@@ -142,10 +296,20 @@ void main() {
   test('a field error with no place on the current step is passed on as a message', () async {
     final repository = RecordingRegistrationRepository()
       ..answers.addAll([
-        const ValidationFailure(message: 'invalid', errors: {'nominees.0.nid': ['NID is already used.']}),
-        const ValidationFailure(message: 'invalid', errors: {'nominees.5.nid': ['Unknown row.']}),
+        const ValidationFailure(
+          message: 'invalid',
+          errors: {
+            'nominees.0.nid': ['NID is already used.'],
+          },
+        ),
+        const ValidationFailure(
+          message: 'invalid',
+          errors: {
+            'nominees.5.nid': ['Unknown row.'],
+          },
+        ),
       ]);
-    final controller = RegistrationFormController(repository: repository)..skipValidationForTests = true;
+    final controller = RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository())..skipValidationForTests = true;
     await controller.load();
     controller.currentStep.value = 2;
 
