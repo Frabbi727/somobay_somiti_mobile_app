@@ -20,6 +20,8 @@ Widget _app(Widget child) => GetMaterialApp(
 AppSearchablePicker<GeoPlaceModel> _picker({
   List<GeoPlaceModel>? items,
   bool enabled = true,
+  GeoPlaceModel? value,
+  String keyPrefix = 'picker',
   bool isLoading = false,
   Failure? failure,
   VoidCallback? onRetry,
@@ -34,6 +36,8 @@ AppSearchablePicker<GeoPlaceModel> _picker({
       onChanged: onChanged ?? (_) {},
       validator: validator,
       enabled: enabled,
+      value: value,
+      keyPrefix: keyPrefix,
       isLoading: isLoading,
       failure: failure,
       onRetry: onRetry,
@@ -62,6 +66,11 @@ void main() {
     await tester.enterText(find.byKey(const Key('picker_search')), 'গুলশান-২');
     await tester.pumpAndSettle();
     expect(find.text('Gulshan-1'), findsNothing);
+    expect(find.text('Gulshan-2'), findsOneWidget);
+
+    await tester.enterText(find.byKey(const Key('picker_search')), 'gulshan-২');
+    await tester.pumpAndSettle();
+    expect(find.text('Gulshan-1'), findsNothing, reason: 'the Bangla digit is converted before matching the English name');
     expect(find.text('Gulshan-2'), findsOneWidget);
 
     await tester.enterText(find.byKey(const Key('picker_search')), 'xyz');
@@ -129,5 +138,82 @@ void main() {
     await tester.pump();
 
     expect(find.text('Required'), findsOneWidget);
+  });
+
+  testWidgets('value is the source of truth: an external reset clears the field and its error', (tester) async {
+    final key = GlobalKey<FormState>();
+    final selection = ValueNotifier<GeoPlaceModel?>(_unions().first);
+    await tester.pumpWidget(GetMaterialApp(
+      translations: AppTranslations(),
+      locale: const Locale('en', 'US'),
+      home: Scaffold(
+        body: Form(
+          key: key,
+          child: ValueListenableBuilder<GeoPlaceModel?>(
+            valueListenable: selection,
+            builder: (_, place, __) => _picker(value: place, onChanged: (p) => selection.value = p, validator: (p) => p == null ? 'Required' : null),
+          ),
+        ),
+      ),
+    ));
+    expect(find.text(_unions().first.label('en')), findsOneWidget);
+
+    selection.value = null;
+    await tester.pumpAndSettle();
+    expect(find.text('Select'), findsOneWidget);
+
+    key.currentState!.validate();
+    await tester.pumpAndSettle();
+    expect(find.text('Required'), findsOneWidget);
+
+    selection.value = _unions().last;
+    await tester.pumpAndSettle();
+    expect(find.text('Required'), findsNothing);
+    expect(find.text(_unions().last.label('en')), findsOneWidget);
+
+    selection.value = null;
+    await tester.pumpAndSettle();
+    expect(find.text('Required'), findsNothing, reason: 'a reset drops the stale error');
+    expect(find.text('Select'), findsOneWidget);
+  });
+
+  testWidgets('a choice the parent does not feed back is reverted on rebuild', (tester) async {
+    final rebuild = ValueNotifier<int>(0);
+    await tester.pumpWidget(_app(ValueListenableBuilder<int>(valueListenable: rebuild, builder: (_, __, ___) => _picker())));
+
+    await tester.tap(find.byKey(const Key('picker_field')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Gulshan-1'));
+    await tester.pumpAndSettle();
+    expect(find.text('Gulshan-1'), findsOneWidget);
+
+    rebuild.value++;
+    await tester.pumpAndSettle();
+    expect(find.text('Gulshan-1'), findsNothing);
+    expect(find.text('Select'), findsOneWidget);
+  });
+
+  testWidgets('the open sheet refreshes when the error gives way to items', (tester) async {
+    final state = ValueNotifier<({Failure? failure, List<GeoPlaceModel> items})>((failure: const NetworkFailure(), items: const []));
+    await tester.pumpWidget(_app(ValueListenableBuilder(
+      valueListenable: state,
+      builder: (_, s, __) => _picker(failure: s.failure, items: s.items, onRetry: () {}),
+    )));
+
+    await tester.tap(find.byKey(const Key('picker_field')));
+    await tester.pumpAndSettle();
+    expect(find.text('Retry'), findsOneWidget);
+
+    state.value = (failure: null, items: _unions());
+    await tester.pumpAndSettle();
+    expect(find.text('Retry'), findsNothing);
+    expect(find.text('Gulshan-1'), findsOneWidget);
+  });
+
+  testWidgets('pickers with their own key prefix can share a screen', (tester) async {
+    await tester.pumpWidget(_app(Column(children: [_picker(keyPrefix: 'union'), _picker(keyPrefix: 'upazila')])));
+
+    expect(find.byKey(const Key('union_field')), findsOneWidget);
+    expect(find.byKey(const Key('upazila_field')), findsOneWidget);
   });
 }

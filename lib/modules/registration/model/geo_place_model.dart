@@ -23,4 +23,10 @@ class GeoPlaceModel {
     final other = languageCode == 'bn' ? nameEn : nameBn;
     return preferred.isNotEmpty ? preferred : other;
   }
+
+  @override
+  bool operator ==(Object other) => other is GeoPlaceModel && other.id == id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

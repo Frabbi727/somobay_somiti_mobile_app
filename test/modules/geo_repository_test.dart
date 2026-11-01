@@ -46,6 +46,13 @@ void main() {
     expect(const GeoPlaceModel(id: 1, nameBn: 'ঢাকা', nameEn: '').label('en'), 'ঢাকা');
   });
 
+  test('places with the same id are equal', () {
+    const a = GeoPlaceModel(id: 1, nameBn: 'ক', nameEn: 'A');
+    const b = GeoPlaceModel(id: 1, nameBn: 'ক', nameEn: 'A');
+    expect(a, b);
+    expect(<GeoPlaceModel>{a, const GeoPlaceModel(id: 1, nameBn: 'খ', nameEn: 'B')}, hasLength(1));
+  });
+
   test('an empty child list is a success and is cached; a failure is not cached', () async {
     var empty = true;
     final api = FakeApi({
