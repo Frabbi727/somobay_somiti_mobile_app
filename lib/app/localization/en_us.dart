@@ -326,6 +326,12 @@ const Map<String, String> enUS = {
   TranslationKeys.registrationNomineeNeeded: 'Add at least one nominee',
   TranslationKeys.registrationTotalNot100: 'Nominee shares must add up to 100%',
 
+  // Geography
+  TranslationKeys.geoSelect: 'Select',
+  TranslationKeys.geoNoMatch: 'No matches',
+  TranslationKeys.geoEmptyList: 'Nothing to choose here',
+  TranslationKeys.geoSearchHint: 'Search in Bangla or English',
+
   // Splash
   TranslationKeys.splashTagline: 'A trusted platform for savings and growth',
 };

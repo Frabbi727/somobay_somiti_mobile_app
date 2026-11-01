@@ -326,6 +326,12 @@ class TranslationKeys {
   static const String registrationNomineeNeeded = 'registration_nominee_needed';
   static const String registrationTotalNot100 = 'registration_total_not_100';
 
+  // Geography
+  static const String geoSelect = 'geo_select';
+  static const String geoNoMatch = 'geo_no_match';
+  static const String geoEmptyList = 'geo_empty_list';
+  static const String geoSearchHint = 'geo_search_hint';
+
   // Splash
   static const String splashTagline = 'splash_tagline';
 }

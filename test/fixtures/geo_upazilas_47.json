@@ -1,0 +1,234 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": [
+    {
+      "id": 505,
+      "name_bn": "বাড্ডা",
+      "name_en": "Badda"
+    },
+    {
+      "id": 496,
+      "name_bn": "বনানী",
+      "name_en": "Banani"
+    },
+    {
+      "id": 515,
+      "name_bn": "ভাষানটেক",
+      "name_en": "Bhashantek"
+    },
+    {
+      "id": 502,
+      "name_bn": "বিমানবন্দর",
+      "name_en": "Bimanbandar"
+    },
+    {
+      "id": 497,
+      "name_bn": "ক্যান্টনমেন্ট",
+      "name_en": "Cantonment"
+    },
+    {
+      "id": 501,
+      "name_bn": "দক্ষিণখান",
+      "name_en": "Dakshinkhan"
+    },
+    {
+      "id": 514,
+      "name_bn": "দারুস সালাম",
+      "name_en": "Darussalam"
+    },
+    {
+      "id": 533,
+      "name_bn": "ডেমরা",
+      "name_en": "Demra"
+    },
+    {
+      "id": 366,
+      "name_bn": "ধামরাই",
+      "name_en": "Dhamrai"
+    },
+    {
+      "id": 516,
+      "name_bn": "ধানমন্ডি",
+      "name_en": "Dhanmondi"
+    },
+    {
+      "id": 369,
+      "name_bn": "দোহার",
+      "name_en": "Dohar"
+    },
+    {
+      "id": 531,
+      "name_bn": "গেন্ডারিয়া",
+      "name_en": "Gendaria"
+    },
+    {
+      "id": 495,
+      "name_bn": "গুলশান",
+      "name_en": "Gulshan"
+    },
+    {
+      "id": 527,
+      "name_bn": "হাজারীবাগ",
+      "name_en": "Hazaribagh"
+    },
+    {
+      "id": 532,
+      "name_bn": "যাত্রাবাড়ী",
+      "name_en": "Jatrabari"
+    },
+    {
+      "id": 512,
+      "name_bn": "কাফরুল",
+      "name_en": "Kafrul"
+    },
+    {
+      "id": 528,
+      "name_bn": "কামরাঙ্গীরচর",
+      "name_en": "Kamrangirchar"
+    },
+    {
+      "id": 367,
+      "name_bn": "কেরাণীগঞ্জ",
+      "name_en": "Keraniganj"
+    },
+    {
+      "id": 529,
+      "name_bn": "খিলগাঁও",
+      "name_en": "Khilgaon"
+    },
+    {
+      "id": 503,
+      "name_bn": "খিলক্ষেত",
+      "name_en": "Khilkhet"
+    },
+    {
+      "id": 525,
+      "name_bn": "কোতোয়ালি ঢাকা",
+      "name_en": "Kotwali Dhaka"
+    },
+    {
+      "id": 526,
+      "name_bn": "লালবাগ",
+      "name_en": "Lalbagh"
+    },
+    {
+      "id": 510,
+      "name_bn": "মিরপুর",
+      "name_en": "Mirpur"
+    },
+    {
+      "id": 517,
+      "name_bn": "মোহাম্মদপুর",
+      "name_en": "Mohammadpur"
+    },
+    {
+      "id": 521,
+      "name_bn": "মতিঝিল",
+      "name_en": "Motijheel"
+    },
+    {
+      "id": 368,
+      "name_bn": "নবাবগঞ্জ",
+      "name_en": "Nawabganj"
+    },
+    {
+      "id": 518,
+      "name_bn": "নিউ মার্কেট",
+      "name_en": "New Market"
+    },
+    {
+      "id": 511,
+      "name_bn": "পল্লবী",
+      "name_en": "Pallabi"
+    },
+    {
+      "id": 522,
+      "name_bn": "পল্টন",
+      "name_en": "Paltan"
+    },
+    {
+      "id": 520,
+      "name_bn": "রমনা",
+      "name_en": "Ramna"
+    },
+    {
+      "id": 506,
+      "name_bn": "রামপুরা",
+      "name_en": "Rampura"
+    },
+    {
+      "id": 530,
+      "name_bn": "সবুজবাগ",
+      "name_en": "Sabujbagh"
+    },
+    {
+      "id": 365,
+      "name_bn": "সাভার",
+      "name_en": "Savar"
+    },
+    {
+      "id": 513,
+      "name_bn": "শাহ আলী",
+      "name_en": "Shah Ali"
+    },
+    {
+      "id": 519,
+      "name_bn": "শাহবাগ",
+      "name_en": "Shahbagh"
+    },
+    {
+      "id": 509,
+      "name_bn": "শের-ই-বাংলা নগর",
+      "name_en": "Sher-E-Bangla Nagar"
+    },
+    {
+      "id": 534,
+      "name_bn": "শ্যামপুর",
+      "name_en": "Shyampur"
+    },
+    {
+      "id": 524,
+      "name_bn": "সূত্রাপুর",
+      "name_en": "Sutrapur"
+    },
+    {
+      "id": 507,
+      "name_bn": "তেজগাঁও",
+      "name_en": "Tejgaon"
+    },
+    {
+      "id": 508,
+      "name_bn": "তেজগাঁও শিল্প এলাকা",
+      "name_en": "Tejgaon Industrial Area"
+    },
+    {
+      "id": 498,
+      "name_bn": "উত্তরা পূর্ব",
+      "name_en": "Uttara East"
+    },
+    {
+      "id": 499,
+      "name_bn": "উত্তরা পশ্চিম",
+      "name_en": "Uttara West"
+    },
+    {
+      "id": 500,
+      "name_bn": "উত্তরখান",
+      "name_en": "Uttarkhan"
+    },
+    {
+      "id": 504,
+      "name_bn": "ভাটারা",
+      "name_en": "Vatara"
+    },
+    {
+      "id": 523,
+      "name_bn": "ওয়ারী",
+      "name_en": "Wari"
+    }
+  ]
+}

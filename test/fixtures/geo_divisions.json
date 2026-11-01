@@ -1,0 +1,49 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": [
+    {
+      "id": 4,
+      "name_bn": "বরিশাল",
+      "name_en": "Barisal"
+    },
+    {
+      "id": 1,
+      "name_bn": "চট্টগ্রাম",
+      "name_en": "Chattagram"
+    },
+    {
+      "id": 6,
+      "name_bn": "ঢাকা",
+      "name_en": "Dhaka"
+    },
+    {
+      "id": 3,
+      "name_bn": "খুলনা",
+      "name_en": "Khulna"
+    },
+    {
+      "id": 8,
+      "name_bn": "ময়মনসিংহ",
+      "name_en": "Mymensingh"
+    },
+    {
+      "id": 2,
+      "name_bn": "রাজশাহী",
+      "name_en": "Rajshahi"
+    },
+    {
+      "id": 7,
+      "name_bn": "রংপুর",
+      "name_en": "Rangpur"
+    },
+    {
+      "id": 5,
+      "name_bn": "সিলেট",
+      "name_en": "Sylhet"
+    }
+  ]
+}

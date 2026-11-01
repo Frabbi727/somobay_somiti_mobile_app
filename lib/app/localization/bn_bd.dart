@@ -326,6 +326,12 @@ const Map<String, String> bnBD = {
   TranslationKeys.registrationNomineeNeeded: 'অন্তত একজন নমিনি যোগ করুন',
   TranslationKeys.registrationTotalNot100: 'নমিনিদের অংশ মিলে ১০০% হতে হবে',
 
+  // Geography
+  TranslationKeys.geoSelect: 'নির্বাচন করুন',
+  TranslationKeys.geoNoMatch: 'কোনো মিল পাওয়া যায়নি',
+  TranslationKeys.geoEmptyList: 'এখানে বাছাই করার কিছু নেই',
+  TranslationKeys.geoSearchHint: 'বাংলা বা ইংরেজিতে খুঁজুন',
+
   // Splash
   TranslationKeys.splashTagline: 'সঞ্চয় ও উন্নয়নের বিশ্বস্ত প্ল্যাটফর্ম',
 };

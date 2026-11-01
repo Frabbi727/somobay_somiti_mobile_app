@@ -20,6 +20,12 @@ class ApiConstants {
   static const String registrationPhoto = '/api/v1/registration/photo';
   static const String registrationSubmit = '/api/v1/registration/submit';
 
+  // Geography (public): division > district > upazila > union
+  static const String geoDivisions = '/api/v1/geo/divisions';
+  static const String geoDistricts = '/api/v1/geo/districts';
+  static const String geoUpazilas = '/api/v1/geo/upazilas';
+  static const String geoUnions = '/api/v1/geo/unions';
+
   // Member
   static const String dashboardSummary = '/api/v1/dashboard/summary';
   static const String dues = '/api/v1/dues';
