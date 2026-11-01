@@ -16,8 +16,9 @@ abstract class IRegistrationRepository {
 
   Future<RegistrationResult> uploadPhoto(String path);
 
-  /// One key per form: a retry with the same key never submits twice.
-  Future<RegistrationResult> submit(String idempotencyKey);
+  /// One key per form: a retry with the same key never submits twice. [termsVersion] is the rules
+  /// version the applicant agreed to.
+  Future<RegistrationResult> submit(String idempotencyKey, int termsVersion);
 
   Future<({Failure? failure, List<NomineeRelationModel> relations})> relations();
 
@@ -43,8 +44,8 @@ class RegistrationRepository implements IRegistrationRepository {
       );
 
   @override
-  Future<RegistrationResult> submit(String idempotencyKey) =>
-      _registration(() => apiClient.post(ApiConstants.registrationSubmit, data: {'idempotency_key': idempotencyKey}));
+  Future<RegistrationResult> submit(String idempotencyKey, int termsVersion) =>
+      _registration(() => apiClient.post(ApiConstants.registrationSubmit, data: {'idempotency_key': idempotencyKey, 'terms_version': termsVersion}));
 
   @override
   Future<({Failure? failure, List<NomineeRelationModel> relations})> relations() async {

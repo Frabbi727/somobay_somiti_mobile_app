@@ -3,11 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:somobay_somiti_mobile_app/app/localization/app_translations.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
+import 'package:somobay_somiti_mobile_app/core/widgets/app_buttons.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/model/registration_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/view/registration_form_page.dart';
 
 import '../support/fake_geo_repository.dart';
+import '../support/fake_terms_repository.dart';
 import '../support/fixtures.dart';
 
 import 'registration_form_controller_test.dart' show RecordingRegistrationRepository;
@@ -15,7 +17,7 @@ import 'registration_form_controller_test.dart' show RecordingRegistrationReposi
 void main() {
   testWidgets('walks from personal details to contact after saving', (tester) async {
     final repository = RecordingRegistrationRepository();
-    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -40,7 +42,7 @@ void main() {
           },
         ),
       );
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()))..skipValidationForTests = true;
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()))..skipValidationForTests = true;
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -70,7 +72,7 @@ void main() {
         };
         return RegistrationModel.fromJson(json);
       };
-    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -82,7 +84,7 @@ void main() {
 
   testWidgets('accepts the requested shares typed in Bangla digits', (tester) async {
     final repository = RecordingRegistrationRepository();
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -108,7 +110,7 @@ void main() {
           },
         ),
       );
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()))..skipValidationForTests = true;
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()))..skipValidationForTests = true;
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -128,7 +130,7 @@ void main() {
 
   testWidgets('choosing a division keeps the choice and offers its districts', (tester) async {
     final repository = RecordingRegistrationRepository();
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -153,7 +155,7 @@ void main() {
   });
 
   testWidgets('ticking same as present hides the permanent address', (tester) async {
-    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: FakeGeoRepository()));
+    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -173,7 +175,7 @@ void main() {
 
   testWidgets('the union picker stays open after a failed load so Retry can be reached', (tester) async {
     final geo = FakeGeoRepository()..unionsFailure = const NetworkFailure();
-    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: geo));
+    final controller = Get.put(RegistrationFormController(repository: RecordingRegistrationRepository(), geoRepository: geo, termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -199,7 +201,7 @@ void main() {
 
   testWidgets('next is blocked while gender and the address are empty', (tester) async {
     final repository = RecordingRegistrationRepository();
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -217,7 +219,7 @@ void main() {
 
   testWidgets('the review step lists the place names, and skips an empty address', (tester) async {
     final repository = RecordingRegistrationRepository()..draft = () => RegistrationModel.fromJson(fixture('registration_submitted')['data'] as Map<String, dynamic>);
-    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository()));
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
 
     await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
     await tester.pumpAndSettle();
@@ -234,6 +236,32 @@ void main() {
     controller.nominees.refresh();
     await tester.pumpAndSettle();
     expect(find.textContaining('Present address: ', skipOffstage: false), findsOneWidget, reason: 'only the nominee keeps its address lines');
+
+    Get.reset();
+  });
+
+  testWidgets('the review step shows the rules in the app language and keeps Submit disabled until ticked', (tester) async {
+    final repository = RecordingRegistrationRepository()..draft = () => RegistrationModel.fromJson(fixture('registration_submitted')['data'] as Map<String, dynamic>);
+    final controller = Get.put(RegistrationFormController(repository: repository, geoRepository: FakeGeoRepository(), termsRepository: FakeTermsRepository()));
+
+    await tester.pumpWidget(GetMaterialApp(translations: AppTranslations(), locale: const Locale('en', 'US'), home: const RegistrationFormPage()));
+    await tester.pumpAndSettle();
+    controller.currentStep.value = 4;
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.byKey(const Key('terms_expansion')));
+    await tester.tap(find.byKey(const Key('terms_expansion')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('1. Members must pay', skipOffstage: false), findsOneWidget);
+    expect(find.textContaining('২. ঋণ', skipOffstage: false), findsNothing);
+
+    Finder submit() => find.widgetWithText(AppButton, 'Submit registration');
+    expect(tester.widget<AppButton>(submit()).onPressed, isNull);
+
+    await tester.ensureVisible(find.byKey(const Key('terms_checkbox')));
+    await tester.tap(find.byKey(const Key('terms_checkbox')));
+    await tester.pumpAndSettle();
+    expect(tester.widget<AppButton>(submit()).onPressed, isNotNull);
 
     Get.reset();
   });

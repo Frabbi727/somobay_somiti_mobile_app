@@ -1,0 +1,15 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "OK",
+ "data": {
+  "version": 3,
+  "rules_bn": "১. সদস্যকে নিয়মিত চাঁদা দিতে হবে।\n২. ঋণ সময়মতো পরিশোধ করতে হবে।",
+  "rules_en": "1. Members must pay their dues regularly.\n2. Loans must be repaid on time.",
+  "declaration_bn": "আমি সমিতির নিয়মাবলি পড়েছি ও মেনে চলব।",
+  "declaration_en": "I have read the rules and will follow them.",
+  "accepted": null
+ },
+ "errors": null,
+ "meta": null
+}

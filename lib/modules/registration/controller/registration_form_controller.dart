@@ -6,6 +6,8 @@ import '../../../core/errors/failures.dart';
 import '../../../core/models/ui_state.dart';
 import '../../../core/utils/bangla_number_util.dart';
 import '../../../core/utils/image_compressor.dart';
+import '../../terms/model/terms_model.dart';
+import '../../terms/repository/terms_repository.dart';
 import '../model/registration_model.dart';
 import '../repository/geo_repository.dart';
 import '../repository/registration_repository.dart';
@@ -26,8 +28,9 @@ int? percentToHundredths(String text) {
 class RegistrationFormController extends GetxController {
   final IRegistrationRepository repository;
   final IGeoRepository geoRepository;
+  final ITermsRepository termsRepository;
 
-  RegistrationFormController({required this.repository, required this.geoRepository}) : person = PersonFormState(geo: geoRepository);
+  RegistrationFormController({required this.repository, required this.geoRepository, required this.termsRepository}) : person = PersonFormState(geo: geoRepository);
 
   /// The member's own gender, passport and addresses.
   final PersonFormState person;
@@ -50,6 +53,15 @@ class RegistrationFormController extends GetxController {
   final submitting = false.obs;
   final failure = Rxn<Failure>();
 
+  /// The rules the applicant must agree to on the review step, and whether they ticked the box.
+  final terms = Rxn<TermsModel>();
+  final termsAgreed = false.obs;
+  final termsLoading = false.obs;
+  final termsFailure = Rxn<Failure>();
+
+  /// True when the last submit was refused because the rules changed; the page shows the new ones.
+  final rulesChanged = false.obs;
+
   final nameBnController = TextEditingController();
   final nameEnController = TextEditingController();
   final guardianController = TextEditingController();
@@ -62,7 +74,31 @@ class RegistrationFormController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // The rules are loaded when the review step opens.
+    ever(currentStep, (step) {
+      if (step == stepLabels.length - 1) loadTerms();
+    });
     load();
+  }
+
+  /// Loads the current rules; a newer version than the one shown clears the agreement.
+  Future<void> loadTerms() async {
+    termsLoading.value = true;
+    termsFailure.value = null;
+    final result = await termsRepository.current();
+    termsLoading.value = false;
+
+    if (result.terms == null) {
+      termsFailure.value = result.failure ?? const UnknownFailure();
+      return;
+    }
+
+    if (terms.value?.version != result.terms!.version) {
+      termsAgreed.value = false;
+      // The server ties an idempotency key to one rules version.
+      _idempotencyKey = const Uuid().v4();
+    }
+    terms.value = result.terms;
   }
 
   Future<void> load() async {
@@ -238,20 +274,41 @@ class RegistrationFormController extends GetxController {
 
   /// True when the registration was submitted (it now waits for the first approver).
   Future<bool> submit() async {
-    if (submitting.value) return false;
+    final sentTerms = terms.value;
+    if (submitting.value || sentTerms == null || !termsAgreed.value) return false;
 
     submitting.value = true;
     failure.value = null;
-    final result = await repository.submit(_idempotencyKey);
+    rulesChanged.value = false;
+    final result = await repository.submit(_idempotencyKey, sentTerms.version);
     submitting.value = false;
 
     if (result.failure != null) {
       failure.value = result.failure;
+      await _reloadRulesIfOutdated(result.failure!, sentTerms.version);
       return false;
     }
 
     _idempotencyKey = const Uuid().v4();
     return true;
+  }
+
+  /// The server sends no code for "the rules changed", only a 422 without field errors. So after such
+  /// a refusal the current version is asked again; if it differs, the new rules are shown and the box is unticked.
+  Future<void> _reloadRulesIfOutdated(Failure refused, int sentVersion) async {
+    final isRefusalWithoutFields = (refused.statusCode == 422 || refused.statusCode == 409) && (refused.validationErrors?.isEmpty ?? true);
+    if (!isRefusalWithoutFields) return;
+
+    final result = await termsRepository.current();
+    if (result.terms == null || result.terms!.version == sentVersion) return;
+
+    terms.value = result.terms;
+    termsAgreed.value = false;
+    rulesChanged.value = true;
+    _idempotencyKey = const Uuid().v4();
+    if (refused.message.isEmpty) {
+      failure.value = const ValidationFailure(message: 'terms_rules_changed');
+    }
   }
 
   @override

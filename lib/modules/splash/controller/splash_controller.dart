@@ -54,6 +54,10 @@ class SplashController extends GetxController {
         final accountType = session.accountType ?? 'member';
         await storageService.saveAccountType(accountType);
         LogService.i('Session accepted, opening $accountType home', tag: 'STARTUP');
+        if (session.termsRequired && accountType != 'applicant') {
+          LogService.i('Rules not accepted, opening the accept page', tag: 'STARTUP');
+          return AppRoutes.acceptRules;
+        }
         return homeRouteFor(accountType);
       }
 

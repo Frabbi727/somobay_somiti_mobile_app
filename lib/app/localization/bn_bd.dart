@@ -348,4 +348,15 @@ const Map<String, String> bnBD = {
 
   // Splash
   TranslationKeys.splashTagline: 'সঞ্চয় ও উন্নয়নের বিশ্বস্ত প্ল্যাটফর্ম',
+
+  // Rules (terms)
+  TranslationKeys.termsAcceptTitle: 'নিয়মাবলিতে সম্মতি',
+  TranslationKeys.termsAcceptIntro: 'চালিয়ে যেতে সমিতির নিয়মাবলি পড়ে সম্মতি দিন।',
+  TranslationKeys.termsAgree: 'আমি পড়েছি ও সম্মত',
+  TranslationKeys.termsAcceptButton: 'সম্মতি দিন',
+  TranslationKeys.termsVersion: 'নিয়মাবলির সংস্করণ',
+  TranslationKeys.termsRulesTitle: 'আমার সম্মত নিয়মাবলি',
+  TranslationKeys.termsRulesSection: 'সমিতির নিয়মাবলি ও ঘোষণা',
+  TranslationKeys.termsRulesChanged: 'নিয়মাবলি বদলেছে। নতুন নিয়মাবলি পড়ে আবার সম্মতি দিন।',
+  TranslationKeys.termsLoadFailed: 'নিয়মাবলি লোড করা যায়নি',
 };

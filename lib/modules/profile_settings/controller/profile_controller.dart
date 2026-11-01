@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../core/errors/failures.dart';
 import '../../../core/models/ui_state.dart';
+import '../../../core/network/interceptors/terms_interceptor.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/utils/paged_list.dart';
 import '../../dues/controller/dues_controller.dart';
@@ -56,6 +57,7 @@ class ProfileController extends GetxController {
   Future<void> logout() async {
     await repository.logout();
     await storageService.clearAuthData();
+    TermsInterceptor.reset();
     Get.offAllNamed(AppRoutes.login);
   }
 }

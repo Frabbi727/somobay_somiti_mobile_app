@@ -348,4 +348,15 @@ class TranslationKeys {
 
   // Splash
   static const String splashTagline = 'splash_tagline';
+
+  // Rules (terms)
+  static const String termsAcceptTitle = 'terms_accept_title';
+  static const String termsAcceptIntro = 'terms_accept_intro';
+  static const String termsAgree = 'terms_agree';
+  static const String termsAcceptButton = 'terms_accept_button';
+  static const String termsVersion = 'terms_version';
+  static const String termsRulesTitle = 'terms_rules_title';
+  static const String termsRulesSection = 'terms_rules_section';
+  static const String termsRulesChanged = 'terms_rules_changed';
+  static const String termsLoadFailed = 'terms_load_failed';
 }

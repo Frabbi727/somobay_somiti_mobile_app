@@ -1,0 +1,11 @@
+{
+ "success": false,
+ "statusCode": 403,
+ "message": "নতুন নিয়মাবলিতে সম্মতি দিন।",
+ "data": null,
+ "errors": null,
+ "meta": {
+  "code": "terms_acceptance_required",
+  "version": "3"
+ }
+}

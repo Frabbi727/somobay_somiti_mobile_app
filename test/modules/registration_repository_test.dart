@@ -29,9 +29,9 @@ void main() {
   test('sends the idempotency key and maps a reused key to a conflict', () async {
     final api = FakeApi({'POST /api/v1/registration/submit': (_) => (409, envelopeError(409, 'already used'))});
 
-    final result = await RegistrationRepository(apiClient: api.client()).submit('3f0c…');
+    final result = await RegistrationRepository(apiClient: api.client()).submit('3f0c…', 3);
 
-    expect(api.last.data, {'idempotency_key': '3f0c…'});
+    expect(api.last.data, {'idempotency_key': '3f0c…', 'terms_version': 3});
     expect(result.failure, isA<ConflictFailure>());
   });
 

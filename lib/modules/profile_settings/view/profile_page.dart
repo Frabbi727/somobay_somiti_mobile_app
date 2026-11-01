@@ -110,6 +110,7 @@ class ProfilePage extends GetView<ProfileController> {
           _item(Icons.card_giftcard_rounded, 'profile_dividends'.tr, () => Get.toNamed(AppRoutes.dividends)),
           _item(Icons.sms_outlined, 'profile_messages'.tr, () => Get.toNamed(AppRoutes.notifications)),
           _item(Icons.account_balance_outlined, 'profile_about_somiti'.tr, () => Get.toNamed(AppRoutes.somitiInfo)),
+          _item(Icons.gavel_rounded, 'terms_rules_title'.tr, () => Get.toNamed(AppRoutes.rules)),
           Obx(() => _item(
                 Icons.translate_rounded,
                 'profile_change_language'.tr,

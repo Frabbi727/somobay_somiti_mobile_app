@@ -10,6 +10,7 @@ import 'package:somobay_somiti_mobile_app/modules/authentication/model/login_req
 import 'package:somobay_somiti_mobile_app/modules/authentication/repository/auth_repository.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/geo_repository.dart';
+import 'package:somobay_somiti_mobile_app/modules/terms/repository/terms_repository.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/registration_repository.dart';
 
 /// Contract check of the registration screens against a running backend: an invited applicant
@@ -59,6 +60,7 @@ void main() {
       final form = RegistrationFormController(
         repository: repository,
         geoRepository: GeoRepository(apiClient: client('bn')),
+        termsRepository: TermsRepository(apiClient: client('bn')),
       )..skipValidationForTests = true;
       await form.load();
       expect(form.loadState.value.isSuccess, isTrue, reason: 'form load');
@@ -109,6 +111,8 @@ void main() {
         expect(await form.next(), isTrue, reason: 'step $step: ${form.failure.value?.message} ${form.failure.value?.validationErrors}');
       }
 
+      await form.loadTerms();
+      form.termsAgreed.value = true;
       expect(await form.submit(), isTrue, reason: 'submit: ${form.failure.value?.message} ${form.failure.value?.validationErrors}');
       form.onClose();
     }

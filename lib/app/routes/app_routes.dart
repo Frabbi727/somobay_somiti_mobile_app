@@ -8,6 +8,10 @@ class AppRoutes {
   static const String registration = '/registration';
   static const String registrationForm = '/registration/form';
 
+  // Rules (somiti terms)
+  static const String acceptRules = '/accept-rules';
+  static const String rules = '/rules';
+
   // Member pages (docs/MEMBER_NAVIGATION.md)
   static const String payOnline = '/payments/pay-online';
   static const String paymentDetail = '/payments/detail';

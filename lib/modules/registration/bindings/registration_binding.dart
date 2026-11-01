@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/services/storage_service.dart';
 import '../../profile_settings/repository/profile_repository.dart';
+import '../../terms/repository/terms_repository.dart';
 import '../controller/registration_form_controller.dart';
 import '../controller/registration_status_controller.dart';
 import '../repository/geo_repository.dart';
@@ -24,6 +25,9 @@ class RegistrationFormBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<IRegistrationRepository>(() => RegistrationRepository(apiClient: Get.find<ApiClient>()), fenix: true);
     Get.lazyPut<IGeoRepository>(() => GeoRepository(apiClient: Get.find<ApiClient>()), fenix: true);
-    Get.lazyPut<RegistrationFormController>(() => RegistrationFormController(repository: Get.find<IRegistrationRepository>(), geoRepository: Get.find<IGeoRepository>()));
+    Get.lazyPut<ITermsRepository>(() => TermsRepository(apiClient: Get.find<ApiClient>()), fenix: true);
+    Get.lazyPut<RegistrationFormController>(
+      () => RegistrationFormController(repository: Get.find<IRegistrationRepository>(), geoRepository: Get.find<IGeoRepository>(), termsRepository: Get.find<ITermsRepository>()),
+    );
   }
 }

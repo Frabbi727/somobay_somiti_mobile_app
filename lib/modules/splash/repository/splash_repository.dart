@@ -7,8 +7,9 @@ import '../../profile_settings/model/somiti_info_model.dart';
 abstract class ISplashRepository {
   Future<({Failure? failure, SomitiInfoModel? info})> somitiInfo();
 
-  /// Whether the stored session is still accepted, and whose it is (member or applicant).
-  Future<({Failure? failure, bool isValid, String? accountType})> me();
+  /// Whether the stored session is still accepted, whose it is (member or applicant), and whether
+  /// a member must first accept the current rules.
+  Future<({Failure? failure, bool isValid, String? accountType, bool termsRequired})> me();
 }
 
 class SplashRepository implements ISplashRepository {
@@ -28,13 +29,13 @@ class SplashRepository implements ISplashRepository {
   }
 
   @override
-  Future<({Failure? failure, bool isValid, String? accountType})> me() async {
+  Future<({Failure? failure, bool isValid, String? accountType, bool termsRequired})> me() async {
     try {
       final response = await apiClient.get(ApiConstants.me);
       final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
-      return (failure: null, isValid: true, accountType: (data['account_type'] as String?) ?? 'member');
+      return (failure: null, isValid: true, accountType: (data['account_type'] as String?) ?? 'member', termsRequired: data['terms_acceptance_required'] == true);
     } catch (e) {
-      return (failure: ErrorHandler.handleException(e), isValid: false, accountType: null);
+      return (failure: ErrorHandler.handleException(e), isValid: false, accountType: null, termsRequired: false);
     }
   }
 }

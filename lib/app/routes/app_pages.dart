@@ -38,6 +38,11 @@ import '../../modules/registration/bindings/registration_binding.dart';
 import '../../modules/registration/view/registration_form_page.dart';
 import '../../modules/registration/view/registration_status_page.dart';
 
+// Rules
+import '../../modules/terms/bindings/terms_binding.dart';
+import '../../modules/terms/view/accept_rules_page.dart';
+import '../../modules/terms/view/rules_page.dart';
+
 /// Only member features the backend supports are registered (docs/MEMBER_NAVIGATION.md).
 class AppPages {
   AppPages._();
@@ -109,6 +114,16 @@ class AppPages {
       name: AppRoutes.registrationForm,
       page: () => const RegistrationFormPage(),
       binding: RegistrationFormBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.acceptRules,
+      page: () => const AcceptRulesPage(),
+      binding: AcceptRulesBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.rules,
+      page: () => const RulesPage(),
+      binding: RulesBinding(),
     ),
   ];
 }

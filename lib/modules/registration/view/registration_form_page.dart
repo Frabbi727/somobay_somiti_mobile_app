@@ -17,6 +17,7 @@ import '../../../core/widgets/app_step_indicator.dart';
 import '../../../core/widgets/app_text_fields.dart';
 import '../controller/person_form_state.dart';
 import '../controller/registration_form_controller.dart';
+import '../../terms/view/widgets/rules_text.dart';
 import '../model/registration_model.dart';
 import 'widgets/nominee_card.dart';
 import 'widgets/person_fields.dart';
@@ -252,8 +253,56 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
           for (final row in controller.nominees) ...['${row.nameController.text} (${relationOf(row.relationId.value)}) — ${row.shareController.text}%', ..._personLines(row.person)],
         ]),
         section(3, 'registration_step_shares', [controller.sharesController.text]),
+        _rules(),
         if (controller.failure.value != null) Text(controller.failure.value!.message.tr, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error)),
       ],
+    );
+  }
+
+  /// The rules and declaration (collapsible) with the box the applicant must tick to submit.
+  Widget _rules() {
+    final terms = controller.terms.value;
+    return AppCard(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (controller.rulesChanged.value) ...[
+            Text('terms_rules_changed'.tr, key: const Key('terms_changed_notice'), style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error)),
+            const SizedBox(height: 8),
+          ],
+          if (terms == null && controller.termsLoading.value)
+            const Center(child: CircularProgressIndicator())
+          else if (terms == null)
+            Row(
+              children: [
+                Expanded(child: Text((controller.termsFailure.value?.message ?? 'terms_load_failed').tr, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error))),
+                TextButton(onPressed: controller.loadTerms, child: Text('common_retry'.tr)),
+              ],
+            )
+          else ...[
+            Theme(
+              data: Theme.of(Get.context!).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                key: const Key('terms_expansion'),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: EdgeInsets.zero,
+                expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                title: Text('terms_rules_section'.tr, style: AppTextStyles.titleMedium),
+                children: [RulesText(terms: terms)],
+              ),
+            ),
+            CheckboxListTile(
+              key: const Key('terms_checkbox'),
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              value: controller.termsAgreed.value,
+              onChanged: controller.submitting.value ? null : (value) => controller.termsAgreed.value = value ?? false,
+              title: Text('terms_agree'.tr),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -274,7 +323,7 @@ class RegistrationFormPage extends GetView<RegistrationFormController> {
             ],
             Expanded(
               flex: 2,
-              child: AppButton(text: last ? 'registration_submit'.tr : 'registration_next'.tr, isLoading: busy, onPressed: last ? _submit : _next),
+              child: AppButton(text: last ? 'registration_submit'.tr : 'registration_next'.tr, isLoading: busy, onPressed: last ? (controller.termsAgreed.value && controller.terms.value != null ? _submit : null) : _next),
             ),
           ],
         );

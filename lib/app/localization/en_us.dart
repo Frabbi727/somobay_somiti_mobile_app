@@ -348,4 +348,15 @@ const Map<String, String> enUS = {
 
   // Splash
   TranslationKeys.splashTagline: 'A trusted platform for savings and growth',
+
+  // Rules (terms)
+  TranslationKeys.termsAcceptTitle: 'Accept the rules',
+  TranslationKeys.termsAcceptIntro: 'Please read the society rules and accept them to continue.',
+  TranslationKeys.termsAgree: 'I have read and agree',
+  TranslationKeys.termsAcceptButton: 'Accept',
+  TranslationKeys.termsVersion: 'Rules version',
+  TranslationKeys.termsRulesTitle: 'Rules I accepted',
+  TranslationKeys.termsRulesSection: 'Society rules and declaration',
+  TranslationKeys.termsRulesChanged: 'The rules have changed. Please read the new rules and agree again.',
+  TranslationKeys.termsLoadFailed: 'The rules could not be loaded',
 };
