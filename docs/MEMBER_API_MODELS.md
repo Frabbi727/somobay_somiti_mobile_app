@@ -90,6 +90,8 @@ Enum values the member API returns:
 | memberNo | member_no | String | No | Member number | `"M-0042"` |
 | name | name | String | No | Name in the request language | `"রহিম উদ্দিন"` |
 | status | status | EnumValueModel | No | Member status | `{"value": "active", …}` |
+| termsAcceptanceRequired | terms_acceptance_required | bool | No | Member must accept the current rules (always `false` for an applicant) | `true` |
+| termsVersion | terms_version | int | No | Current rules version | `3` |
 
 ## SomitiInfoModel (`config/somiti-info`)
 
@@ -293,6 +295,34 @@ All PaymentSummaryModel fields, plus:
 | body | body | String | No | SMS text as sent (usually Bangla) | — |
 | status | status | EnumValueModel | No | queued / sent / failed | — |
 | sentAt | sent_at | String | Yes | ISO timestamp | — |
+
+## TermsModel (`terms/current`)
+
+| Field | JSON Key | Type | Nullable | Description | Example |
+|-------|----------|------|----------|-------------|---------|
+| version | version | int | No | Rules version (sent back as `terms_version` on submit, `version` on accept) | `3` |
+| rulesBn / rulesEn | rules_bn / rules_en | String | No | Rules text, one numbered rule per line | — |
+| declarationBn / declarationEn | declaration_bn / declaration_en | String | No | Declaration text | — |
+| accepted | accepted | bool | Yes | `null` for an applicant | `false` |
+
+The 403 `terms_acceptance_required` error carries `meta.code` and `meta.version` (a **string**, e.g. `"3"`).
+
+## PlaceModel (`geo/*`)
+
+One place in the division, district, upazila, union chain. The lists are searched with `q`; each level needs its parent id (`division_id`, `district_id`, `upazila_id`).
+
+## RegistrationAddressModel (inside `registration` data, member and each nominee)
+
+| Field | JSON Key | Type | Nullable | Description | Example |
+|-------|----------|------|----------|-------------|---------|
+| upazilaId | upazila_id | int | No | Upazila | `495` |
+| unionId | union_id | int | No | Union | `4541` |
+| divisionId | division_id | int | No | Resolved from the union | `6` |
+| districtId | district_id | int | No | Resolved from the union | `47` |
+| addressLine | address_line | String | Yes | House, road, village | `"House 12, Road 3"` |
+| placeName | place_name | String | No | Union, upazila, district, division in the request language | — |
+
+The whole object is `null` when not filled. Paper-form fields on the registration and on each nominee: `gender` (EnumValueModel, `male|female|other`, nullable), `passport_no` (String, nullable), `present_address`, `permanent_address` (RegistrationAddressModel, nullable). `PUT registration` sends them flat: `gender` (plain string), `passport_no`, `present_` / `permanent_` + `upazila_id`, `union_id`, `address_line`, and `permanent_same_as_present`. `POST registration/submit` sends `idempotency_key` and `terms_version` (both required).
 
 ---
 

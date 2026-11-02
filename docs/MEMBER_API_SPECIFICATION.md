@@ -43,6 +43,7 @@ feature tests in `tests/Feature/Api/*` of the backend. **Real responses** captur
 | 401 | not signed in, token expired, revoked or wrong type | refresh once (single-flight); if that fails → login |
 | 403 | not a member any more (exited) — tokens revoked | go to login with the message |
 | 403 `member_only` | an applicant token used on a member endpoint | not expected: applicants start on registration status (also offline, from the last known account type); if it happens, the message is shown |
+| 403 `terms_acceptance_required` | a member has not accepted the current rules (`meta.code`; `meta.version` is a **string**) | open the accept-rules page; after accepting, retry |
 | 404 | not found or not yours; unknown route | show the message |
 | 405 | wrong method | treat as a bug |
 | 409 | idempotency conflict (pay online) | show the message |
@@ -420,7 +421,30 @@ The office invites a mobile + password in the admin; the person signs in with th
   "registration": { "status": {"value":"submitted","label":"…","color":"warning"}, "next_action": "wait" } }
 ```
 
-A member gets the member fields plus `"account_type": "member"`.
+Both account types also get `terms_acceptance_required` (bool) and `terms_version` (int, the current rules version). For an applicant `terms_acceptance_required` is always `false`: an applicant agrees to the rules inside the registration, at submit. A member gets the member fields plus `"account_type": "member"`, and `terms_acceptance_required` is `true` until they accept the current version.
+
+### Places (division to union)
+Public (no sign-in), rate-limited. Each answers `data: [ {...place} ]`; `q` is an optional search text (Bangla or English). The parent id is required and must exist, else 422.
+
+| Endpoint | Query |
+|----------|-------|
+| `GET /api/v1/geo/divisions` | `q?` |
+| `GET /api/v1/geo/districts` | `division_id`, `q?` |
+| `GET /api/v1/geo/upazilas` | `district_id`, `q?` |
+| `GET /api/v1/geo/unions` | `upazila_id`, `q?` |
+
+### Rules (terms)
+`GET /api/v1/terms/current` · Bearer (member or applicant) · 200 `data`:
+
+```json
+{ "version": 3, "rules_bn": "…", "rules_en": "…", "declaration_bn": "…", "declaration_en": "…", "accepted": false }
+```
+
+`accepted` is `null` for an applicant; for a member it is `true` once the current version is accepted.
+
+`POST /api/v1/terms/accept` · Bearer (member; works before acceptance) · `{ "version": 3, "idempotency_key": "<uuid>" }` · 200 with a message, `data: null`. 422 field errors, or a rule message when the version is no longer current.
+
+Every other member endpoint answers a member who has not accepted the current rules with **403**, `meta: { "code": "terms_acceptance_required", "version": "3" }` (`version` is a string, unlike the int in `terms/current`). The app opens its accept-rules page and retries after accepting.
 
 ### Nominee relations
 `GET /api/v1/config/nominee-relations` · public · `data: [{ "id": 1, "key": "father", "label": "পিতা" }]`, active only, ordered by `sort`.
@@ -446,7 +470,13 @@ A member gets the member fields plus `"account_type": "member"`.
     "name_bn": "…", "name_en": "…", "guardian_name": null, "nid": null, "date_of_birth": null,
     "mobile": "01712345678", "email": null, "address": null, "photo_url": null,
     "requested_shares": 2,
-    "nominees": [{"name":"…","relation_id":1,"relation":"পিতা","mobile":null,"nid":"…","share_percent":"100.00"}]
+    "gender": {"value":"male","label":"পুরুষ","color":"info"},
+    "passport_no": null,
+    "present_address": {"upazila_id":495,"union_id":4541,"division_id":6,"district_id":47,"address_line":"বাড়ি ১২, সড়ক ৩","place_name":"গুলশান-১, গুলশান, ঢাকা, ঢাকা"},
+    "permanent_address": {"upazila_id":495,"union_id":4541,"division_id":6,"district_id":47,"address_line":"বাড়ি ১২, সড়ক ৩","place_name":"গুলশান-১, গুলশান, ঢাকা, ঢাকা"},
+    "nominees": [{"name":"…","relation_id":1,"relation":"পিতা","mobile":null,"nid":"…","share_percent":"100.00",
+                  "gender": {"value":"female","label":"নারী","color":"warning"}, "passport_no": null,
+                  "present_address": {…}, "permanent_address": {…}}]
   }
 }
 ```
@@ -456,15 +486,27 @@ A member gets the member fields plus `"account_type": "member"`.
 - `decision` (returned or rejected, else `null`): `{ "type": {value,label,color}, "by_role": "সভাপতি", "at": "2026-10-07T12:00:00+06:00", "reason": "…" }`.
 - `share_percent` is a decimal string with up to 2 places (`"100.00"`); the app only shows a running total and never computes money.
 - `photo_url` is a short-lived signed URL.
+- The paper-form fields come back **nested**: `gender` is an object `{value,label,color}` (`male`, `female`, `other`; `null` when not filled), and `present_address` / `permanent_address` are objects `{upazila_id, union_id, division_id, district_id, address_line, place_name}`, or `null` when not filled. `place_name` is union, upazila, district, division in the request language. The same shape repeats inside each nominee. `PUT` sends these as flat keys (below).
 
 ### Save the draft
-`PUT /api/v1/registration` · Bearer (applicant) · any subset of `name_bn, name_en, guardian_name, nid, date_of_birth, email, address, requested_shares, nominees[]`. `nominees` replaces the whole list; each `{name, relation_id, mobile?, nid, share_percent}`. 200 returns the **Get the registration** shape. 422 field errors; 422 `registration.errors.not_editable` unless the status is `invited` or `returned`.
+`PUT /api/v1/registration` · Bearer (applicant) · any subset of `name_bn, name_en, guardian_name, nid, date_of_birth, email, address, requested_shares, nominees[]` plus the paper-form fields below. `nominees` replaces the whole list; each `{name, relation_id, mobile?, nid, share_percent}` plus the same paper-form fields. 200 returns the **Get the registration** shape. 422 field errors; 422 `registration.errors.not_editable` unless the status is `invited` or `returned`.
+
+The paper-form fields are **flat keys** on the PUT (the member at the top level, and on each `nominees.*`), although GET returns them nested:
+
+| Key | Rule |
+|-----|------|
+| `gender` | `male`, `female` or `other` (plain string, not the object GET returns) |
+| `passport_no` | string, max 20 |
+| `present_upazila_id`, `present_union_id` | integer, must exist |
+| `present_address_line` | string, max 255 |
+| `permanent_upazila_id`, `permanent_union_id`, `permanent_address_line` | same as present |
+| `permanent_same_as_present` | boolean |
 
 ### Upload the photo
 `POST /api/v1/registration/photo` · Bearer (applicant) · `multipart/form-data` field `photo` (jpg/png, ≤ 1 MB). 200 returns the **Get the registration** shape.
 
 ### Submit
-`POST /api/v1/registration/submit` · Bearer (applicant) · `{ "idempotency_key": "<uuid>" }` (one UUID per attempt; reused on retry). 200 returns the **Get the registration** shape with status `submitted`. 422 field errors (`nominees`, `nominees.0.nid`, …) or a rule message; 409 `registration.errors.idempotency_conflict`; 422 `not_editable`.
+`POST /api/v1/registration/submit` · Bearer (applicant) · `{ "idempotency_key": "<uuid>", "terms_version": 3 }` (one UUID per attempt; reused on retry). `terms_version` is **required** (integer, min 1): the version of the rules the applicant read (`terms/current`). 200 returns the **Get the registration** shape with status `submitted`. 422 field errors (`nominees`, `nominees.0.nid`, …) or a rule message; 409 `registration.errors.idempotency_conflict`; 422 `not_editable`. **Rules outdated:** when the rules were replaced after the applicant read them, the answer is a plain 422 with a message and **no code**; the app detects it by re-fetching `terms/current` (a newer `version` than the one sent), shows the new rules and asks again.
 
 ---
 
