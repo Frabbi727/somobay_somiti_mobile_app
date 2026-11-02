@@ -160,7 +160,7 @@ class AddressFormState {
     for (final (mine, theirs) in [(divisions, other.divisions), (districts, other.districts), (upazilas, other.upazilas), (unions, other.unions)]) {
       mine.places.assignAll(theirs.places);
       mine.failure.value = theirs.failure.value;
-      mine.loading.value = theirs.loading.value;
+      mine.loading.value = false; // the loads still running here were dropped by the epoch bump
     }
   }
 

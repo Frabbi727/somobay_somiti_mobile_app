@@ -35,7 +35,11 @@ class TermsInterceptor extends Interceptor {
 
     if (isTermsGate && !_navigating && storageService.getAccountType() != 'applicant') {
       _navigating = true;
-      onRequired();
+      try {
+        onRequired();
+      } catch (_) {
+        _navigating = false; // navigation failed: the next 403 must be able to try again
+      }
     }
     handler.next(err);
   }

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_text_styles.dart';
 import '../../../core/utils/bangla_number_util.dart';
-import '../../../core/utils/snackbar_margin.dart';
 import '../../../core/widgets/app_app_bar.dart';
 import '../../../core/widgets/app_buttons.dart';
 import '../../../core/widgets/app_error_state.dart';
@@ -85,8 +84,7 @@ class AcceptRulesPage extends GetView<AcceptRulesController> {
   }
 
   Future<void> _accept() async {
-    if (!await controller.accept() && controller.failure.value != null) {
-      Get.snackbar('common_error_title'.tr, controller.failure.value!.message.tr, snackPosition: SnackPosition.BOTTOM, margin: snackbarMargin());
-    }
+    // A failure is shown inline above the button, so no snackbar repeats it.
+    await controller.accept();
   }
 }

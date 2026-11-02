@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:somobay_somiti_mobile_app/core/errors/failures.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/address_form_state.dart';
+import 'package:somobay_somiti_mobile_app/modules/registration/controller/person_form_state.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/controller/registration_form_controller.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/model/registration_model.dart';
 import 'package:somobay_somiti_mobile_app/modules/registration/repository/registration_repository.dart';
@@ -174,6 +175,30 @@ void main() {
     expect(repository.saved.single['permanent_address_line'], 'Road 6');
     expect(repository.saved.single['permanent_union_id'], 4542);
     expect(repository.saved.single['permanent_same_as_present'], isTrue);
+  });
+
+  test('ticking and unticking "same as present" while unions load does not leave permanent loading', () async {
+    final geo = FakeGeoRepository();
+    final person = PersonFormState(geo: geo);
+    await person.present.selectDivision(6);
+    await person.present.selectDistrict(47);
+    await person.permanent.selectDivision(6);
+    await person.permanent.selectDistrict(47);
+    final gate = Completer<void>();
+    geo.unionsGates.add(gate);
+    final presentLoad = person.present.selectUpazila(495); // unions still loading
+    await person.permanent.selectUpazila(495); // permanent's own answer is dropped by the copy below
+
+    person.setSameAsPresent(true);
+    person.setSameAsPresent(false);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(person.permanent.unions.loading.value, isFalse);
+    expect(person.permanent.unionsLoaded.value, isTrue);
+    expect(person.permanent.unions.places, isNotEmpty);
+
+    gate.complete();
+    await presentLoad;
   });
 
   test('changing district clears upazila and union', () async {
@@ -415,7 +440,7 @@ void main() {
       expect(controller.terms.value!.version, 4);
       expect(controller.termsAgreed.value, isFalse);
       expect(controller.rulesChanged.value, isTrue);
-      expect(controller.failure.value!.message, 'The rules changed.');
+      expect(controller.failure.value, isNull, reason: 'the notice replaces the failure text');
       // The old key belonged to version 3: agreeing again uses a new one.
       controller.termsAgreed.value = true;
       expect(await controller.submit(), isTrue);

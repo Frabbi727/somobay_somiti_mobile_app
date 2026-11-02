@@ -49,6 +49,25 @@ void main() {
     expect(opened, 2);
   });
 
+  test('a failing navigation still passes the error on and lets the next 403 try again', () async {
+    final api = FakeApi({'GET /a': (_) => (403, fixture('error_403_terms_required'))});
+    final dio = api.dio();
+    var attempts = 0;
+    dio.interceptors.add(TermsInterceptor(
+      storageService: MemoryStorage(access: 'a', refresh: 'r'),
+      onRequired: () {
+        attempts++;
+        if (attempts == 1) throw StateError('no navigator');
+      },
+    ));
+
+    final first = await dio.get('/a').then((_) => 'ok', onError: (e) => (e as DioException).response!.statusCode.toString());
+    await dio.get('/a').then((_) {}, onError: (_) {});
+
+    expect(first, '403');
+    expect(attempts, 2);
+  });
+
   test('other errors are passed on without opening anything', () async {
     final api = FakeApi({
       'GET /plain': (_) => (403, envelopeError(403, 'forbidden')),

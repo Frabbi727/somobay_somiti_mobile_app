@@ -22,7 +22,12 @@ class PersonFormState {
   /// Ticking copies the present address now; later edits to it are copied again when sent.
   void setSameAsPresent(bool same) {
     permanentSameAsPresent.value = same;
-    if (same) permanent.copyFrom(present);
+    if (same) {
+      permanent.copyFrom(present);
+    } else if (!permanent.unionsLoaded.value && permanent.upazilaId.value != null) {
+      // A load that was running when the copy happened was dropped; ask again so the union list is not left empty.
+      permanent.reloadUnions();
+    }
   }
 
   /// What the server stores: uppercase, without spaces.

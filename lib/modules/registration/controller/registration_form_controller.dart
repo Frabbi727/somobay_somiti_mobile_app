@@ -306,9 +306,7 @@ class RegistrationFormController extends GetxController {
     termsAgreed.value = false;
     rulesChanged.value = true;
     _idempotencyKey = const Uuid().v4();
-    if (refused.message.isEmpty) {
-      failure.value = const ValidationFailure(message: 'terms_rules_changed');
-    }
+    failure.value = null; // the page shows the "rules changed" notice instead of the server text
   }
 
   @override

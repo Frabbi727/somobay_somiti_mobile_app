@@ -74,4 +74,21 @@ void main() {
     await repository.upazilas(0);
     expect(api.requests, hasLength(3), reason: 'failures are retried, not cached');
   });
+
+  test('overlapping calls for the same list share one request, and a failure is not kept', () async {
+    var failing = true;
+    final api = FakeApi({
+      'GET ${ApiConstants.geoUnions}': (_) => failing ? (500, envelopeError(500, 'boom')) : (200, fixture('geo_unions_495')),
+    });
+    final repository = GeoRepository(apiClient: api.client());
+
+    final failed = await Future.wait([repository.unions(495), repository.unions(495)]);
+    expect(api.requests, hasLength(1));
+    expect(failed.every((result) => result.failure != null), isTrue);
+
+    failing = false;
+    final loaded = await Future.wait([repository.unions(495), repository.unions(495), repository.unions(495)]);
+    expect(api.requests, hasLength(2));
+    expect(loaded.every((result) => result.places.length == 5), isTrue);
+  });
 }

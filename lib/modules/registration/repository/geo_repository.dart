@@ -20,10 +20,12 @@ abstract class IGeoRepository {
 }
 
 /// Each child list is small, so it is fetched whole once per parent and kept in memory;
-/// the picker searches it locally. Failures are never cached.
+/// the picker searches it locally. Failures are never cached. Calls for the same list that overlap
+/// share one request, so a form that opens many pickers at once makes one GET per list.
 class GeoRepository implements IGeoRepository {
   final ApiClient apiClient;
   final Map<String, List<GeoPlaceModel>> _cache = {};
+  final Map<String, Future<GeoResult>> _pending = {};
 
   GeoRepository({required this.apiClient});
 
@@ -46,6 +48,19 @@ class GeoRepository implements IGeoRepository {
       return (failure: null, places: cached);
     }
 
+    final running = _pending[cacheKey];
+    if (running != null) return running;
+
+    final request = _fetch(cacheKey, path, parentKey, parentId);
+    _pending[cacheKey] = request;
+    try {
+      return await request;
+    } finally {
+      _pending.remove(cacheKey);
+    }
+  }
+
+  Future<GeoResult> _fetch(String cacheKey, String path, String? parentKey, int? parentId) async {
     try {
       final response = await apiClient.get(path, queryParameters: parentKey == null ? null : {parentKey: parentId});
       final rows = (response.data as Map<String, dynamic>)['data'] as List<dynamic>;

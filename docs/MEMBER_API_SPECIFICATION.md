@@ -442,9 +442,9 @@ Public (no sign-in), rate-limited. Each answers `data: [ {...place} ]`; `q` is a
 
 `accepted` is `null` for an applicant; for a member it is `true` once the current version is accepted.
 
-`POST /api/v1/terms/accept` · Bearer (member; works before acceptance) · `{ "version": 3, "idempotency_key": "<uuid>" }` · 200 with a message, `data: null`. 422 field errors, or a rule message when the version is no longer current.
+`POST /api/v1/terms/accept` · Bearer (member; works before acceptance) · `{ "version": 3, "idempotency_key": "<uuid>" }` · 200 with a message, `data: null`. 422 field errors, or a rule message when the version is no longer current. Reusing a key for another version, or another person's key, gives **422** `terms.errors.idempotency_conflict`, not 409.
 
-Every other member endpoint answers a member who has not accepted the current rules with **403**, `meta: { "code": "terms_acceptance_required", "version": "3" }` (`version` is a string, unlike the int in `terms/current`). The app opens its accept-rules page and retries after accepting.
+Every other member endpoint answers a member who has not accepted the current rules with **403**, `meta: { "code": "terms_acceptance_required", "version": "3" }` (`version` is a string, unlike the int in `terms/current`). The app opens its accept-rules page (also at start-up from `auth/me` `terms_acceptance_required`) and, after accepting, goes to home without retrying the failed call.
 
 ### Nominee relations
 `GET /api/v1/config/nominee-relations` · public · `data: [{ "id": 1, "key": "father", "label": "পিতা" }]`, active only, ordered by `sort`.
