@@ -1,13 +1,14 @@
+import '../../../core/constants/api_constants.dart';
 import '../../../core/errors/error_handler.dart';
 import '../../../core/errors/failures.dart';
 import '../../../core/network/api_client.dart';
-import '../model/transaction_model.dart';
+import '../model/statement_model.dart';
 
+/// The passbook: the member statement for a date range, and a signed link to its PDF.
 abstract class ITransactionRepository {
-  Future<({Failure? failure, List<TransactionModel> transactions})> getTransactions({
-    int page = 1,
-    String? type,
-  });
+  /// Without dates the backend uses the current fiscal year so far.
+  Future<({Failure? failure, StatementModel? statement})> getStatement({String? from, String? until});
+  Future<({Failure? failure, String? url})> statementPdfUrl({String? from, String? until});
 }
 
 class TransactionRepository implements ITransactionRepository {
@@ -15,50 +16,30 @@ class TransactionRepository implements ITransactionRepository {
 
   TransactionRepository({required this.apiClient});
 
+  Map<String, dynamic> _range(String? from, String? until) => {
+        if (from != null) 'from': from,
+        if (until != null) 'until': until,
+      };
+
   @override
-  Future<({Failure? failure, List<TransactionModel> transactions})> getTransactions({
-    int page = 1,
-    String? type,
-  }) async {
+  Future<({Failure? failure, StatementModel? statement})> getStatement({String? from, String? until}) async {
     try {
-      await Future.delayed(const Duration(milliseconds: 600));
-      return (
-        failure: null,
-        transactions: const [
-          TransactionModel(
-            id: 'TX-101',
-            transactionId: 'TXN87629318',
-            title: 'ডিপিএস মাসিক কিস্তি জমা',
-            amount: 1000.0,
-            type: TransactionType.credit,
-            createdAt: '01 Oct 2026, 10:30 AM',
-            paymentMethod: 'bKash',
-            accountNumber: 'DPS-2024-502',
-          ),
-          TransactionModel(
-            id: 'TX-102',
-            transactionId: 'TXN87629004',
-            title: 'ক্ষুদ্র ব্যবসা ঋণ কিস্তি পরিশোধ',
-            amount: 2500.0,
-            type: TransactionType.credit,
-            createdAt: '15 Sep 2026, 04:15 PM',
-            paymentMethod: 'Nagad',
-            accountNumber: 'LN-2024-88',
-          ),
-          TransactionModel(
-            id: 'TX-103',
-            transactionId: 'TXN87628811',
-            title: 'সাধারণ সঞ্চয় হিসাব থেকে উত্তোলন',
-            amount: 5000.0,
-            type: TransactionType.debit,
-            createdAt: '05 Sep 2026, 11:00 AM',
-            paymentMethod: 'Cash',
-            accountNumber: 'GEN-2024-101',
-          ),
-        ],
-      );
+      final response = await apiClient.get(ApiConstants.statement, queryParameters: _range(from, until));
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+      return (failure: null, statement: StatementModel.fromJson(data));
     } catch (e) {
-      return (failure: ErrorHandler.handleException(e), transactions: <TransactionModel>[]);
+      return (failure: ErrorHandler.handleException(e), statement: null);
+    }
+  }
+
+  @override
+  Future<({Failure? failure, String? url})> statementPdfUrl({String? from, String? until}) async {
+    try {
+      final response = await apiClient.get(ApiConstants.statementPdfLink, queryParameters: _range(from, until));
+      final data = (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+      return (failure: null, url: data['url'] as String);
+    } catch (e) {
+      return (failure: ErrorHandler.handleException(e), url: null);
     }
   }
 }

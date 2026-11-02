@@ -5,7 +5,7 @@ void main() async {
   await runSomitiApp(
     const AppConfig(
       appName: 'Somiti App (Staging)',
-      apiBaseUrl: 'https://staging-api.somobaysomiti.com',
+      apiBaseUrl: 'https://shomiti.techrealify.com',
       connectTimeout: Duration(seconds: 30),
       receiveTimeout: Duration(seconds: 30),
       enableLogging: true,

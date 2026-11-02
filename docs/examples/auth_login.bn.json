@@ -1,0 +1,16 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "লগইন হয়েছে।",
+        "data": {
+            "access_token": "1|hTLupodt8hvZzHPBXeEvtavUTuPmHtfgQQ4h6K0g0928ebbe",
+            "refresh_token": "2|FBjllfrW3EA0P99IH0H6ve5ZrUBM46rhzkzKwu8G4adcd6e3",
+            "token_type": "Bearer",
+            "expires_in": 3600
+        },
+        "errors": null,
+        "meta": null
+    }
+}

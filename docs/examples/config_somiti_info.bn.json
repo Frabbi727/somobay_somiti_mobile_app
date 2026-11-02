@@ -1,0 +1,21 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": {
+            "name": "সবুজ সমবায় সমিতি লিমিটেড",
+            "name_bn": "সবুজ সমবায় সমিতি লিমিটেড",
+            "name_en": "Sabuj Cooperative Society Ltd",
+            "registration_no": "DHK-1234",
+            "address": "মিরপুর, ঢাকা",
+            "phone": "01711000000",
+            "email": "office@sabuj.test",
+            "logo_url": null,
+            "otp_enabled": true
+        },
+        "errors": null,
+        "meta": null
+    }
+}

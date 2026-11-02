@@ -16,11 +16,16 @@ class AuthTokenModel {
   @JsonKey(name: 'expires_in')
   final int expiresIn;
 
+  /// "member" or "applicant" (someone still registering). Older backends send nothing: member.
+  @JsonKey(name: 'account_type', defaultValue: 'member')
+  final String accountType;
+
   const AuthTokenModel({
     required this.accessToken,
     required this.refreshToken,
     this.tokenType = 'Bearer',
     this.expiresIn = 3600,
+    this.accountType = 'member',
   });
 
   factory AuthTokenModel.fromJson(Map<String, dynamic> json) =>

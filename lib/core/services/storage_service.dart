@@ -36,7 +36,12 @@ class StorageService extends GetxService {
     await _prefs.remove(StorageKeys.userPhone);
     await _prefs.remove(StorageKeys.userName);
     await _prefs.remove(StorageKeys.userRole);
+    await _prefs.remove(StorageKeys.accountType);
   }
+
+  /// Whose session this is ("member" or "applicant"), remembered for an offline start.
+  Future<void> saveAccountType(String accountType) async => await _prefs.setString(StorageKeys.accountType, accountType);
+  String? getAccountType() => _prefs.getString(StorageKeys.accountType);
 
   // Preferences
   Future<void> saveString(String key, String value) async => await _prefs.setString(key, value);

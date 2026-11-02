@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import '../../../core/models/ui_state.dart';
-import '../model/somiti_summary_model.dart';
+import '../model/dashboard_summary_model.dart';
 import '../repository/home_repository.dart';
 
 class HomeController extends GetxController {
@@ -8,7 +8,7 @@ class HomeController extends GetxController {
 
   HomeController({required this.repository});
 
-  final summaryState = UIState<SomitiSummaryModel>.initial().obs;
+  final summaryState = UIState<DashboardSummaryModel>.initial().obs;
   final isBalanceHidden = false.obs;
 
   @override

@@ -3,6 +3,7 @@ import '../config/app_config.dart';
 import '../services/storage_service.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
+import 'interceptors/terms_interceptor.dart';
 
 class ApiClient {
   late final Dio _dio;
@@ -24,11 +25,15 @@ class ApiClient {
     _dio.interceptors.add(
       AuthInterceptor(storageService: storageService, dio: _dio),
     );
+    _dio.interceptors.add(TermsInterceptor(storageService: storageService));
 
     if (config.enableLogging) {
       _dio.interceptors.add(LoggingInterceptor());
     }
   }
+
+  /// Test seam: an ApiClient over a prepared Dio (no interceptors are added).
+  ApiClient.forTesting(Dio dio) : _dio = dio;
 
   Dio get dio => _dio;
 

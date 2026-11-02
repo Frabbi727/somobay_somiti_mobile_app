@@ -1,0 +1,152 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": [
+            {
+                "id": 4,
+                "month": "2026-08",
+                "type": {
+                    "value": "deposit",
+                    "label": "জমা",
+                    "color": "success"
+                },
+                "amount": {
+                    "poisha": 100000,
+                    "display": "৳ ১,০০০.০০"
+                },
+                "paid": {
+                    "poisha": 100000,
+                    "display": "৳ ১,০০০.০০"
+                },
+                "outstanding": {
+                    "poisha": 0,
+                    "display": "৳ ০.০০"
+                },
+                "due_date": "2026-08-10",
+                "status": {
+                    "value": "settled",
+                    "label": "পরিশোধিত",
+                    "color": "success"
+                }
+            },
+            {
+                "id": 5,
+                "month": "2026-08",
+                "type": {
+                    "value": "service_charge",
+                    "label": "সার্ভিস চার্জ",
+                    "color": "warning"
+                },
+                "amount": {
+                    "poisha": 2000,
+                    "display": "৳ ২০.০০"
+                },
+                "paid": {
+                    "poisha": 2000,
+                    "display": "৳ ২০.০০"
+                },
+                "outstanding": {
+                    "poisha": 0,
+                    "display": "৳ ০.০০"
+                },
+                "due_date": "2026-08-10",
+                "status": {
+                    "value": "settled",
+                    "label": "পরিশোধিত",
+                    "color": "success"
+                }
+            },
+            {
+                "id": 1,
+                "month": "2026-07",
+                "type": {
+                    "value": "registration",
+                    "label": "ভর্তি ফি",
+                    "color": "info"
+                },
+                "amount": {
+                    "poisha": 20000,
+                    "display": "৳ ২০০.০০"
+                },
+                "paid": {
+                    "poisha": 20000,
+                    "display": "৳ ২০০.০০"
+                },
+                "outstanding": {
+                    "poisha": 0,
+                    "display": "৳ ০.০০"
+                },
+                "due_date": "2026-07-10",
+                "status": {
+                    "value": "settled",
+                    "label": "পরিশোধিত",
+                    "color": "success"
+                }
+            },
+            {
+                "id": 2,
+                "month": "2026-07",
+                "type": {
+                    "value": "deposit",
+                    "label": "জমা",
+                    "color": "success"
+                },
+                "amount": {
+                    "poisha": 100000,
+                    "display": "৳ ১,০০০.০০"
+                },
+                "paid": {
+                    "poisha": 100000,
+                    "display": "৳ ১,০০০.০০"
+                },
+                "outstanding": {
+                    "poisha": 0,
+                    "display": "৳ ০.০০"
+                },
+                "due_date": "2026-07-10",
+                "status": {
+                    "value": "settled",
+                    "label": "পরিশোধিত",
+                    "color": "success"
+                }
+            },
+            {
+                "id": 3,
+                "month": "2026-07",
+                "type": {
+                    "value": "service_charge",
+                    "label": "সার্ভিস চার্জ",
+                    "color": "warning"
+                },
+                "amount": {
+                    "poisha": 2000,
+                    "display": "৳ ২০.০০"
+                },
+                "paid": {
+                    "poisha": 2000,
+                    "display": "৳ ২০.০০"
+                },
+                "outstanding": {
+                    "poisha": 0,
+                    "display": "৳ ০.০০"
+                },
+                "due_date": "2026-07-10",
+                "status": {
+                    "value": "settled",
+                    "label": "পরিশোধিত",
+                    "color": "success"
+                }
+            }
+        ],
+        "errors": null,
+        "meta": {
+            "current_page": 1,
+            "last_page": 1,
+            "per_page": 20,
+            "total": 5
+        }
+    }
+}

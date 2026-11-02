@@ -2,7 +2,7 @@ name: somobay_somiti_mobile_app
 description: "A production-grade Flutter mobile application for Somobay Somiti (Cooperative Society) management."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.1.0+5
 
 environment:
   sdk: ^3.12.2
@@ -26,6 +26,8 @@ dependencies:
   package_info_plus: ^8.1.0
   url_launcher: ^6.3.0
   uuid: ^4.5.1
+  file_picker: ^11.0.3
+  image: ^4.10.1
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +39,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # Only the in-app logo; the launcher/Play Store artwork is not bundled.
+  assets:
+    - assets/images/logo.jpg
 
   # assets:
   #   - assets/icons/

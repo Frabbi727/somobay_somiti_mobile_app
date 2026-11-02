@@ -1,0 +1,15 @@
+{
+    "status": 422,
+    "body": {
+        "success": false,
+        "statusCode": 422,
+        "message": "চিহ্নিত ঘরগুলো দেখে আবার চেষ্টা করুন।",
+        "data": null,
+        "errors": {
+            "mobile": [
+                "মোবাইল নম্বর বা পাসওয়ার্ড সঠিক নয়।"
+            ]
+        },
+        "meta": null
+    }
+}

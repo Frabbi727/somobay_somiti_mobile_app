@@ -4,8 +4,8 @@ import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_dimensions.dart';
 import '../controller/dashboard_controller.dart';
 import '../../home/view/home_page.dart';
-import '../../savings_dps/view/savings_list_page.dart';
-import '../../loans/view/loan_list_page.dart';
+import '../../dues/view/dues_page.dart';
+import '../../payments/view/payments_page.dart';
 import '../../transactions/view/transaction_history_page.dart';
 import '../../profile_settings/view/profile_page.dart';
 import '../../../core/widgets/app_network_banner.dart';
@@ -15,8 +15,8 @@ class DashboardPage extends GetView<DashboardController> {
 
   static const List<Widget> _pages = [
     HomePage(),
-    SavingsListPage(),
-    LoanListPage(),
+    DuesPage(),
+    PaymentsPage(),
     TransactionHistoryPage(),
     ProfilePage(),
   ];
@@ -52,14 +52,14 @@ class DashboardPage extends GetView<DashboardController> {
               label: 'tab_home'.tr,
             ),
             NavigationDestination(
-              icon: const Icon(Icons.savings_outlined),
-              selectedIcon: const Icon(Icons.savings_rounded, color: AppColors.primary),
-              label: 'tab_savings'.tr,
+              icon: const Icon(Icons.event_note_outlined),
+              selectedIcon: const Icon(Icons.event_note_rounded, color: AppColors.primary),
+              label: 'tab_dues'.tr,
             ),
             NavigationDestination(
               icon: const Icon(Icons.payments_outlined),
               selectedIcon: const Icon(Icons.payments_rounded, color: AppColors.primary),
-              label: 'tab_loans'.tr,
+              label: 'tab_payments'.tr,
             ),
             NavigationDestination(
               icon: const Icon(Icons.menu_book_outlined),

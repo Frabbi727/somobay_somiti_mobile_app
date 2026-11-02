@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1060109414285",
+    "project_id": "somobay-somiti-c0f92",
+    "storage_bucket": "somobay-somiti-c0f92.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060109414285:android:c75dbc960c9d4f7a9897c4",
+        "android_client_info": {
+          "package_name": "com.somobay_somiti_mobile_app.somobay_somiti_mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2mktw4pvEN1rR7BsH2Z4KlWyLQSkyCpI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,34 @@
+{
+ "success": true,
+ "statusCode": 201,
+ "message": "ধন্যবাদ। ৳ ১,০০০.০০ জমা হয়েছে এবং অনুমোদনের অপেক্ষায় আছে।",
+ "data": {
+  "id": 2,
+  "received_on": "2026-08-12",
+  "method": {
+   "value": "bkash",
+   "label": "বিকাশ",
+   "color": null
+  },
+  "trx_id": "BK8X2LQ91Z",
+  "amount": {
+   "poisha": 100000,
+   "display": "৳ ১,০০০.০০"
+  },
+  "status": {
+   "value": "pending",
+   "label": "অপেক্ষমাণ",
+   "color": "warning"
+  },
+  "rejection_reason": null,
+  "approved_at": null,
+  "receipt_available": false,
+  "allocations": [],
+  "to_advance": {
+   "poisha": 0,
+   "display": "৳ ০.০০"
+  }
+ },
+ "errors": null,
+ "meta": null
+}

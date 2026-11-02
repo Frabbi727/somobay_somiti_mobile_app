@@ -1,0 +1,15 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "OK",
+ "data": {
+  "account_type": "member",
+  "member_no": "M-0001",
+  "name": "করিম মিয়া",
+  "status": "active",
+  "terms_acceptance_required": true,
+  "terms_version": 3
+ },
+ "errors": null,
+ "meta": null
+}

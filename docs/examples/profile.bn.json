@@ -1,0 +1,31 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "ঠিক আছে",
+        "data": {
+            "member_no": "M-30763",
+            "name": "রহিম উদ্দিন",
+            "name_bn": "রহিম উদ্দিন",
+            "name_en": "Rahim Uddin",
+            "mobile": "01712345678",
+            "joined_on": "2026-07-01",
+            "status": {
+                "value": "active",
+                "label": "সক্রিয়",
+                "color": "success"
+            },
+            "nominees": [
+                {
+                    "name": "করিমা বেগম",
+                    "relation": "স্ত্রী",
+                    "share_percent": "100.00",
+                    "share_display": "১০০.০০%"
+                }
+            ]
+        },
+        "errors": null,
+        "meta": null
+    }
+}

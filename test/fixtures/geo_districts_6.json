@@ -1,0 +1,74 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "OK",
+  "errors": null,
+  "meta": null,
+  "data": [
+    {
+      "id": 47,
+      "name_bn": "ঢাকা",
+      "name_en": "Dhaka"
+    },
+    {
+      "id": 52,
+      "name_bn": "ফরিদপুর",
+      "name_en": "Faridpur"
+    },
+    {
+      "id": 41,
+      "name_bn": "গাজীপুর",
+      "name_en": "Gazipur"
+    },
+    {
+      "id": 51,
+      "name_bn": "গোপালগঞ্জ",
+      "name_en": "Gopalganj"
+    },
+    {
+      "id": 45,
+      "name_bn": "কিশোরগঞ্জ",
+      "name_en": "Kishoreganj"
+    },
+    {
+      "id": 50,
+      "name_bn": "মাদারীপুর",
+      "name_en": "Madaripur"
+    },
+    {
+      "id": 46,
+      "name_bn": "মানিকগঞ্জ",
+      "name_en": "Manikganj"
+    },
+    {
+      "id": 48,
+      "name_bn": "মুন্সিগঞ্জ",
+      "name_en": "Munshiganj"
+    },
+    {
+      "id": 43,
+      "name_bn": "নারায়ণগঞ্জ",
+      "name_en": "Narayanganj"
+    },
+    {
+      "id": 40,
+      "name_bn": "নরসিংদী",
+      "name_en": "Narsingdi"
+    },
+    {
+      "id": 49,
+      "name_bn": "রাজবাড়ী",
+      "name_en": "Rajbari"
+    },
+    {
+      "id": 42,
+      "name_bn": "শরীয়তপুর",
+      "name_en": "Shariatpur"
+    },
+    {
+      "id": 44,
+      "name_bn": "টাঙ্গাইল",
+      "name_en": "Tangail"
+    }
+  ]
+}

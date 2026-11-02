@@ -11,4 +11,10 @@ class StorageKeys {
   static const String countryCode = 'country_code';
   static const String isDarkMode = 'is_dark_mode';
   static const String isOnboardingCompleted = 'is_onboarding_completed';
+  static const String somitiName = 'somiti_name';
+  static const String otpEnabled = 'otp_enabled';
+
+  /// "member" or "applicant" from the last sign-in, refresh or `auth/me`; used to pick the start
+  /// screen when the app opens offline.
+  static const String accountType = 'account_type';
 }

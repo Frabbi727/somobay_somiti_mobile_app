@@ -1,0 +1,55 @@
+{
+ "success": true,
+ "statusCode": 200,
+ "message": "ঠিক আছে",
+ "data": {
+  "member": {
+   "member_no": "M-30763",
+   "name": "রহিম উদ্দিন",
+   "status": {
+    "value": "active",
+    "label": "সক্রিয়",
+    "color": "success"
+   }
+  },
+  "savings": {
+   "poisha": 200000,
+   "display": "৳ ২,০০০.০০"
+  },
+  "advance": {
+   "poisha": 26000,
+   "display": "৳ ২৬০.০০"
+  },
+  "outstanding": {
+   "poisha": 0,
+   "display": "৳ ০.০০"
+  },
+  "paid_through": "2026-08",
+  "advance_months_estimate": 0,
+  "shares": 2,
+  "pay_now_visible": false,
+  "recent_payments": [
+   {
+    "id": 1,
+    "received_on": "2026-07-20",
+    "method": {
+     "value": "cash",
+     "label": "নগদ",
+     "color": null
+    },
+    "trx_id": null,
+    "amount": {
+     "poisha": 250000,
+     "display": "৳ ২,৫০০.০০"
+    },
+    "status": {
+     "value": "approved",
+     "label": "অনুমোদিত",
+     "color": "success"
+    }
+   }
+  ]
+ },
+ "errors": null,
+ "meta": null
+}

@@ -108,4 +108,254 @@ class TranslationKeys {
   static const String forceUpdateTitle = 'force_update_title';
   static const String forceUpdateMessage = 'force_update_message';
   static const String updateNow = 'force_update_button';
+
+  // Member API errors
+  static const String errorForbidden = 'error_forbidden';
+  static const String errorNotFound = 'error_not_found';
+  static const String errorConflict = 'error_conflict';
+  static const String errorTooMany = 'error_too_many';
+
+  // Member sign-in
+  static const String errorTitle = 'common_error_title';
+  static const String successTitle = 'common_success_title';
+  static const String passwordHelp = 'auth_password_help';
+  static const String usePassword = 'auth_use_password';
+  static const String useCode = 'auth_use_code';
+  static const String codeLabel = 'auth_code_label';
+  static const String codeHint = 'auth_code_hint';
+  static const String sendCode = 'auth_send_code';
+  static const String resendIn = 'auth_resend_in';
+  static const String codeRequired = 'auth_code_required';
+
+  // Member sign-in (code)
+  static const String codeSent = 'auth_code_sent';
+
+  // Unsupported
+  static const String errorNotSupported = 'error_not_supported';
+
+  // Month names
+  static const String month1 = 'month_1';
+  static const String month2 = 'month_2';
+  static const String month3 = 'month_3';
+  static const String month4 = 'month_4';
+  static const String month5 = 'month_5';
+  static const String month6 = 'month_6';
+  static const String month7 = 'month_7';
+  static const String month8 = 'month_8';
+  static const String month9 = 'month_9';
+  static const String month10 = 'month_10';
+  static const String month11 = 'month_11';
+  static const String month12 = 'month_12';
+
+  // Home
+  static const String homeSavings = 'home_savings';
+  static const String homeAdvance = 'home_advance';
+  static const String homeOutstanding = 'home_outstanding';
+  static const String homePaidThrough = 'home_paid_through';
+  static const String homePaidThroughNone = 'home_paid_through_none';
+  static const String homeAdvanceEstimate = 'home_advance_estimate';
+  static const String homeShares = 'home_shares';
+  static const String homeSharesCount = 'home_shares_count';
+  static const String homePayNow = 'home_pay_now';
+  static const String homeRecentPayments = 'home_recent_payments';
+  static const String homeNoPayments = 'home_no_payments';
+  static const String memberNo = 'member_no';
+
+  // Notifications
+  static const String notificationsTitle = 'notifications_title';
+
+  // Dues
+  static const String tabDues = 'tab_dues';
+  static const String duesTitle = 'dues_title';
+  static const String duesFilterOpen = 'dues_filter_open';
+  static const String duesFilterAll = 'dues_filter_all';
+  static const String duesFilterSettled = 'dues_filter_settled';
+  static const String duesTypeAll = 'dues_type_all';
+  static const String duesTypeDeposit = 'dues_type_deposit';
+  static const String duesTypeService = 'dues_type_service';
+  static const String duesTypeRegistration = 'dues_type_registration';
+  static const String duesTypeLateFee = 'dues_type_late_fee';
+  static const String duesAmount = 'dues_amount';
+  static const String duesPaid = 'dues_paid';
+  static const String duesOutstanding = 'dues_outstanding';
+  static const String duesDueDate = 'dues_due_date';
+  static const String duesNoneOpen = 'dues_none_open';
+  static const String duesNone = 'dues_none';
+
+  // Payments
+  static const String tabPayments = 'tab_payments';
+  static const String paymentsTitle = 'payments_title';
+  static const String paymentsFilterAll = 'payments_filter_all';
+  static const String paymentsFilterPending = 'payments_filter_pending';
+  static const String paymentsFilterApproved = 'payments_filter_approved';
+  static const String paymentsFilterRejected = 'payments_filter_rejected';
+  static const String paymentsNone = 'payments_none';
+  static const String paymentsPayOnline = 'payments_pay_online';
+  static const String paymentDetailTitle = 'payment_detail_title';
+  static const String paymentAmount = 'payment_amount';
+  static const String paymentMethod = 'payment_method';
+  static const String paymentTrx = 'payment_trx';
+  static const String paymentDate = 'payment_date';
+  static const String paymentApprovedAt = 'payment_approved_at';
+  static const String paymentRejectionReason = 'payment_rejection_reason';
+  static const String paymentAllocations = 'payment_allocations';
+  static const String paymentToAdvance = 'payment_to_advance';
+  static const String paymentPendingNote = 'payment_pending_note';
+  static const String paymentReceipt = 'payment_receipt';
+  static const String paymentReceiptOpenFailed = 'payment_receipt_open_failed';
+  static const String payTitle = 'pay_title';
+  static const String payIntro = 'pay_intro';
+  static const String payMethod = 'pay_method';
+  static const String payBkash = 'pay_bkash';
+  static const String payNagad = 'pay_nagad';
+  static const String payAmount = 'pay_amount';
+  static const String payAmountHint = 'pay_amount_hint';
+  static const String payTrx = 'pay_trx';
+  static const String payTrxHint = 'pay_trx_hint';
+  static const String payDate = 'pay_date';
+  static const String payProof = 'pay_proof';
+  static const String payProofChoose = 'pay_proof_choose';
+  static const String payProofTooLarge = 'pay_proof_too_large';
+  static const String payProofRequired = 'pay_proof_required';
+  static const String payProofShort = 'pay_proof_short';
+  static const String payProofNone = 'pay_proof_none';
+  static const String payProofRemove = 'pay_proof_remove';
+  static const String payProofCompressing = 'pay_proof_compressing';
+  static const String payProofUnreadable = 'pay_proof_unreadable';
+  static const String payConfirmTitle = 'pay_confirm_title';
+  static const String paySend = 'pay_send';
+  static const String paySent = 'pay_sent';
+
+  // Statement
+  static const String statementTitle = 'statement_title';
+  static const String statementRange = 'statement_range';
+  static const String statementChangeRange = 'statement_change_range';
+  static const String statementOpening = 'statement_opening';
+  static const String statementClosing = 'statement_closing';
+  static const String statementCharges = 'statement_charges';
+  static const String statementPaid = 'statement_paid';
+  static const String statementCharge = 'statement_charge';
+  static const String statementPayment = 'statement_payment';
+  static const String statementBalance = 'statement_balance';
+  static const String statementNoRows = 'statement_no_rows';
+  static const String statementPdf = 'statement_pdf';
+  static const String statementPdfFailed = 'statement_pdf_failed';
+
+  // Shares, messages, profile
+  static const String sharesTitle = 'shares_title';
+  static const String sharesCurrent = 'shares_current';
+  static const String sharesHistory = 'shares_history';
+  static const String sharesFrom = 'shares_from';
+  static const String sharesAfter = 'shares_after';
+  static const String sharesRates = 'shares_rates';
+  static const String sharesRatesFrom = 'shares_rates_from';
+  static const String sharesNoRates = 'shares_no_rates';
+  static const String rateShareUnit = 'rate_share_unit';
+  static const String rateServiceCharge = 'rate_service_charge';
+  static const String rateRegistrationFee = 'rate_registration_fee';
+  static const String rateDueDay = 'rate_due_day';
+  static const String rateDueDayValue = 'rate_due_day_value';
+  static const String rateGraceDays = 'rate_grace_days';
+  static const String rateGraceDaysValue = 'rate_grace_days_value';
+  static const String rateLateFee = 'rate_late_fee';
+  static const String rateLateFeeCap = 'rate_late_fee_cap';
+  static const String messagesNone = 'messages_none';
+  static const String profileDetails = 'profile_details';
+  static const String profileNameBn = 'profile_name_bn';
+  static const String profileNameEn = 'profile_name_en';
+  static const String profileMobile = 'profile_mobile';
+  static const String profileJoined = 'profile_joined';
+  static const String profileStatus = 'profile_status';
+  static const String profileNoNominees = 'profile_no_nominees';
+  static const String profileEditNote = 'profile_edit_note';
+  static const String profileDividends = 'profile_dividends';
+  static const String profileMessages = 'profile_messages';
+  static const String profileAboutSomiti = 'profile_about_somiti';
+  static const String dividendsNone = 'dividends_none';
+  static const String dividendsShareMonths = 'dividends_share_months';
+  static const String somitiRegistration = 'somiti_registration';
+  static const String somitiAddress = 'somiti_address';
+  static const String somitiPhone = 'somiti_phone';
+  static const String somitiEmail = 'somiti_email';
+  static const String passwordCurrent = 'password_current';
+  static const String passwordNew = 'password_new';
+  static const String passwordConfirm = 'password_confirm';
+  static const String passwordMismatch = 'password_mismatch';
+  static const String passwordSaved = 'password_saved';
+
+  // Registration
+  static const String registrationTitle = 'registration_title';
+  static const String registrationStatusTitle = 'registration_status_title';
+  static const String registrationStepPersonal = 'registration_step_personal';
+  static const String registrationStepContact = 'registration_step_contact';
+  static const String registrationStepNominees = 'registration_step_nominees';
+  static const String registrationStepShares = 'registration_step_shares';
+  static const String registrationStepReview = 'registration_step_review';
+  static const String registrationNameBn = 'registration_name_bn';
+  static const String registrationNameEn = 'registration_name_en';
+  static const String registrationGuardian = 'registration_guardian';
+  static const String registrationNid = 'registration_nid';
+  static const String registrationDob = 'registration_dob';
+  static const String registrationPhoto = 'registration_photo';
+  static const String registrationPhotoPick = 'registration_photo_pick';
+  static const String registrationMobile = 'registration_mobile';
+  static const String registrationNomineeMobile = 'registration_nominee_mobile';
+  static const String registrationEmail = 'registration_email';
+  static const String registrationNominee = 'registration_nominee';
+  static const String registrationNomineeName = 'registration_nominee_name';
+  static const String registrationLogout = 'registration_logout';
+  static const String registrationNomineeAdd = 'registration_nominee_add';
+  static const String registrationNomineeRemove = 'registration_nominee_remove';
+  static const String registrationNomineeRelation = 'registration_nominee_relation';
+  static const String registrationNomineeShare = 'registration_nominee_share';
+  static const String registrationNomineeTotal = 'registration_nominee_total';
+  static const String registrationSharesRequested = 'registration_shares_requested';
+  static const String registrationSharesHelp = 'registration_shares_help';
+  static const String registrationNext = 'registration_next';
+  static const String registrationBack = 'registration_back';
+  static const String registrationEdit = 'registration_edit';
+  static const String registrationSubmit = 'registration_submit';
+  static const String registrationSubmitConfirmTitle = 'registration_submit_confirm_title';
+  static const String registrationSubmitConfirmMessage = 'registration_submit_confirm_message';
+  static const String registrationSubmitted = 'registration_submitted';
+  static const String registrationActionComplete = 'registration_action_complete';
+  static const String registrationActionResubmit = 'registration_action_resubmit';
+  static const String registrationReason = 'registration_reason';
+  static const String registrationRequired = 'registration_required';
+  static const String registrationNomineeNeeded = 'registration_nominee_needed';
+  static const String registrationTotalNot100 = 'registration_total_not_100';
+
+  static const String registrationGender = 'registration_gender';
+  static const String registrationGenderMale = 'registration_gender_male';
+  static const String registrationGenderFemale = 'registration_gender_female';
+  static const String registrationPassport = 'registration_passport';
+  static const String registrationPassportInvalid = 'registration_passport_invalid';
+  static const String registrationPresentAddress = 'registration_present_address';
+  static const String registrationPermanentAddress = 'registration_permanent_address';
+  static const String registrationSameAsPresent = 'registration_same_as_present';
+  static const String registrationAddressLine = 'registration_address_line';
+  static const String geoDivision = 'geo_division';
+  static const String geoDistrict = 'geo_district';
+  static const String geoUpazila = 'geo_upazila';
+  static const String geoUnion = 'geo_union';
+
+  // Geography
+  static const String geoSelect = 'geo_select';
+  static const String geoNoMatch = 'geo_no_match';
+  static const String geoEmptyList = 'geo_empty_list';
+  static const String geoSearchHint = 'geo_search_hint';
+
+  // Splash
+  static const String splashTagline = 'splash_tagline';
+
+  // Rules (terms)
+  static const String termsAcceptTitle = 'terms_accept_title';
+  static const String termsAcceptIntro = 'terms_accept_intro';
+  static const String termsAgree = 'terms_agree';
+  static const String termsAcceptButton = 'terms_accept_button';
+  static const String termsVersion = 'terms_version';
+  static const String termsRulesTitle = 'terms_rules_title';
+  static const String termsRulesSection = 'terms_rules_section';
+  static const String termsRulesChanged = 'terms_rules_changed';
+  static const String termsLoadFailed = 'terms_load_failed';
 }

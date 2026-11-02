@@ -138,7 +138,8 @@ class AppButton extends StatelessWidget {
       height: height,
       child: Material(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(AppDimensions.radius8),
+        // Material accepts a borderRadius or a shape, not both (the outlined variant needs the shape).
+        borderRadius: borderSide == null ? BorderRadius.circular(AppDimensions.radius8) : null,
         shape: borderSide != null
             ? RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppDimensions.radius8),

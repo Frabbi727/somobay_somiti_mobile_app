@@ -1,0 +1,58 @@
+{
+    "status": 200,
+    "body": {
+        "success": true,
+        "statusCode": 200,
+        "message": "OK",
+        "data": {
+            "member": {
+                "member_no": "M-30763",
+                "name": "Rahim Uddin",
+                "status": {
+                    "value": "active",
+                    "label": "Active",
+                    "color": "success"
+                }
+            },
+            "savings": {
+                "poisha": 200000,
+                "display": "৳ 2,000.00"
+            },
+            "advance": {
+                "poisha": 26000,
+                "display": "৳ 260.00"
+            },
+            "outstanding": {
+                "poisha": 0,
+                "display": "৳ 0.00"
+            },
+            "paid_through": "2026-08",
+            "advance_months_estimate": 0,
+            "shares": 2,
+            "pay_now_visible": false,
+            "recent_payments": [
+                {
+                    "id": 1,
+                    "received_on": "2026-07-20",
+                    "method": {
+                        "value": "cash",
+                        "label": "Cash",
+                        "color": null
+                    },
+                    "trx_id": null,
+                    "amount": {
+                        "poisha": 250000,
+                        "display": "৳ 2,500.00"
+                    },
+                    "status": {
+                        "value": "approved",
+                        "label": "Approved",
+                        "color": "success"
+                    }
+                }
+            ]
+        },
+        "errors": null,
+        "meta": null
+    }
+}

@@ -32,7 +32,9 @@ void main() async {
   await runSomitiApp(
     const AppConfig(
       appName: 'Somiti App (Dev)',
-      apiBaseUrl: 'https://dev-api.somobaysomiti.com',
+      // Local backend: Android emulator reaches the host at 10.0.2.2; override with
+      // --dart-define=API_BASE_URL=http://localhost:8002 for the iOS simulator.
+      apiBaseUrl: String.fromEnvironment('API_BASE_URL', defaultValue: 'http://10.0.2.2:8002'),
       connectTimeout: Duration(seconds: 30),
       receiveTimeout: Duration(seconds: 30),
       enableLogging: true,

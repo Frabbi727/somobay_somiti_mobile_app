@@ -1,9 +1,15 @@
 import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
+import '../../../app/routes/home_route.dart';
+import '../../../core/constants/storage_keys.dart';
+import '../../../core/errors/failures.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../core/services/log_service.dart';
 import '../repository/splash_repository.dart';
+import '../../../app/routes/go_to_login.dart';
 
+/// Start-up: load the society's details (name, SMS-code sign-in on/off), then check the stored
+/// session with the backend. There is no app-version check (no backend support).
 class SplashController extends GetxController {
   final ISplashRepository repository;
   final StorageService storageService;
@@ -20,29 +26,52 @@ class SplashController extends GetxController {
   }
 
   Future<void> _handleAppStartup() async {
+    final route = await startRoute();
+    if (route == AppRoutes.login) {
+      goToLogin();
+    } else {
+      Get.offAllNamed(route);
+    }
+  }
+
+  /// The first screen: login without a usable session, otherwise the home screen for the account
+  /// type. Offline, the last known account type is used, so an applicant is not sent to member screens.
+  Future<String> startRoute() async {
     try {
-      // 1. Minimum Version & Force Update Check
-      final versionResult = await repository.checkAppVersion();
-      if (versionResult.versionData != null && versionResult.versionData!.forceUpdate) {
-        Get.offAllNamed(
-          AppRoutes.forceUpdate,
-          arguments: versionResult.versionData,
-        );
-        return;
+      final info = await repository.somitiInfo();
+      if (info.info != null) {
+        await storageService.saveString(StorageKeys.somitiName, info.info!.name);
+        await storageService.saveBool(StorageKeys.otpEnabled, info.info!.otpEnabled);
       }
 
-      // 2. Authentication Check
       final token = await storageService.getAccessToken();
-      if (token != null && token.isNotEmpty) {
-        LogService.i('Active session found, navigating to Dashboard', tag: 'STARTUP');
-        Get.offAllNamed(AppRoutes.dashboard);
-      } else {
-        LogService.i('No active session, navigating to Login', tag: 'STARTUP');
-        Get.offAllNamed(AppRoutes.login);
+      if (token == null || token.isEmpty) {
+        return AppRoutes.login;
       }
+
+      final session = await repository.me();
+      if (session.isValid) {
+        final accountType = session.accountType ?? 'member';
+        await storageService.saveAccountType(accountType);
+        LogService.i('Session accepted, opening $accountType home', tag: 'STARTUP');
+        if (session.termsRequired && accountType != 'applicant') {
+          LogService.i('Rules not accepted, opening the accept page', tag: 'STARTUP');
+          return AppRoutes.acceptRules;
+        }
+        return homeRouteFor(accountType);
+      }
+
+      if (session.failure is NetworkFailure || session.failure is TimeoutFailure) {
+        final accountType = storageService.getAccountType();
+        LogService.i('Offline, opening ${accountType ?? 'member'} home', tag: 'STARTUP');
+        return homeRouteFor(accountType);
+      }
+
+      await storageService.clearAuthData();
+      return AppRoutes.login;
     } catch (e) {
       LogService.e('Startup sequence failed', error: e, tag: 'STARTUP');
-      Get.offAllNamed(AppRoutes.login);
+      return AppRoutes.login;
     }
   }
 }
