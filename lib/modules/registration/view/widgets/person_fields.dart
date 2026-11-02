@@ -19,7 +19,7 @@ class PersonFields extends StatelessWidget {
 
   const PersonFields({super.key, required this.person, required this.keyPrefix, required this.errorFor});
 
-  static const _genders = ['male', 'female', 'other'];
+  static const _genders = ['male', 'female'];
 
   Widget _error(String field) => Obx(() {
     final message = errorFor(field);

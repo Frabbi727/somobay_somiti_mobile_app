@@ -328,7 +328,7 @@ One place in the division, district, upazila, union chain (`GeoPlaceModel`). The
 | addressLine | address_line | String | Yes | House, road, village | `"House 12, Road 3"` |
 | placeName | place_name | String | No | Union, upazila, district, division in the request language | — |
 
-The whole object is `null` when nothing is filled. A line saved without an upazila comes back with `upazila_id`, `division_id`, `district_id` and `place_name` all `null`. Paper-form fields on the registration and on each nominee: `gender` (EnumValueModel, `male|female|other`, nullable), `passport_no` (String, nullable), `present_address`, `permanent_address` (RegistrationAddressModel, nullable). `PUT registration` sends them flat: `gender` (plain string), `passport_no`, `present_` / `permanent_` + `upazila_id`, `union_id`, `address_line`, and `permanent_same_as_present`. `POST registration/submit` sends `idempotency_key` and `terms_version` (both required).
+The whole object is `null` when nothing is filled. A line saved without an upazila comes back with `upazila_id`, `division_id`, `district_id` and `place_name` all `null`. Paper-form fields on the registration and on each nominee: `gender` (EnumValueModel, `male|female`, nullable), `passport_no` (String, nullable), `present_address`, `permanent_address` (RegistrationAddressModel, nullable). `PUT registration` sends them flat: `gender` (plain string), `passport_no`, `present_` / `permanent_` + `upazila_id`, `union_id`, `address_line`, and `permanent_same_as_present`. `POST registration/submit` sends `idempotency_key` and `terms_version` (both required).
 
 ---
 

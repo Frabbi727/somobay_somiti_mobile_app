@@ -328,7 +328,6 @@ class TranslationKeys {
   static const String registrationGender = 'registration_gender';
   static const String registrationGenderMale = 'registration_gender_male';
   static const String registrationGenderFemale = 'registration_gender_female';
-  static const String registrationGenderOther = 'registration_gender_other';
   static const String registrationPassport = 'registration_passport';
   static const String registrationPassportInvalid = 'registration_passport_invalid';
   static const String registrationPresentAddress = 'registration_present_address';

@@ -328,7 +328,6 @@ const Map<String, String> bnBD = {
   TranslationKeys.registrationGender: 'লিঙ্গ',
   TranslationKeys.registrationGenderMale: 'পুরুষ',
   TranslationKeys.registrationGenderFemale: 'মহিলা',
-  TranslationKeys.registrationGenderOther: 'অন্যান্য',
   TranslationKeys.registrationPassport: 'পাসপোর্ট নম্বর (থাকলে)',
   TranslationKeys.registrationPassportInvalid: 'পাসপোর্ট নম্বরে ৬ থেকে ২০টি ইংরেজি অক্ষর বা সংখ্যা থাকতে হবে',
   TranslationKeys.registrationPresentAddress: 'বর্তমান ঠিকানা',

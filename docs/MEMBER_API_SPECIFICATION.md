@@ -486,7 +486,7 @@ Every other member endpoint answers a member who has not accepted the current ru
 - `decision` (returned or rejected, else `null`): `{ "type": {value,label,color}, "by_role": "সভাপতি", "at": "2026-10-07T12:00:00+06:00", "reason": "…" }`.
 - `share_percent` is a decimal string with up to 2 places (`"100.00"`); the app only shows a running total and never computes money.
 - `photo_url` is a short-lived signed URL.
-- The paper-form fields come back **nested**: `gender` is an object `{value,label,color}` (`male`, `female`, `other`; `null` when not filled), and `present_address` / `permanent_address` are objects `{upazila_id, union_id, division_id, district_id, address_line, place_name}`, or `null` when not filled. `place_name` is union, upazila, district, division in the request language. The same shape repeats inside each nominee. `PUT` sends these as flat keys (below).
+- The paper-form fields come back **nested**: `gender` is an object `{value,label,color}` (`male`, `female`; `null` when not filled), and `present_address` / `permanent_address` are objects `{upazila_id, union_id, division_id, district_id, address_line, place_name}`, or `null` when not filled. `place_name` is union, upazila, district, division in the request language. The same shape repeats inside each nominee. `PUT` sends these as flat keys (below).
 
 ### Save the draft
 `PUT /api/v1/registration` · Bearer (applicant) · any subset of `name_bn, name_en, guardian_name, nid, date_of_birth, email, address, requested_shares, nominees[]` plus the paper-form fields below. `nominees` replaces the whole list; each `{name, relation_id, mobile?, nid, share_percent}` plus the same paper-form fields. 200 returns the **Get the registration** shape. 422 field errors; 422 `registration.errors.not_editable` unless the status is `invited` or `returned`.
@@ -495,7 +495,7 @@ The paper-form fields are **flat keys** on the PUT (the member at the top level,
 
 | Key | Rule |
 |-----|------|
-| `gender` | `male`, `female` or `other` (plain string, not the object GET returns) |
+| `gender` | `male` or `female` (plain string, not the object GET returns) |
 | `passport_no` | string, max 20 |
 | `present_upazila_id`, `present_union_id` | integer, must exist |
 | `present_address_line` | string, max 255 |

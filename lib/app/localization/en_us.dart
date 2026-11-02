@@ -328,7 +328,6 @@ const Map<String, String> enUS = {
   TranslationKeys.registrationGender: 'Gender',
   TranslationKeys.registrationGenderMale: 'Male',
   TranslationKeys.registrationGenderFemale: 'Female',
-  TranslationKeys.registrationGenderOther: 'Other',
   TranslationKeys.registrationPassport: 'Passport number (if any)',
   TranslationKeys.registrationPassportInvalid: 'Passport number must be 6 to 20 letters or digits',
   TranslationKeys.registrationPresentAddress: 'Present address',
